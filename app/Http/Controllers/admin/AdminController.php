@@ -12,23 +12,29 @@ use function Psy\debug;
 class AdminController extends Controller
 {
     public function index(){
+      
         return view("admin.login");
     }
 
     public function authenticate(Request $request){
+
         $validate = Validator::make($request->all(), [
             "email"=> "required|email",
             "password"=> "required",
         ]);
-
+        
         if($validate->passes()){
             if(Auth::guard("admin") ->attempt(["email" => $request->email,"password"=> $request->password], $request->get("remember"))){
-                $admin = Auth::guard('admin')->user(); 
-                 
-                if($admin->role == '2'){
-                    return redirect()->route('admin.dashboard')->with('message', 'Login Successfully! ');
+                $admin = Auth::guard('admin')->user();  
+                if($admin->role == 2){
+                    // dd("2");
+                    toastr()->success('Login Successfully!');
+                    return redirect()->route('admin.dashboard');
                 }else{
-                    return redirect()->route('admin.login')->with('error', 'You are autheticate person to access this site. ');
+                    dd("1");
+                    Auth::guard('admin')->logout(); 
+                    toastr()->error('You are not an authenticated person to access this site.'); 
+                    return redirect()->route('admin.login');
                 }
                 
             }else{
