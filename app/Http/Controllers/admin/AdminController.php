@@ -26,12 +26,10 @@ class AdminController extends Controller
         if($validate->passes()){
             if(Auth::guard("admin") ->attempt(["email" => $request->email,"password"=> $request->password], $request->get("remember"))){
                 $admin = Auth::guard('admin')->user();  
-                if($admin->role == 2){
-                    // dd("2");
+                if($admin->role == 2){ 
                     toastr()->success('Login Successfully!');
                     return redirect()->route('admin.dashboard');
-                }else{
-                    dd("1");
+                }else{ 
                     Auth::guard('admin')->logout(); 
                     toastr()->error('You are not an authenticated person to access this site.'); 
                     return redirect()->route('admin.login');
