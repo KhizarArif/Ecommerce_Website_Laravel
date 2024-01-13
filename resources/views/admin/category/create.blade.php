@@ -43,6 +43,18 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="image">Image</label>
+                                    <input type="hidden" name="image_id" id="image_id" value="{{ isset($category->image_id) ? $category->image_id : '' }}">
+                                    <div id="image" class="dropzone dz-clickable">
+                                        <div class="dz-message needsclick">    
+                                            <br>Drop files here or click to upload.<br><br>                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control" value="{{ isset($category->status) ? $category->status : '' }}">
                                         <option value="1"> Active </option>
@@ -55,7 +67,7 @@
                 </div>
                 <div class="pb-5 pt-3">
                     <button type="submit" class="btn btn-primary">Create</button>
-                    <a href="#" class="btn btn-outline-dark ml-3">Cancel</a>
+                    <a href="{{ route('categories.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>
@@ -105,6 +117,28 @@
                     }
                 }
             });
+        });
+
+        Dropzone.autoDiscover = false;    
+        const dropzone = $("#image").dropzone({ 
+        init: function() {
+            this.on('addedfile', function(file) {
+                if (this.files.length > 1) {
+                    this.removeFile(this.files[0]);
+                }
+            });
+        },
+        url:  "{{ route('image.create') }}",
+        maxFiles: 1,
+        paramName: 'image',
+        addRemoveLinks: true,
+        acceptedFiles: "image/jpeg,image/png,image/gif",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, success: function(file, response){
+            $("#image_id").val(response.image_id);
+            //console.log(response)
+        }
         });
     </script>
 @endsection
