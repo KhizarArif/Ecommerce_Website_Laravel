@@ -22,7 +22,7 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     { 
         return [
-            "name" => "required",
+            "name" => "required|unique:categories|name",
             "slug" => "required ",
         ];
     }

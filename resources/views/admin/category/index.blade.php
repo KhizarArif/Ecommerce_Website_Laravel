@@ -17,10 +17,19 @@
     <section class="content">
         <div class="container-fluid">
             <div class="card">
-                <form action="" method="get">
+            <form action="{{ route('file-import') }}" method="post" enctype="multipart/form-data">
+                @csrf
                 <div class="card-header">
                     <div class="card-title">
-                        <button type="button" class="btn btn-danger btn-sm " > <a href="{{ route('categories.index')}}" class="text-white text-decoration-none"> Reset </a> </button>
+                        <button type="button" class="btn btn-danger" > <a href="{{ route('categories.index')}}" class="text-white text-decoration-none"> Reset </a> </button>
+                            <div class="form-group mb-4" style="max-width: 500px; margin: 0 auto;">
+                                <div class="custom-file text-left">
+                                    <input type="file" name="file" class="custom-file-input" id="customFile">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        <button class="btn btn-primary">Import data</button>
+                        <a class="btn btn-success" href="{{ route('file-export') }}">Export data</a>
                     </div>
                     <div class="card-tools">
                         <div class="input-group input-group" style="width: 250px;">
@@ -34,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                </form>
+            </form>
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
@@ -81,15 +90,11 @@
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <form id="deleteForm" action="{{ route('categories.delete', $category->id) }}" method="post"  class="d-inline form-inline ">
-                                                @csrf
-                                                @method('DELETE')
-                                                <a href="#" class="text-danger w-4 h-4 mr-1" onclick="submitForm()">
-                                                    <svg wire:loading.remove.delay="" wire:target="" class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path ath fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                    </svg>
+                                            
+                                                <a href="#"  class="btn btn-light btn-sm"   onclick="submitForm('{{$category->id}}')">
+                                                    <i class="fas fa-trash text-danger"></i>
                                                 </a>
-                                            </form>
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -119,9 +124,29 @@
 
 @section('customJs')
     <script>
-        function submitForm() {
+        function submitForm(categoryId) {
             console.log("khizar");
-            document.getElementById('deleteForm').submit();
+            console.log("Category ID:", categoryId);
+            Swal.fire({
+            title: "Do you want to save the changes?",
+            text: "Data will be lost if you don't save it",
+            showDenyButton: true,
+            confirmButtonText: "Delete",
+          }).then((result) => { 
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        "id": categoryId,
+                    },
+                    url: "{{ route('categories.delete') }}",
+                    success: function (response) {
+                        Swal.fire("Deleted Successfully!", "", "success");
+                    }                    
+                });
+            }  
+          });
+
     }
     </script>
 @endsection

@@ -20,7 +20,7 @@
 
         <div class="container-fluid">
             <form action="{{ route('categories.store') }}" method="POST" id="categoryForm">
-                @csrf
+                @csrf 
                 <input type="hidden" name="id" id="id" value="{{ isset($category->id) ? $category->id : 0 }}">
                 <div class="card">
                     <div class="card-body">

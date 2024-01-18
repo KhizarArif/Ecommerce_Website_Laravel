@@ -2,12 +2,17 @@
 
 namespace App\Http\Services;
 
+use App\Exports\CategoryExport;
+use App\Imports\CategoryImport;
 use App\Models\Category;
-use App\Models\TempImage;
+use App\Models\TempImage; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryService
-{
+{ 
+
     public function index(Request $request)
     { 
         if($request->get('table_search')){
@@ -18,22 +23,35 @@ class CategoryService
         return view('admin.category.index', compact('categories'));
     }
 
+
     public function store(Request $request)
-    {
-        dd($request->all());
+    {  
         $category = $request->id > 0 ?  Category::find($request->id) : new Category();
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->status = $request->status;
         $category->save();
 
-        if(!empty($request->image_id)){
+        if (!empty($request->image_id)) {
             $tempImage = TempImage::find($request->image_id);
-            $extArray = explode('.', $tempImage->name);
-            $ext = last($extArray);
-
-            $newImageName = $category->id.'.'.$ext;
             
+            // Check if $tempImage->name is a file
+            if (is_file(public_path('temp/' . $tempImage->name))) {
+                $extArray = explode('.', $tempImage->name);
+                $ext = last($extArray);
+
+                $newImageName = $category->id . '.' . $ext;
+                $spath = public_path() . '/temp/' . $tempImage->name;
+                $dpath = public_path() . '/uploads/category/' . $newImageName;
+
+                // Check if $spath is a file before attempting to copy
+                if (is_file($spath)) {
+                    File::copy($spath, $dpath);
+
+                    $category->image = $newImageName;
+                    $category->save();
+                }
+            }
         }
 
         $successMessage = $request->id > 0 ? 'Category Updated Successfully' : 'Category Added Successfully';
@@ -50,9 +68,25 @@ class CategoryService
         return view('admin.category.create', compact('category'));
     }
     public function destroy($id)
-    {
+    { 
+        // dd($id);
         $category = Category::find($id)->delete();
-        session()->flash('success', "Category deleted successfully");
+              
+        return response()->json([
+            "message" => 'success',
+        ]);
+    }
+
+    public function fileImport(Request $request) 
+    {
+        Excel::import(new CategoryImport, $request->file('file')->store('temp'));
         return back();
     }
+
+    public function fileExport(){
+        ob_clean();
+        ob_start();
+        return Excel::download(new CategoryExport, 'categories.xlsx');
+    }
+
 }

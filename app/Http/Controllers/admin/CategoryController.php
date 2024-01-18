@@ -27,7 +27,7 @@ class CategoryController extends Controller
         return view('admin.category.create');
     }
 
-    public function store(CategoryRequest $request)
+    public function store( Request $request)
     {
         return $this->categoryService->store($request);
     }
@@ -35,8 +35,15 @@ class CategoryController extends Controller
     {
         return $this->categoryService->edit($id);
     }
-    public function destroy($id)
-    {
-        return $this->categoryService->destroy($id);
+    public function destroy(Request $request)
+    { 
+        return $this->categoryService->destroy($request->id);
+    }
+
+    public function fileImport(Request $request){
+        return $this->categoryService->fileImport($request);
+    } 
+    public function fileExport(){
+        return $this->categoryService->fileExport();
     }
 }
