@@ -17,7 +17,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="card">
-            <form action="{{ route('file-import') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('file-import') }}" method="post" enctype="multipart/form-data" target="_blank">
                 @csrf
                 <div class="card-header">
                     <div class="card-title">
@@ -30,7 +30,11 @@
                             </div>
                         <button class="btn btn-primary">Import data</button>
                         <a class="btn btn-success" href="{{ route('file-export') }}">Export data</a>
+
+                        <button class="btn btn-primary"  > <a href="{{route('view-pdf')}}" class="text-white" > <i class="fa fa-thin fa-eye"></i> View PDF </a> </button>
+                        
                     </div>
+                    <!-- Search  -->
                     <div class="card-tools">
                         <div class="input-group input-group" style="width: 250px;">
                             <input type="search" name="table_search" class="form-control float-right" placeholder="Search" value="{{ request()->get('table_search') }}">
@@ -41,7 +45,8 @@
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div> 
+
                 </div>
             </form>
                 <div class="card-body table-responsive p-0">

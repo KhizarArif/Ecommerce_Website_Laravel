@@ -46,4 +46,13 @@ class CategoryController extends Controller
     public function fileExport(){
         return $this->categoryService->fileExport();
     }
+
+    public function viewPDF(){
+        return $this->categoryService->viewPDF();
+    }
+    public function downloadPDF(){
+        return $this->categoryService->downloadPDF();
+    }
+
 }
+

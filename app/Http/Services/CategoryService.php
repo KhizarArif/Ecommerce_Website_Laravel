@@ -5,10 +5,13 @@ namespace App\Http\Services;
 use App\Exports\CategoryExport;
 use App\Imports\CategoryImport;
 use App\Models\Category;
-use App\Models\TempImage; 
+use App\Models\TempImage;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Facades\Excel; 
+
+
 
 class CategoryService
 { 
@@ -79,14 +82,39 @@ class CategoryService
 
     public function fileImport(Request $request) 
     {
-        Excel::import(new CategoryImport, $request->file('file')->store('temp'));
+        // Excel::import(new CategoryImport, $request->file('file')->store('temp'));
         return back();
     }
 
     public function fileExport(){
         ob_clean();
         ob_start();
-        return Excel::download(new CategoryExport, 'categories.xlsx');
+        // return Excel::download(new CategoryExport, 'categories.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
+        return Excel::download(new CategoryExport, 'categories.xlsx', \Maatwebsite\Excel\Excel::XLSX, ['X-Vapor-Base64-Encode' => 'True']);
     }
+
+    public function viewPDF()
+    {
+        $categories = Category::all();
+
+        $pdf = Pdf::loadView('admin.category.index', array('categories' =>  $categories))
+        ->setPaper('a4', 'portrait');
+
+        return $pdf->stream();
+
+    }
+
+
+    public function downloadPDF()
+    {
+        $categories = Category::all();
+
+        $pdf = PDF::loadView('admin.pdf.pdftable', array('categories' =>  $categories))
+        ->setPaper('a4', 'portrait');
+
+        return $pdf->download('users-details.pdf');   
+    }
+
+
 
 }

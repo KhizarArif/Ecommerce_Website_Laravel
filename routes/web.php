@@ -48,6 +48,9 @@ Route::group(["prefix" => "admin"], function () {
         Route::get('file-export', [CategoryController::class, 'fileExport'])->name('file-export');
         Route::post('file-import', [CategoryController::class, 'fileImport'])->name('file-import');
 
+        // PDF Routes 
+        Route::get('view-pdf', [CategoryController::class, 'viewPDF'])->name('view-pdf');
+        Route::post('download-pdf', [CategoryController::class, 'downloadPDF'])->name('download-pdf');
 
         // Image routes
         Route::post('/upload-image', [TempImageController::class, 'create'])->name('image.create');
