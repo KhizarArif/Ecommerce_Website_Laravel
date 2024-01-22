@@ -14,7 +14,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
 
-class CategoryService
+class   CategoryService
 { 
 
     public function index(Request $request)
@@ -42,20 +42,28 @@ class CategoryService
                 $extArray = explode('.', $tempImage->name);
                 $ext = last($extArray); 
 
-                $newImageName = $category->id . '.' . $ext;
-                $spath = public_path() . '/temp' . $tempImage->name;
+                $newImageName = hexdec(uniqid()) . '.' . $ext;
+                $spath = public_path() . '/temp/' . $tempImage->name;
                 $dpath = public_path() . '/uploads/category/' . $newImageName;
                 File::makeDirectory(public_path() . '/uploads/category/', 0755, true, true);
                 File::copy($spath, $dpath);
                 
 
                  // Creating Image Thumbnail 
-                 $manager = new ImageManager(new Driver()); 
-                 $image = $manager->read($request->image_id);
-                 $image = $image->resize(370, 246);
-                 $image->toJpeg()->save(base_path('public/uploads/category/thumb/'. $newImageName));
-                 $save_url = 'uploads/category/'.$newImageName;
-                 $image->save($save_url);
+             
+
+                 try {
+                    $manager = new ImageManager(new Driver()); 
+                    $image = $manager->read($spath);
+                    $image = $image->resize(370, 246);
+                    $image->toJpeg()->save(base_path('public/uploads/category/thumb/'. $newImageName));
+                    $save_url = 'uploads/category/'.$newImageName;
+                    $image->save($save_url);
+                } catch (\Intervention\Image\Exceptions\DecoderException $e) {
+                    // Log or handle the exception
+                    dd($e->getMessage());
+                }
+                
 
                  $category->image = $newImageName;
                 $category->save(); 
