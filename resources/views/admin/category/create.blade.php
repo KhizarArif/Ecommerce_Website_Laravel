@@ -19,7 +19,7 @@
     <section class="content">
 
         <div class="container-fluid">
-            <form action="{{ route('categories.store') }}" method="POST" id="categoryForm">
+            <form action="{{ route('categories.store') }}" method="POST" id="categoryForm" enctype="multipart/form-data" >
                 @csrf 
                 <input type="hidden" name="id" id="id" value="{{ isset($category->id) ? $category->id : 0 }}">
                 <div class="card">
@@ -44,8 +44,8 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="image">Image</label>
-                                    <input type="hidden" name="image_id" id="image_id" value="{{ isset($category->image_id) ? $category->image_id : '' }}">
-                                    <div id="image" class="dropzone dz-clickable">
+                                    <input type="hidden" name="image_id" id="image_id" >
+                                    <div id="image" class="dropzone dz-clickable" name="image" >
                                         <div class="dz-message needsclick">    
                                             <br>Drop files here or click to upload.<br><br>                                            
                                         </div>
@@ -136,8 +136,8 @@
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }, success: function(file, response){
+            console.log("response", response)
             $("#image_id").val(response.image_id);
-            //console.log(response)
         }
         });
     </script>

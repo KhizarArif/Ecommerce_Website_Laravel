@@ -23,8 +23,8 @@
                     height="40" alt="">
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
-                <h4 class="h4 mb-0"><strong> {{ Auth::guard("admin")->user()->name }} </strong></h4>
-                <div class="mb-3"> {{ Auth::guard("admin")->user()->email }}  </div>
+                <h4 class="h4 mb-0"><strong> {{ auth()->user()->name }} </strong></h4>
+                <div class="mb-3"> {{ auth()->user()->email }}  </div>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
                     <i class="fas fa-user-cog mr-2"></i> Settings

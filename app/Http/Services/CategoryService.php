@@ -10,7 +10,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel; 
-
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 
 class CategoryService
@@ -36,25 +37,30 @@ class CategoryService
         $category->save();
 
         if (!empty($request->image_id)) {
-            $tempImage = TempImage::find($request->image_id);
-            
-            // Check if $tempImage->name is a file
-            if (is_file(public_path('temp/' . $tempImage->name))) {
+            $tempImage = TempImage::find($request->image_id); 
+
                 $extArray = explode('.', $tempImage->name);
-                $ext = last($extArray);
+                $ext = last($extArray); 
 
                 $newImageName = $category->id . '.' . $ext;
-                $spath = public_path() . '/temp/' . $tempImage->name;
+                $spath = public_path() . '/temp' . $tempImage->name;
                 $dpath = public_path() . '/uploads/category/' . $newImageName;
+                File::makeDirectory(public_path() . '/uploads/category/', 0755, true, true);
+                File::copy($spath, $dpath);
+                
 
-                // Check if $spath is a file before attempting to copy
-                if (is_file($spath)) {
-                    File::copy($spath, $dpath);
+                 // Creating Image Thumbnail 
+                 $manager = new ImageManager(new Driver()); 
+                 $image = $manager->read($request->image_id);
+                 $image = $image->resize(370, 246);
+                 $image->toJpeg()->save(base_path('public/uploads/category/thumb/'. $newImageName));
+                 $save_url = 'uploads/category/'.$newImageName;
+                 $image->save($save_url);
 
-                    $category->image = $newImageName;
-                    $category->save();
-                }
-            }
+                 $category->image = $newImageName;
+                $category->save(); 
+
+
         }
 
         $successMessage = $request->id > 0 ? 'Category Updated Successfully' : 'Category Added Successfully';
