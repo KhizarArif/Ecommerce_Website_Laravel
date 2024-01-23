@@ -35,9 +35,9 @@ class CategoryController extends Controller
     {
         return $this->categoryService->edit($id);
     }
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     { 
-        return $this->categoryService->destroy($request->id, $id);
+        return $this->categoryService->destroy( $id);
     }
 
     public function fileImport(Request $request){

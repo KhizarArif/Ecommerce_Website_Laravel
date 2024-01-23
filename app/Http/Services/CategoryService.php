@@ -86,7 +86,7 @@ class   CategoryService
         $category = Category::find($id);
         return view('admin.category.create', compact('category'));
     }
-    public function destroy($request, $id)
+    public function destroy($id)
     {  
         $category = Category::find($id);
 
@@ -118,7 +118,7 @@ class   CategoryService
     {
         $categories = Category::all();
 
-        $pdf = Pdf::loadView('admin.category.index', array('categories' =>  $categories))
+        $pdf = Pdf::loadView('admin.pdf.pdftable', array('categories' =>  $categories))
         ->setPaper('a4', 'portrait');
 
         return $pdf->stream();
