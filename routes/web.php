@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
@@ -27,21 +28,35 @@ Route::get('/', function () {
 
 
 Route::group(["prefix" => "admin"], function () {
- 
-        Route::get('/login', [AdminController::class, 'index'])->name('admin.login');
-        Route::post('/authenticate', [AdminController::class, 'authenticate'])->name('admin.authenticate'); 
 
-     Route::group(["middleware" => "is_admin"], function () {
+    Route::get('/login', [AdminController::class, 'index'])->name('admin.login');
+    Route::post('/authenticate', [AdminController::class, 'authenticate'])->name('admin.authenticate');
+
+    Route::group(["middleware" => "is_admin"], function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
         Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
 
-        // Category routes
-        Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
-        Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
-        Route::post('/categories/store', [CategoryController::class, 'store'])->name('categories.store');
-        Route::get('/categories/edit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
-        Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
-        
+        // Category routes 
+        Route::controller(CategoryController::class)->prefix('categories')->group(function () {
+            Route::get('', 'index')->name('categories.index');
+            Route::get('create', 'create')->name('categories.create');
+            Route::get('edit/{id}', 'edit')->name('categories.edit');
+            Route::post('store', 'store')->name('categories.store');
+            Route::delete('delete/{id}', 'destroy')->name('categories.delete');
+        });
+
+
+        // Sub Category routes
+        Route::controller(SubCategoryController::class)->prefix('subcategories')->group(function () {
+            Route::get('', 'index')->name('subcategories.index');
+            Route::get('create', 'create')->name('subcategories.create');
+            Route::get('edit/{id}', 'edit')->name('subcategories.edit');
+            Route::post('store', 'store')->name('subcategories.store');
+            Route::delete('delete/{id}', 'destroy')->name('subcategories.delete');
+        });
+
+
+
         // Export Data to Excel
         Route::get('file-export', [CategoryController::class, 'fileExport'])->name('file-export');
         Route::post('file-import', [CategoryController::class, 'fileImport'])->name('file-import');
@@ -54,7 +69,7 @@ Route::group(["prefix" => "admin"], function () {
         Route::post('/upload-image', [TempImageController::class, 'create'])->name('image.create');
 
         Route::get('/getSlug', function (Request $request) {
-            $slug = "";                                     
+            $slug = "";
             if (!empty($request->title)) {
                 $slug = Str::slug($request->title);
             }
@@ -64,5 +79,5 @@ Route::group(["prefix" => "admin"], function () {
                 "slug" => $slug,
             ]);
         })->name('getSlug');
-     });
+    });
 });
