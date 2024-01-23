@@ -16,47 +16,42 @@
     </section>
     <section class="content">
         <div class="container-fluid">
-            <div class="card">
-            <form action="{{ route('file-import') }}" method="post" enctype="multipart/form-data" target="_blank">
-                @csrf
+            <div class="card"> 
                 <div class="card-header">
-                    <div class="card-title">
-                        <button type="button" class="btn btn-danger" > <a href="{{ route('categories.index')}}" class="text-white text-decoration-none"> Reset </a> </button>
-                            <div class="form-group mb-4" style="max-width: 500px; margin: 0 auto;">
-                                <div class="custom-file text-left">
-                                    <input type="file" name="file" class="custom-file-input" id="customFile">
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
-                                </div>
-                            </div>
-                        <button class="btn btn-primary">Import data</button>
-                        <a class="btn btn-success" href="{{ route('file-export') }}">Export data</a>
 
-                        <button class="btn btn-primary"  > <a href="{{route('view-pdf')}}" class="text-white" > <i class="fa fa-thin fa-eye"></i> View PDF </a> </button>
-                        
-                    </div>
-                    <!-- Search  -->
+                <!-- Reset Button Start -->
+                    <div class="card-title">
+                        <form action="">
+                        <button type="button" class="btn btn-danger" > <a href="{{ route('categories.index')}}" class="text-white text-decoration-none"> Reset </a> </button> 
+                        </form>
+                    </div> 
+                <!-- Reset Button End -->
+
+                    <!-- Search  Start -->
                     <div class="card-tools">
+                        <form action="">
                         <div class="input-group input-group" style="width: 250px;">
                             <input type="search" name="table_search" class="form-control float-right" placeholder="Search" value="{{ request()->get('table_search') }}">
-
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-default">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
+                        </form>
                     </div> 
 
-                </div>
-            </form>
+                <!-- Search  End -->
+
+                </div> 
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th width="60">ID</th>
-                                <th>Name</th>
-                                <th>Slug</th>
-                                <th width="100">Status</th>
+                                <th width="60"> ID </th>
+                                <th> Name </th>
+                                <th> Slug </th>
+                                <th width="100"> Status </th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
@@ -96,7 +91,7 @@
                                                 </svg>
                                             </a>
                                             
-                                                <a href="#"  class="btn btn-light btn-sm"   onclick="submitForm('{{$category->id}}')">
+                                                <a href="#"  class="btn btn-light btn-sm"   onclick="deleteItem('{{$category->id}}')">
                                                     <i class="fas fa-trash text-danger"></i>
                                                 </a>
                                             
@@ -129,9 +124,9 @@
 
 @section('customJs')
     <script>
-        function submitForm(categoryId) {
-            console.log("khizar");
-            console.log("Category ID:", categoryId);
+        function deleteItem(categoryId) {
+            var url = "{{ route('categories.delete', 'ID') }}";
+            var newUrl = url.replace('ID', categoryId);
             Swal.fire({
             title: "Do you want to save the changes?",
             text: "Data will be lost if you don't save it",
@@ -140,13 +135,17 @@
           }).then((result) => { 
             if (result.isConfirmed) {
                 $.ajax({
-                    type: "POST",
-                    data: {
-                        "id": categoryId,
+                    type: "delete",
+                    data: {},
+                    url: newUrl,
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ route('categories.delete') }}",
                     success: function (response) {
                         Swal.fire("Deleted Successfully!", "", "success");
+                        // window.location.reload();
+                        window.location.href = "{{ route('categories.index') }}";
                     }                    
                 });
             }  

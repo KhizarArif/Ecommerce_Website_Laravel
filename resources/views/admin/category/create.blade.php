@@ -52,13 +52,18 @@
                                     </div>
 
                                 </div>
+                                @if (!empty($category->image))
+                                    <div>
+                                        <img width="250" src="{{ asset('uploads/category/thumb/'.$category->image) }}" alt="">
+                                    </div>
+                                @endif
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control" value="{{ isset($category->status) ? $category->status : '' }}">
-                                        <option value="1"> Active </option>
-                                        <option value="0"> InActive </option>
+                                        <option {{isset($category->status) == 1 ? 'selected' : ''}} value="1"> Active </option>
+                                        <option {{isset($category->status) == 0 ? 'selected' : ''}} value="0"> InActive </option>
                                     </select>
                                 </div>
                             </div>
@@ -66,7 +71,7 @@
                     </div>
                 </div>
                 <div class="pb-5 pt-3">
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary"> {{ isset($category->id) ? 'Update' : 'Create'}} </button>
                     <a href="{{ route('categories.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>

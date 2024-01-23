@@ -18,8 +18,8 @@ class   CategoryService
 { 
 
     public function index(Request $request)
-    { 
-        if($request->get('table_search')){
+    {  
+        if($request->get('table_search')){ 
             $categories = Category::where('name', 'like', '%'.$request->get('table_search').'%')->paginate(10); 
         }else{
             $categories = Category::paginate(10);
@@ -36,6 +36,8 @@ class   CategoryService
         $category->status = $request->status;
         $category->save();
 
+        $oldImage = $category->image;
+
         if (!empty($request->image_id)) {
             $tempImage = TempImage::find($request->image_id); 
 
@@ -49,13 +51,11 @@ class   CategoryService
                 File::copy($spath, $dpath);
                 
 
-                 // Creating Image Thumbnail 
-             
-
+                 // Creating Image Thumbnail  
                  try {
                     $manager = new ImageManager(new Driver()); 
                     $image = $manager->read($spath);
-                    $image = $image->resize(370, 246);
+                    $image = $image->resize(370, 246);                     
                     $image->toJpeg()->save(base_path('public/uploads/category/thumb/'. $newImageName));
                     $save_url = 'uploads/category/'.$newImageName;
                     $image->save($save_url);
@@ -68,6 +68,8 @@ class   CategoryService
                  $category->image = $newImageName;
                 $category->save(); 
 
+                File::delete(public_path() . '/uploads/category/thumb/' . $oldImage);
+                File::delete(public_path() . '/uploads/category/' . $oldImage);
 
         }
 
@@ -84,12 +86,17 @@ class   CategoryService
         $category = Category::find($id);
         return view('admin.category.create', compact('category'));
     }
-    public function destroy($id)
-    { 
-        // dd($id);
-        $category = Category::find($id)->delete();
-              
+    public function destroy($request, $id)
+    {  
+        $category = Category::find($id);
+
+        File::delete(public_path() . '/uploads/category/thumb/' . $category->image);
+        File::delete(public_path() . '/uploads/category/' . $category->image);
+        
+        $category->delete(); 
+
         return response()->json([
+            "status" => true,
             "message" => 'success',
         ]);
     }

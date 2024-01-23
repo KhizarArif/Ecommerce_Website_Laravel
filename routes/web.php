@@ -40,7 +40,7 @@ Route::group(["prefix" => "admin"], function () {
         Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
         Route::post('/categories/store', [CategoryController::class, 'store'])->name('categories.store');
         Route::get('/categories/edit/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
-        Route::post('/categories/delete', [CategoryController::class, 'destroy'])->name('categories.delete');
+        Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
         
         // Export Data to Excel
         Route::get('file-export', [CategoryController::class, 'fileExport'])->name('file-export');
