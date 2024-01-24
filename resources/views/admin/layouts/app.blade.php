@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
     <!-- Dropzone --> 
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.css') }}"> 
+    <!-- Summer Note -->
+    <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css')}}">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -33,8 +35,7 @@
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-
-            <strong>Copyright &copy; 2014-2022 AmazingShop All rights reserved.
+            <strong>Copyright &copy; 2023-2024 khizar All rights reserved.
         </footer>
 
     </div>
@@ -49,6 +50,7 @@
     <script src="{{ asset('admin-assets/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('admin-assets/js/demo.js') }}"></script>
+    <script src="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.js') }}"></script> 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
         $.ajaxSetup({

@@ -11,6 +11,8 @@ class SubCategory extends Model
 {
     use HasFactory;
 
+    protected $table = 'sub_categories';
+    
     protected $guarded = [];
 
     public function category(): BelongsTo{

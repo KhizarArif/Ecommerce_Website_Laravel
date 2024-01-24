@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\HomeController;  
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -53,6 +55,27 @@ Route::group(["prefix" => "admin"], function () {
             Route::get('edit/{id}', 'edit')->name('subcategories.edit');
             Route::post('store', 'store')->name('subcategories.store');
             Route::delete('delete/{id}', 'destroy')->name('subcategories.delete');
+        });
+
+        // Brands routes
+        Route::controller(BrandController::class)->prefix('brands')->group(function () {
+            Route::get('', 'index')->name('brands.index');
+            Route::get('create', 'create')->name('brands.create');
+            Route::get('edit/{id}', 'edit')->name('brands.edit');
+            Route::post('store', 'store')->name('brands.store');
+            Route::delete('delete/{id}', 'destroy')->name('brands.delete');
+        });
+
+        // Products Routes
+        Route::controller(ProductController::class)->prefix('products')->group(function () {
+            Route::get('', 'index')->name('products.index');
+            Route::get('create', 'create')->name('products.create');
+            Route::get('edit/{id}', 'edit')->name('products.edit');
+            Route::post('store', 'store')->name('products.store');
+            Route::delete('delete/{id}', 'destroy')->name('products.delete');
+
+
+            Route::get('getSubCategory', 'GetSubCategory')->name('getSubCategory');
         });
 
 

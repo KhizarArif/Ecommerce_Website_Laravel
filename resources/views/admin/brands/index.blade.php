@@ -6,10 +6,10 @@
     <div class="container-fluid my-2">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Sub Categories</h1>
+                <h1> Brands </h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('subcategories.create') }}" class="btn btn-primary">New Sub Category</a>
+                <a href="{{ route('brands.create') }}" class="btn btn-primary">New Brand</a>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
                 <!-- Reset Button Start -->
                 <div class="card-title">
                     <form action="">
-                        <button type="button" class="btn btn-danger"> <a href="{{ route('subcategories.index')}}"
+                        <button type="button" class="btn btn-danger"> <a href="{{ route('brands.index')}}"
                                 class="text-white text-decoration-none"> Reset </a> </button>
                     </form>
                 </div>
@@ -33,7 +33,7 @@
 
 
                 <!-- Export Button Start  -->
-                <button class="btn btn-primary mx-3" >
+                <button class="btn btn-primary mx-3">
                     <a href="{{route('view-pdf')}}" class="text-white">
                         <i class="fa fa-thin fa-eye"></i>
                         View PDF
@@ -65,21 +65,19 @@
                             <th width="60"> ID </th>
                             <th> Name </th>
                             <th> Slug </th>
-                            <th> Category  </th>
                             <th width="100"> Status </th>
                             <th width="100">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($subcategories->isNotEmpty())
-                        @foreach ($subcategories as $subcategory)
+                        @if ($brands->isNotEmpty())
+                        @foreach ($brands as $brand)
                         <tr>
-                            <td> {{ $subcategory->id }} </td>
-                            <td> {{ $subcategory->name }} </td>
-                            <td> {{ $subcategory->slug }} </td>
-                            <td> {{ $subcategory->category->name }} </td>
+                            <td> {{ $brand->id }} </td>
+                            <td> {{ $brand->name }} </td>
+                            <td> {{ $brand->slug }} </td>
                             <td>
-                                @if ($subcategory->status == 1)
+                                @if ($brand->status == 1)
                                 <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                     aria-hidden="true">
@@ -96,7 +94,7 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('subcategories.edit', $subcategory->id) }}">
+                                <a href="{{ route('brands.edit', $brand->id) }}">
                                     <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path
@@ -105,7 +103,7 @@
                                     </svg>
                                 </a>
 
-                                <a href="#" class="btn btn-light btn-sm" onclick="deleteItem('{{$subcategory->id}}')">
+                                <a href="#" class="btn btn-light btn-sm" onclick="deleteItem('{{$brand->id}}')">
                                     <i class="fas fa-trash text-danger"></i>
                                 </a>
 
@@ -138,33 +136,33 @@
 
 @section('customJs')
 <script>
-    function deleteItem(categoryId) {
-        var url = "{{ route('subcategories.delete', 'ID') }}";
-        var newUrl = url.replace('ID', categoryId);
-        Swal.fire({
-            title: "Do you want to save the changes?",
-            text: "Data will be lost if you don't save it",
-            showDenyButton: true,
-            confirmButtonText: "Delete",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "delete",
-                    data: {},
-                    url: newUrl,
-                    dataType: 'json',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (response) {
-                        Swal.fire("Deleted Successfully!", "", "success");
-                        // window.location.reload();
-                        window.location.href = "{{ route('subcategories.index') }}";
-                    }
-                });
-            }
-        });
+function deleteItem(categoryId) {
+    var url = "{{ route('brands.delete', 'ID') }}";
+    var newUrl = url.replace('ID', categoryId);
+    Swal.fire({
+        title: "Do you want to save the changes?",
+        text: "Data will be lost if you don't save it",
+        showDenyButton: true,
+        confirmButtonText: "Delete",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "delete",
+                data: {},
+                url: newUrl,
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    Swal.fire("Deleted Successfully!", "", "success");
+                    // window.location.reload();
+                    window.location.href = "{{ route('brands.index') }}";
+                }
+            });
+        }
+    });
 
-    }
+}
 </script>
 @endsection
