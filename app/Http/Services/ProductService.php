@@ -7,10 +7,14 @@ use App\Imports\CategoryImport;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\SubCategory;
+use App\Models\TempImage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use Maatwebsite\Excel\Facades\Excel;  
 
 
@@ -22,9 +26,10 @@ class ProductService
         if($request->get('table_search')){ 
             $products = Product::where('name', 'like', '%'.$request->get('table_search').'%')->paginate(10); 
         }else{
-            $products = Product::paginate(10);
+            $productImages = ProductImage::with('product')->get();
         }
-        return view('admin.products.index', compact('products'));
+       
+        return view('admin.products.index', compact('productImages'));
     }
 
     public function create()
@@ -35,7 +40,7 @@ class ProductService
     }
 
     public function store(Request $request)
-    {  
+    {    
         $rules = [
             "title" => "required|unique:products",
             "slug" => "required ",
@@ -66,6 +71,40 @@ class ProductService
             $product->brand_id = $request->brand_id;
             $product->is_featured = $request->is_featured; 
             $product->save();
+
+            if(!empty($request->image_array)){
+                foreach ($request->image_array as  $temp_value_image) {
+
+                    $tempImageInfo = TempImage::find($temp_value_image);
+                    $extArray = explode('.', $tempImageInfo->name);
+                    $ext = last($extArray);
+
+                    $productImage = new ProductImage();
+                    $productImage->product_id = $product->id;
+                    $productImage->image = "NULL";    
+                    $productImage->save();
+
+                    $newImageName = $product-> id . '-' . $productImage->id . '.' . time() . '.' . $ext;
+                    $productImage->image = $newImageName;
+                    $productImage->save();  
+
+                    // For Large Image  
+                    $spath = public_path() . '/temp/' . $tempImageInfo->name; 
+                    $dpath = public_path() . '/uploads/product/large/' . $tempImageInfo->name;
+                      $manager = new ImageManager(new Driver()); 
+                      $image = $manager->read($spath);
+                      $image->resize(1400, 900);                
+                      $image->save($dpath); 
+
+                    // For Small Image  
+                        $dpath = public_path() . '/uploads/product/small/' . $newImageName;
+                          $manager = new ImageManager(new Driver()); 
+                          $image = $manager->read($spath);
+                          $image->resize(300, 300);                
+                          $image->save($dpath); 
+                }
+
+            }
 
             session()->flash('success', "Product Added Successfully!.");
 

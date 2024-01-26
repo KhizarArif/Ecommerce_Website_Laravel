@@ -13,6 +13,7 @@ class TempImageController extends Controller
 {
     public function create(Request $request){
   
+       
         $image = $request->image;
 
         if (!empty($image) ) {
@@ -27,16 +28,16 @@ class TempImageController extends Controller
  
             $spath = public_path() . '/temp/' . $newName; 
               // Creating Image Thumbnail  
-            //   try {
+            try {
                 $manager = new ImageManager(new Driver()); 
                 $image = $manager->read($spath);
                 $image = $image->resize(300, 275);                     
                 $image->toJpeg()->save(base_path('public/temp/thumb/'. $newName));
                 $save_url = 'temp/thumb/'.$newName;
                 $image->save($save_url);
-            // } catch (\Intervention\Image\Exceptions\DecoderException $e) { 
-            //     dd($e->getMessage());
-            // } 
+            } catch (\Intervention\Image\Exceptions\DecoderException $e) { 
+                dd($e->getMessage());
+            } 
             
             return response()->json([
                "status" => true,

@@ -54,7 +54,6 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h2 class="h4 mb-3">Media</h2>
-                            <input type="hidden" name="image_id" id="image_id">
                             <div id="image" name="image" class="dropzone dz-clickable">
                                 <div class="dz-message needsclick">
                                     <br>Drop files here or click to upload.<br><br>
@@ -111,11 +110,11 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <div class="custom-control custom-checkbox">
+                                        <div class="   ">
                                             <input type="hidden" value="No" name="track_qty" id="track_qty">
-                                            <input class="custom-control-input" type="checkbox" id="track_qty"
-                                                name="track_qty" value="Yes" checked>
-                                            <label for="track_qty" class="custom-control-label">Track Quantity</label>
+                                            <input class="" type="checkbox" id="track_qty"
+                                                name="track_qty" value="Yes" >
+                                                <label for="track_qty"> Track Quantity </label> 
                                             <p class="error"></p>
                                         </div>
                                     </div>
@@ -209,7 +208,8 @@ $(function() {
         height: '300px'
     });
 
-        const dropzone = $("#image").dropzone({
+        $(document).ready(function() {
+            const dropzone = $("#image").dropzone({
             
             url: "{{ route('image.create') }}",
             maxFiles: 10,
@@ -219,26 +219,29 @@ $(function() {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            success: function(file, response) { 
-                // $("#image_id").val(response.id);
-                console.log("response", response.ImagePath);
-                console.log("response", response);
+            success: function(file, response) {  
 
-                var html = `
-                <div class="card" style="width: 18rem;">
-                    <img src="${response.ImagePath}" class="card-img-top" alt="...">
-                        <div class="card-body"> 
-                         <a href="#" class="btn btn-danger btn-sm delete"> Delete </a>
-                        </div> 
-                </div>`;
+                console.log("success", response.image_id);
+                var product = `
+                <div class="col-md-2">
+                    <div class="card" >
+                        <input type="hidden" name="image_array[]" value="${response.image_id}">
+                        <img src="{{ asset('${response.ImagePath}') }}" class="card-img-top" alt="...">
+                            <div class="card-body"> 
+                            <a href="#" class="btn btn-danger btn-sm delete"> Delete </a>
+                            </div> 
+                    </div>
+                </div>
+                `;
 
-                $("#product-gallery").append(html);
+                $("#product-gallery").append(product); 
             
             },error: function(error) {
 
                 console.log("error", error);
             }
         });
+        })
 
 });
 
@@ -294,7 +297,8 @@ $("#productForm").submit(function(e) {
         dataType: "json",
         success: function(response) {
             if (response.status) {
-                // $(".error-message").html("");
+                $('.error').removeClass('text-danger').html('');
+                $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
                 window.location.href = "{{ route('products.index') }}";
 
             } else {
