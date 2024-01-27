@@ -21,16 +21,24 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+            <div class="card-title">
+                    <form action="">
+                        <button type="button" class="btn btn-danger"> <a href="{{ route('products.index')}}"
+                                class="text-white text-decoration-none"> Reset </a> </button>
+                    </form>
+                </div>
                 <div class="card-tools">
-                    <div class="input-group input-group" style="width: 250px;">
-                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
+                    <form action="">
+                        <div class="input-group input-group" style="width: 250px;">
+                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search"
+                                value="{{ request()->get('table_search') }}">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <div class="card-body table-responsive p-0">
@@ -48,20 +56,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ( $productImages as $productImage )
+                        @foreach ( $products as $product )
                         <tr>
-                            <td> {{ $productImage->product->id}} </td>
+                            <td> {{ $product->id}} </td>
                             <td>
-                                @if (!empty($productImages))
-                               		<img src="{{ asset('uploads/product/small/'.$productImage->first()->image)}}" class="img-thumbnail" width="50">
-                                @endif 
+                                @if (!empty($product->productImages->first()->image))
+                                <img src="{{ asset('uploads/product/small/'.$product->productImages->first()->image)}}"
+                                    class="img-thumbnail" width="50">
+                                @endif
                             </td>
-                            <td><a href="#"> {{ $productImage->product->title}} </a></td>
-                            <td> ${{ $productImage->product->price}} </td>
-                            <td> {{ $productImage->product->qty}} left in stock </td>
-                            <td> {{ $productImage->product->sku}} </td>
+                            <td><a href="#"> {{ $product->title}} </a></td>
+                            <td> ${{ $product->price}} </td>
+                            <td> {{ $product->qty}} left in stock </td>
+                            <td> {{ $product->sku}} </td>
                             <td>
-                                @if ($productImage->product->status == 1)
+                                @if ($product->status == 1)
                                 <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                     aria-hidden="true">
@@ -77,7 +86,7 @@
                                 </svg>
                                 @endif
                             <td>
-                                <a href="#">
+                                <a href="{{ route('products.edit', $product->id) }}">
                                     <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path
@@ -85,7 +94,10 @@
                                         </path>
                                     </svg>
                                 </a>
-                                <a href="#" class="text-danger w-4 h-4 mr-1">
+                                <form action="{{ route('products.delete', $product->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                <button  class="text-danger w-4 h-4 mr-1 border-none">
                                     <svg wire:loading.remove.delay="" wire:target=""
                                         class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -93,7 +105,8 @@
                                             d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                                             clip-rule="evenodd"></path>
                                     </svg>
-                                </a>
+                                </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach

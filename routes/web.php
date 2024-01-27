@@ -72,9 +72,8 @@ Route::group(["prefix" => "admin"], function () {
             Route::get('create', 'create')->name('products.create');
             Route::get('edit/{id}', 'edit')->name('products.edit');
             Route::post('store', 'store')->name('products.store');
-            Route::delete('delete/{id}', 'destroy')->name('products.delete');
-
-
+            Route::get('delete/{id}', 'destroy')->name('products.delete');
+            
             Route::get('getSubCategory', 'GetSubCategory')->name('getSubCategory');
         });
 

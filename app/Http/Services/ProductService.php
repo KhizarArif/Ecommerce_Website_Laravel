@@ -20,17 +20,20 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProductService
 { 
-
+ 
     public function index(Request $request)
-    {  
-        if($request->get('table_search')){ 
-            $products = Product::where('name', 'like', '%'.$request->get('table_search').'%')->paginate(10); 
-        }else{
-            $productImages = ProductImage::with('product')->get();
-        }
-       
-        return view('admin.products.index', compact('productImages'));
+    {
+    $query = Product::latest('id')->with('productImages');
+
+    if ($request->get('table_search')) {
+        $query->where('title', 'like', '%' . $request->get('table_search') . '%');
     }
+
+    $products = $query->paginate();
+
+    return view('admin.products.index', compact('products'));
+    }
+
 
     public function create()
     {
@@ -40,9 +43,9 @@ class ProductService
     }
 
     public function store(Request $request)
-    {    
+    {     
         $rules = [
-            "title" => "required|unique:products",
+            "title" => "required",
             "slug" => "required ",
             "price" => "required | numeric",
             "sku" => "required ",
@@ -55,7 +58,7 @@ class ProductService
         }
         $validator = Validator::make($request->all(), $rules);
         if ($validator->passes()) {
-            $product = new Product();
+            $product = $request->id ? Product::find($request->id) : new Product();
             $product->title = $request->title;
             $product->slug = $request->slug;
             $product->description = $request->description;
@@ -73,9 +76,8 @@ class ProductService
             $product->save();
 
             if(!empty($request->image_array)){
-                foreach ($request->image_array as  $temp_value_image) {
-
-                    $tempImageInfo = TempImage::find($temp_value_image);
+                foreach ($request->image_array as  $temp_value_image) { 
+                    $tempImageInfo = TempImage::find($temp_value_image); 
                     $extArray = explode('.', $tempImageInfo->name);
                     $ext = last($extArray);
 
@@ -97,16 +99,15 @@ class ProductService
                       $image->save($dpath); 
 
                     // For Small Image  
-                        $dpath = public_path() . '/uploads/product/small/' . $newImageName;
+                        $dpath = public_path() . '/uploads/product/small/' . $tempImageInfo->name;
                           $manager = new ImageManager(new Driver()); 
                           $image = $manager->read($spath);
                           $image->resize(300, 300);                
                           $image->save($dpath); 
                 }
-
-            }
-
-            session()->flash('success', "Product Added Successfully!.");
+            };
+            $successMsg = $request->id ? "Product Updated Successfully!" : "Product Added Successfully!.";
+            session()->flash('success', $successMsg);
 
             return response()->json([
                 "status" => true, 
@@ -123,9 +124,15 @@ class ProductService
 
     public function edit($id)
     {
-        $product = Product::find($id);
-        return view('admin.products.create', compact('product'));
+        $product = Product::find($id); 
+        $productImages = ProductImage::where('product_id', $product->id)->get();
+        $subcategories = SubCategory::where('category_id', $product->category_id)->get();
+        $categories = Category::orderBy('name', 'ASC')->get();
+        $brands = Brand::orderBy('name', 'ASC')->get(); 
+
+        return view('admin.products.edit', compact('product', 'categories', 'brands', 'subcategories', 'productImages'));
     }
+
     public function destroy($id)
     {  
           Product::find($id)->delete();  
