@@ -7,6 +7,7 @@ use App\Models\TempImage;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\File;
 
 
 class TempImageController extends Controller
@@ -46,5 +47,20 @@ class TempImageController extends Controller
                "message" => "Image uploaded successfully" 
             ]);
         }
-    }
+    } 
+
+        public function deleteImage($id)
+        {
+            $tempImage = TempImage::find($id);
+            if ($tempImage) { 
+                File::delete(public_path() . '/temp/thumb/' . $tempImage->name);
+                File::delete(public_path() . '/temp/' . $tempImage->name);
+                $tempImage->delete();
+
+                return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
+            }
+            return response()->json(['success' => false, 'message' => 'Image not found']);
+        }
+
+
 }

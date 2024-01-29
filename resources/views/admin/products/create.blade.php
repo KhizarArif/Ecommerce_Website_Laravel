@@ -236,9 +236,8 @@ $(function() {
 
                 $("#product-gallery").append(product); 
             
-            },error: function(error) {
-
-                console.log("error", error);
+            },complete: function(file) {
+                this.removeFile(file);
             }
         });
         })
@@ -320,9 +319,26 @@ $("#productForm").submit(function(e) {
     });
 });
 
-function deleteImage(imageId) { 
-    console.log('Deleting image with ID:', imageId);
-    $('#image-row-' + imageId).remove(); 
+function deleteImage(imageId) {
+    $.ajax({
+        url: "{{ route('delete.image', ['id' => ':imageId']) }}".replace(':imageId', imageId),
+        type: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            if (response.success) {
+                $("#image-row-" + imageId).remove(); // Remove image from UI
+                console.log("Image deleted successfully");
+            } else {
+                console.error("Error deleting image: ", response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error deleting image: ", error);
+        }
+    });
 }
+
 </script>
 @endsection

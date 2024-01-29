@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Maatwebsite\Excel\Facades\Excel;  
+use Illuminate\Support\Facades\File;
 
 
 class ProductService
@@ -74,8 +75,8 @@ class ProductService
             $product->brand_id = $request->brand_id;
             $product->is_featured = $request->is_featured; 
             $product->save();
-
-            if(!empty($request->image_array)){
+            
+            if(!$request->id &&!empty($request->image_array)){
                 foreach ($request->image_array as  $temp_value_image) { 
                     $tempImageInfo = TempImage::find($temp_value_image); 
                     $extArray = explode('.', $tempImageInfo->name);
@@ -86,24 +87,32 @@ class ProductService
                     $productImage->image = "NULL";    
                     $productImage->save();
 
-                    $newImageName = $product-> id . '-' . $productImage->id . '.' . time() . '.' . $ext;
+                    $newImageName = $product-> id . '-' . $productImage->id . '-' . time() . '.' . $ext;
                     $productImage->image = $newImageName;
-                    $productImage->save();  
+                    $productImage->save();      
 
-                    // For Large Image  
+                    // For Large Image 
+                    try { 
                     $spath = public_path() . '/temp/' . $tempImageInfo->name; 
-                    $dpath = public_path() . '/uploads/product/large/' . $tempImageInfo->name;
+                    $dpath = public_path() . '/uploads/product/large/' . $newImageName;
                       $manager = new ImageManager(new Driver()); 
                       $image = $manager->read($spath);
                       $image->resize(1400, 900);                
                       $image->save($dpath); 
+                    } catch (\Exception $e) { 
+                        dd($e->getMessage());
+                    }
 
                     // For Small Image  
-                        $dpath = public_path() . '/uploads/product/small/' . $tempImageInfo->name;
+                    try {
+                        $dpath = public_path() . '/uploads/product/small/' . $newImageName;
                           $manager = new ImageManager(new Driver()); 
                           $image = $manager->read($spath);
                           $image->resize(300, 300);                
                           $image->save($dpath); 
+                    } catch (\Exception $e) { 
+                        dd($e->getMessage());
+                    }
                 }
             };
             $successMsg = $request->id ? "Product Updated Successfully!" : "Product Added Successfully!.";
@@ -111,6 +120,7 @@ class ProductService
 
             return response()->json([
                 "status" => true, 
+                "message" => $successMsg
             ]);
         }else{
             return response()->json([
@@ -135,12 +145,73 @@ class ProductService
 
     public function destroy($id)
     {  
-          Product::find($id)->delete();  
+        $product = Product::find($id);
+
+        $productImages = ProductImage::where('product_id', $product->id)->get();
+        if(!empty($productImages)){
+            foreach ($productImages as $productImage) {
+                File::delete(public_path() . '/uploads/product/large/' . $productImage->image);
+                File::delete(public_path() . '/uploads/product/small/' . $productImage->image); 
+            }
+            ProductImage::where('product_id', $product->id)->delete();
+        } 
+        
+        $product->delete(); 
+
+        session()->flash('success', 'Product Deleted Successfully! ');
 
         return response()->json([
             "status" => true,
-            "message" => 'success',
+            "message" => 'Product Deleted Successfully! ',
         ]);
+    }
+
+
+
+    // Update Product Controller Image
+    public function updateProductImage(Request $request){
+        
+        $image = $request->image;
+        $ext = $image->getClientOriginalExtension();
+        $sourcePath = $image->getPathName();
+
+        $productImage = new ProductImage();
+        $productImage->product_id = $request->product_id;
+        $productImage->image = "NULL";
+        $productImage->save();
+
+        $newImageName = $request->product_id . '-' . $productImage->id . '-' . time() . '.' . $ext;
+        $productImage->image = $newImageName;
+        $productImage->save();
+
+        try {  
+            $dpath = public_path() . '/uploads/product/large/' . $newImageName;
+              $manager = new ImageManager(new Driver()); 
+              $image = $manager->read($sourcePath);
+              $image->resize(1400, 900);                
+              $image->save($dpath); 
+            } catch (\Exception $e) { 
+                dd($e->getMessage());
+            }
+
+            // For Small Image  
+            try {
+                $dpath = public_path() . '/uploads/product/small/' . $newImageName;
+                  $manager = new ImageManager(new Driver()); 
+                  $image = $manager->read($sourcePath);
+                  $image->resize(300, 300);                
+                  $image->save($dpath); 
+            } catch (\Exception $e) { 
+                dd($e->getMessage());
+            }
+
+            return response()->json([
+                "status" => true,
+                "image_id" => $productImage->id,
+                "ImagePath" => asset('uploads/product/small/'. $productImage->image), 
+                "message" => 'Image Saved Successfully!',
+            ]);
+
     }
 
     // Get Sub categories
@@ -151,6 +222,16 @@ class ProductService
             'status' => true,
             'subCategories' => $subCategories
         ]);
+    }
+
+
+    public function deleteProductImage($request){ 
+        $productImage = ProductImage::find($request-> id);
+        File::delete(public_path() . '/uploads/product/large/' . $productImage->image);
+        File::delete(public_path() . '/uploads/product/small/' . $productImage->image);
+        $productImage->delete();
+
+        return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
     }
 
     // Import Excel File 

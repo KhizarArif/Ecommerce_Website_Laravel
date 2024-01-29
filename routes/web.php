@@ -72,9 +72,13 @@ Route::group(["prefix" => "admin"], function () {
             Route::get('create', 'create')->name('products.create');
             Route::get('edit/{id}', 'edit')->name('products.edit');
             Route::post('store', 'store')->name('products.store');
-            Route::get('delete/{id}', 'destroy')->name('products.delete');
+            Route::delete('delete/{id}', 'destroy')->name('products.delete');
             
             Route::get('getSubCategory', 'GetSubCategory')->name('getSubCategory');
+
+            // Update Product Controller Image
+            Route::post('product-image/update', 'updateProductImage')->name('products.updateImage');
+            Route::delete('product-image', 'deleteProductImage')->name('products.deleteImage');
         });
 
 
@@ -89,6 +93,8 @@ Route::group(["prefix" => "admin"], function () {
 
         // Image routes
         Route::post('/upload-image', [TempImageController::class, 'create'])->name('image.create');
+        Route::delete('/delete-image/{id}', [TempImageController::class, 'deleteImage'])->name('delete.image');
+
 
         Route::get('/getSlug', function (Request $request) {
             $slug = "";

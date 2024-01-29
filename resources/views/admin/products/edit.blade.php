@@ -68,10 +68,10 @@
                         @foreach ($productImages as $image)
                         <div class="col-md-2" id="image-row-{{$image->id}}">
                             <div class="card">
-                                <input type="hidden" name="image_array[]" value="{{$image->id}}">
+                                <input type="hidden" name="image_array[]" value="{{$image->id}}"> 
                                 <img src="{{ asset('uploads/product/small/'.$image->image) }}" class="card-img-top" alt="...">
                                 <div class="card-body">
-                                    <a href="javascript:void(0)" onClick="deleteImage( {{ $image->id }})"
+                                    <a href="javascript:void(0)" onClick="deleteImage( '{{ $image->id }}')"
                                         class="btn btn-danger btn-sm delete"> Delete </a>
                                 </div>
                             </div>
@@ -237,22 +237,22 @@ $(function() {
     $(document).ready(function() {
         const dropzone = $("#image").dropzone({
 
-            url: "{{ route('image.create') }}",
+            url: "{{ route('products.updateImage') }}",
             maxFiles: 10,
             paramName: 'image',
+            params: {'product_id': '{{$product->id}}'},
             addRemoveLinks: true,
             acceptedFiles: "image/jpeg,image/png,image/gif",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            success: function(file, response) {
-
-                console.log("success", response.image_id);
+            success: function(file, response) { 
+                console.log("success", response);
                 var product = `
                 <div class="col-md-2" id="image-row-${response.image_id}">
                     <div class="card" >
                         <input type="hidden" name="image_array[]" value="${response.image_id}">
-                        <img src="{{ asset('${response.ImagePath}') }}" class="card-img-top" alt="...">
+                        <img src="{{ '${response.ImagePath}' }}" class="card-img-top" alt="...">
                             <div class="card-body"> 
                             <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="btn btn-danger btn-sm delete"> Delete </a>
                             </div> 
@@ -343,10 +343,26 @@ $("#productForm").submit(function(e) {
     });
 });
 
-
-function deleteImage(imageId) { 
-    console.log('Deleting image with ID:', imageId);
-    $('#image-row-' + imageId).remove(); 
+function deleteImage(imageId) {
+    $.ajax({
+        type: 'DELETE',
+        data:{id: imageId},
+        url: "{{route('products.deleteImage')}}",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+        },
+        success: function(response) {
+            if (response.success) {
+                $("#image-row-" + imageId).remove(); // Remove image from UI
+                console.log("Image deleted successfully");
+            } else {
+                console.error("Error deleting image: ", response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error deleting image: ", error);
+        }
+    });
 }
 </script>
 @endsection

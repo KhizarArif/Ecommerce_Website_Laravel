@@ -38,6 +38,14 @@ class ProductController extends Controller
         return $this->productservice->destroy( $id);
     }
 
+    public function updateProductImage(Request $request){
+        return $this->productservice->updateProductImage($request);
+    }
+
+    public function deleteProductImage(Request $request){
+        return $this->productservice->deleteProductImage($request);
+    }
+
     public function GetSubCategory(Request $request){
         return $this->productservice->GetSubCategory($request);
     }
