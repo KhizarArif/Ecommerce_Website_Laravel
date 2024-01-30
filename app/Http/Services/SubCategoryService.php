@@ -40,9 +40,12 @@ class SubCategoryService
         $subcategory->category_id = $request->category_id;
         $subcategory->save();
 
+        
+        $successMessage = $request->id > 0 ? 'Category Updated Successfully' : 'Category Added Successfully';
+        session()->flash('success', $successMessage);
+
         return response()->json([
-            "status" => true,
-            "message" => 'Subcategory Added Successfully! ',
+            "status" => true, 
         ]);
     }
 

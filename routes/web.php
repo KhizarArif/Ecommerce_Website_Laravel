@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\HomeController;  
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,12 +23,7 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
-
+Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
 
 Route::group(["prefix" => "admin"], function () {
 
