@@ -7,7 +7,8 @@ use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\FrontController;
-use App\Http\Controllers\HomeController;  
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -24,6 +25,10 @@ use Illuminate\Support\Str;
 */
 
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
+// SHOP Routes
+Route::controller(ShopController::class)->prefix('shop')->group(function () {
+    Route::get('', 'index')->name('shop.index');
+});
 
 Route::group(["prefix" => "admin"], function () {
 
@@ -77,6 +82,7 @@ Route::group(["prefix" => "admin"], function () {
             Route::delete('product-image', 'deleteProductImage')->name('products.deleteImage');
         });
 
+        
 
 
         // Export Data to Excel
