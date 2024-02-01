@@ -27,7 +27,7 @@ use Illuminate\Support\Str;
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
 // SHOP Routes
 Route::controller(ShopController::class)->prefix('shop')->group(function () {
-    Route::get('', 'index')->name('shop.index');
+    Route::get('{categorySlug?}/{subcategorySlug?}', 'index')->name('shop.index');
 });
 
 Route::group(["prefix" => "admin"], function () {

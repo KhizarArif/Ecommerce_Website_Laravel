@@ -33,6 +33,7 @@
 
 	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick.css')}}" />
 	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick-theme.css')}}" />
+	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/ion.rangeSlider.min.css')}}" />
 	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/video-js.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/style.css')}}" />
 

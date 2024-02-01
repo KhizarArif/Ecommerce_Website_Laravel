@@ -20,8 +20,7 @@ use Illuminate\Support\Facades\File;
 
 
 class ProductService
-{ 
- 
+{  
     public function index(Request $request)
     {
     $query = Product::latest('id')->with('productImages');
