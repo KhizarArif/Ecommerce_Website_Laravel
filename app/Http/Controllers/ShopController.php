@@ -29,6 +29,17 @@ class ShopController extends Controller
         if (!empty($subcategorySlug)) {
             $subcategory = SubCategory::where('slug', $subcategorySlug)->first();
             $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("id", "desc")->where('status', 1)->get();
+            if($request->get('sort') != ''){
+                if($request->get('sort') == 'price_desc'){
+                    $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("price", "desc")->where('status', 1)->get();
+                }else if($request->get('sort') == 'price_asc'){
+                    $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("price", "asc")->where('status', 1)->get();
+                }else if($request->get('sort') == 'latest'){
+                    $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("id", "desc")->where('status', 1)->get();
+                }
+            }else{
+                $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("id", "desc")->where('status', 1)->get();
+            }
             $subcategorySelected = $subcategory->id;
         }
 
@@ -38,17 +49,16 @@ class ShopController extends Controller
         }
         // dd($request->get('price_min'), $request->get('price_max'));
         if($request->get('price_min') !=  '' && $request->get('price_max') !=  ''){
-            if($request->get('price_max') == 1000){
-                $products = $products->whereBetween('price', [intval($request->get('price_min')),1000]); 
+            if($request->get('price_max') == 10000){
+                $products = $products->whereBetween('price', [intval($request->get('price_min')),10000]); 
             }else{
                 $products = $products->whereBetween('price', [intval($request->get('price_min')), intval($request->get('price_max'))]);  
             }     
         }
         
-        $data['priceMax'] = (intval($request->get('price_max')) == 0 ) ? 1000 : intval($request->get('price_max')); 
-     
+        $data['priceMax'] = (intval($request->get('price_max')) == 0 ) ? 10000 : intval($request->get('price_max')); 
         $data['priceMin'] = intval($request->get('price_min'));
-
+        $data['sort'] =  $request->get('sort');
 
         return view('frontend.shop', compact('categories', 'brands', 'products', 'categorySelected', 'subcategorySelected', 'brandsArray'))->with($data);
 

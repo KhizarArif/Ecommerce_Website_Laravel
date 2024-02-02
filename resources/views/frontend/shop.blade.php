@@ -95,14 +95,12 @@
                         <div class="col-12 pb-1">
                             <div class="d-flex align-items-center justify-content-end mb-4">
                                 <div class="ml-2">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-light dropdown-toggle"
-                                            data-bs-toggle="dropdown">Sorting</button>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#">Latest</a>
-                                            <a class="dropdown-item" href="#">Price High</a>
-                                            <a class="dropdown-item" href="#">Price Low</a>
-                                        </div>
+                                    <div class="btn-group"> 
+                                        <select name="sort" id="sort" class="dropdown-toggle form-select" >
+                                            <option value="latest" {{($sort == 'latest') ? 'selected' : ''}} >Latest</option>
+                                            <option value="price_desc" {{($sort == 'price_desc') ? 'selected' : ''}}>Price High</option>
+                                            <option value="price_asc" {{($sort == 'price_asc') ? 'selected' : ''}}>Price Low</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -175,14 +173,12 @@
             type: "double",
             min: 0,
             max: 100000,
-            from:  "{{$priceMin}}",
-            // from:  0,
+            from:  "{{$priceMin}}", 
             step: 10,
-            to: "{{$priceMax}}",
-            // to: 500,
+            to: "{{$priceMax}}", 
             skin: "round",
             max_postfix: "+",
-            postfix: "$",
+            prefix: "$",
             onFinish: function () {
                 apply_filters();
             }
@@ -204,11 +200,18 @@
             console.log(brands.toString()); 
             var url = "{{ url()->current()}}?"
              url += '&price_min=' + slider.result.from + '&price_max=' + slider.result.to;
+             url += '&sort=' + $('#sort').val();
              if(brands.length > 0){
                 url += '&brand=' + brands.toString();
              }
             window.location.href =  url;
         }
+
+
+        // Sorting 
+        $('#sort').change(function(){
+            apply_filters();
+        });
 
     </script>
 
