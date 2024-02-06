@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
@@ -29,6 +30,11 @@ Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
 Route::controller(ShopController::class)->prefix('shop')->group(function () {
     Route::get('{categorySlug?}/{subcategorySlug?}', 'index')->name('shop.index');
 });
+
+Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
+
+Route::get('/cart', [CartController::class, 'cart'])->name('front.cart');
+Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('front.addToCart');
 
 Route::group(["prefix" => "admin"], function () {
 
@@ -80,6 +86,10 @@ Route::group(["prefix" => "admin"], function () {
             // Update Product Controller Image
             Route::post('product-image/update', 'updateProductImage')->name('products.updateImage');
             Route::delete('product-image', 'deleteProductImage')->name('products.deleteImage');
+
+            // Related Products Select 2
+            Route::get('getProducts', 'getProducts')->name('products.getProducts');
+
         });
 
         

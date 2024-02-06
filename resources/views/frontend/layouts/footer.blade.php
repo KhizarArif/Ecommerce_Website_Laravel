@@ -55,6 +55,35 @@
 <script src="{{ asset('front-assets/js/slick.min.js')}}"></script>
 <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js')}}"></script>
 <script src="{{ asset('front-assets/js/custom.js')}}"></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    function addToCart(id) { 
+            console.log("id: ", id);
+            $.ajax({
+                url: "{{ route('front.addToCart') }}",
+                type: "POST",
+                data: {
+                    id: id 
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    if(response.status == true){
+                        window.location.href = "{{ route('front.cart') }}";
+                    }else{
+                        console.log("Errrorr");
+                        alert(response.message);
+                    }   
+                }
+            })
+        }
+        
+</script>
 <script>
 window.onscroll = function() {
     myFunction()

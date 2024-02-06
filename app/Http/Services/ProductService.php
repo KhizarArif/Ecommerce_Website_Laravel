@@ -62,6 +62,8 @@ class ProductService
             $product->title = $request->title;
             $product->slug = $request->slug;
             $product->description = $request->description;
+            $product->short_description = $request->short_description;
+            $product->shipping_returns = $request->shipping_returns;
             $product->price = $request->price;
             $product->compare_price = $request->compare_price;
             $product->sku = $request->sku;
@@ -73,6 +75,7 @@ class ProductService
             $product->subcategory_id = $request->subcategory_id;
             $product->brand_id = $request->brand_id;
             $product->is_featured = $request->is_featured; 
+            $product->related_products = (!empty($request->related_products)) ? implode(',', $request->related_products) : '';
             $product->save();
             
             if(!$request->id &&!empty($request->image_array)){
@@ -133,13 +136,20 @@ class ProductService
 
     public function edit($id)
     {
-        $product = Product::find($id); 
+        $product = Product::find($id);  
         $productImages = ProductImage::where('product_id', $product->id)->get();
         $subcategories = SubCategory::where('category_id', $product->category_id)->get();
         $categories = Category::orderBy('name', 'ASC')->get();
         $brands = Brand::orderBy('name', 'ASC')->get(); 
 
-        return view('admin.products.edit', compact('product', 'categories', 'brands', 'subcategories', 'productImages'));
+        // Related Products 
+        $relatedProducts = [];
+        if($product->related_products != ""){
+            $productArray = explode(',', $product->related_products);
+            $relatedProducts = Product::whereIn('id', $productArray)->get();
+        }
+
+        return view('admin.products.edit', compact('product', 'categories', 'brands', 'subcategories', 'productImages', 'relatedProducts'));
     }
 
     public function destroy($id)
@@ -165,7 +175,24 @@ class ProductService
         ]);
     }
 
+    // Get Related Products Select 2
+    public function getProducts($request){
+        
+        $tempProduct = [];
+        if($request->term != ""){
+            $products = Product::where('title', 'like', '%' . $request->term .'%')->get();  
+            if($products != null){
+                foreach($products as $product){
+                    $tempProduct[] = array('id' => $product->id, 'text' => $product->title);
+                }
+            }
+        }
 
+        return response()->json([
+            'tags' => $tempProduct,
+            'status' => true
+        ]);
+    }
 
     // Update Product Controller Image
     public function updateProductImage(Request $request){

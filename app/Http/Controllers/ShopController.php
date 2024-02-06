@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-    public function index(Request $request, $categorySlug = null, $subcategorySlug = null)
+   public function index(Request $request, $categorySlug = null, $subcategorySlug = null)
     {
         $categorySelected = "";
         $subcategorySelected = "";
@@ -18,49 +18,63 @@ class ShopController extends Controller
 
         $categories = Category::with('subCategories')->orderBy("name", "asc")->where('status', 1)->get();
         $brands = Brand::orderBy("name", "asc")->where('status', 1)->get();
-        $products = Product::with('productImages')->orderBy("id", "desc")->where('status', 1)->get();
+        $productsQuery = Product::with('productImages')->orderBy("id", "desc")->where('status', 1);
 
         if (!empty($categorySlug)) {
             $category = Category::where('slug', $categorySlug)->first();
-            $products = Product::where('category_id', $category->id)->with('productImages')->orderBy("id", "desc")->where('status', 1)->get();
+            $productsQuery->where('category_id', $category->id);
             $categorySelected = $category->id;
         }
 
         if (!empty($subcategorySlug)) {
             $subcategory = SubCategory::where('slug', $subcategorySlug)->first();
-            $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("id", "desc")->where('status', 1)->get();
-            if($request->get('sort') != ''){
-                if($request->get('sort') == 'price_desc'){
-                    $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("price", "desc")->where('status', 1)->get();
-                }else if($request->get('sort') == 'price_asc'){
-                    $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("price", "asc")->where('status', 1)->get();
-                }else if($request->get('sort') == 'latest'){
-                    $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("id", "desc")->where('status', 1)->get();
-                }
-            }else{
-                $products = Product::where('subcategory_id', $subcategory->id)->with('productImages')->orderBy("id", "desc")->where('status', 1)->get();
-            }
+            $productsQuery->where('subcategory_id', $subcategory->id);
             $subcategorySelected = $subcategory->id;
         }
 
-        if(!empty($request->get('brand'))){
+        if (!empty($request->get('brand'))) {
             $brandsArray = explode(',', $request->get('brand'));
-            $products = $products->whereIn('brand_id', $brandsArray);
+            $productsQuery->whereIn('brand_id', $brandsArray);
         }
-        // dd($request->get('price_min'), $request->get('price_max'));
-        if($request->get('price_min') !=  '' && $request->get('price_max') !=  ''){
-            if($request->get('price_max') == 10000){
-                $products = $products->whereBetween('price', [intval($request->get('price_min')),10000]); 
-            }else{
-                $products = $products->whereBetween('price', [intval($request->get('price_min')), intval($request->get('price_max'))]);  
-            }     
+
+        if ($request->has('price_min') && $request->has('price_max')) {
+            $productsQuery->whereBetween('price', [intval($request->get('price_min')), intval($request->get('price_max'))]);
         }
-        
-        $data['priceMax'] = (intval($request->get('price_max')) == 0 ) ? 10000 : intval($request->get('price_max')); 
-        $data['priceMin'] = intval($request->get('price_min'));
-        $data['sort'] =  $request->get('sort');
+
+        if ($request->has('sort')) {
+            if ($request->get('sort') == 'price_desc') {
+                $productsQuery->orderBy('price', 'desc');
+            } elseif ($request->get('sort') == 'price_asc') {
+                $productsQuery->orderBy('price', 'asc');
+            }
+        }
+
+        $products = $productsQuery->paginate(6);
+
+        $data = [
+            'priceMax' => (intval($request->get('price_max')) == 0) ? 10000 : intval($request->get('price_max')),
+            'priceMin' => intval($request->get('price_min')),
+            'sort' => $request->get('sort')
+        ];
 
         return view('frontend.shop', compact('categories', 'brands', 'products', 'categorySelected', 'subcategorySelected', 'brandsArray'))->with($data);
+    }
+
+    
+    public function product($slug){
+        $product = Product::where('slug', $slug)->with('productImages')->first();
+        if($product == null){
+            abort(404);
+        } 
+        
+        $relatedProducts = [];
+        if($product->related_products != ""){
+            $productArray = explode(',', $product->related_products); 
+            $relatedProducts = Product::whereIn('id', $productArray)->with('productImages')->get(); 
+        }   
+
+        return view('frontend.product', compact('product', 'relatedProducts'));
+
 
     }
 }

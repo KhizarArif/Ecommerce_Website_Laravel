@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.css') }}"> 
     <!-- Summer Note -->
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css')}}">
+    {{-- Select 2 --}}
+    <link rel="stylesheet" href="{{ asset('admin-assets/plugins/select2/css/select2.min.css')}}">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -50,7 +52,11 @@
     <script src="{{ asset('admin-assets/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('admin-assets/js/demo.js') }}"></script>
+    {{-- Summer Note --}}
     <script src="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.js') }}"></script> 
+    {{-- Select 2 --}}
+    <script src="{{ asset('admin-assets/plugins/select2/js/select2.min.js') }}"></script> 
+    {{-- Sweet Alert --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
         $.ajaxSetup({
