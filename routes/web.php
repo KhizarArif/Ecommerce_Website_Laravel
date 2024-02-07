@@ -5,7 +5,8 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
-use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ProductController; 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\HomeController;
@@ -26,15 +27,27 @@ use Illuminate\Support\Str;
 */
 
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
+
+// Registration & Login Routes
+Route::get('/register', [AuthController::class, 'register'])->name('account.register');
+Route::post('/process-register', [AuthController::class, 'processRegister'])->name('account.processRegister');
+
+
+
 // SHOP Routes
 Route::controller(ShopController::class)->prefix('shop')->group(function () {
-    Route::get('{categorySlug?}/{subcategorySlug?}', 'index')->name('shop.index');
+    Route::get('{categorySlug?}/{subcategorySlug?}', 'index')->name('front.shop');
 });
 
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
 
-Route::get('/cart', [CartController::class, 'cart'])->name('front.cart');
-Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('front.addToCart');
+// Cart Controller 
+Route::controller(CartController::class)->group(function(){
+    Route::get('/cart', 'cart')->name('front.cart');
+    Route::post('/add-to-cart', 'addToCart')->name('front.addToCart');
+    Route::post('/update-cart', 'updateCart')->name('front.updateCart');
+    Route::delete('/delete-cart', 'deleteToCart')->name('front.deleteToCart');
+});
 
 Route::group(["prefix" => "admin"], function () {
 

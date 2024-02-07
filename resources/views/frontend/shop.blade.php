@@ -6,7 +6,7 @@
             <div class="container">
                 <div class="light-font">
                     <ol class="breadcrumb primary-color mb-0">
-                        <li class="breadcrumb-item"><a class="white-text" href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a class="white-text" href="{{ route('frontend.home') }}">Home</a></li>
                         <li class="breadcrumb-item active">Shop</li>
                     </ol>
                 </div>
@@ -36,7 +36,7 @@
                                                         </button>
                                                     </h2>
                                                 @else
-                                                    <a href="{{ route('shop.index', $category->slug) }}"
+                                                    <a href="{{ route('front.shop', $category->slug) }}"
                                                         class="nav-item nav-link {{ $categorySelected == $category->id ? 'text-primary' : '' }}">
                                                         {{ $category->name }} </a>
                                                 @endif
@@ -48,7 +48,7 @@
                                                         <div class="accordion-body">
                                                             <div class="navbar-nav">
                                                                 @foreach ($category->subcategories as $subcategory)
-                                                                    <a href="{{ route('shop.index', [$category->slug, $subcategory->slug]) }}"
+                                                                    <a href="{{ route('front.shop', [$category->slug, $subcategory->slug]) }}"
                                                                         class="nav-item nav-link {{ $subcategorySelected == $subcategory->id ? 'text-primary' : '' }} ">{{ $subcategory->name }}</a>
                                                                 @endforeach
                                                             </div>
