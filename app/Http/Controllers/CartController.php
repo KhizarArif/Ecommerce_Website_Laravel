@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
@@ -109,6 +110,25 @@ class CartController extends Controller
             "status" => $status,
             "message" => $message
         ]);
+    }
+
+    public function checkout(){
+
+        if(Cart::count() == 0){
+            return redirect()->route('front.shop');
+        }
+
+        if(Auth::check() == false){
+
+            if(!session()->has('url.intended')){
+                session(['url.intended' => url()->current()]);
+            }
+
+            return redirect()->route('account.login');
+
+        }
+
+        return view('frontend.checkout');
     }
 
 }

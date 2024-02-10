@@ -29,8 +29,21 @@ use Illuminate\Support\Str;
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
 
 // Registration & Login Routes
-Route::get('/register', [AuthController::class, 'register'])->name('account.register');
-Route::post('/process-register', [AuthController::class, 'processRegister'])->name('account.processRegister');
+Route::group(["prefix" => "account"],function(){
+    Route::group(['middleware' => 'guest'], function(){
+        Route::controller(AuthController::class)->group(function(){
+            Route::get('/register', 'register')->name('account.register');
+            Route::post('/process-register', 'processRegister')->name('account.processRegister');
+            Route::get('/login', 'login')->name('account.login');
+            Route::post('/login', 'authenticate')->name('account.authenticate');
+        });
+    });
+    
+    Route::group(['middleware' => 'auth'], function(){
+        Route::get("/profile", [AuthController::class, 'profile'])->name('account.profile');
+        Route::get("/logout", [AuthController::class, 'logout'])->name('account.logout');
+    });
+});
 
 
 
@@ -47,6 +60,7 @@ Route::controller(CartController::class)->group(function(){
     Route::post('/add-to-cart', 'addToCart')->name('front.addToCart');
     Route::post('/update-cart', 'updateCart')->name('front.updateCart');
     Route::delete('/delete-cart', 'deleteToCart')->name('front.deleteToCart');
+    Route::get('/checkout', 'checkout')->name('front.checkout');
 });
 
 Route::group(["prefix" => "admin"], function () {
