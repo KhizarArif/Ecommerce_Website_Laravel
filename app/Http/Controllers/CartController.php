@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
+use App\Models\CustomerAddress;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -128,7 +131,57 @@ class CartController extends Controller
 
         }
 
-        return view('frontend.checkout');
+        $countries = Country::orderBy('name', 'asc')->get();
+
+        return view('frontend.checkout', compact('countries'));
+    }
+
+    public function processCheckout(Request $request){
+         
+
+        $validator = Validator::make($request->all(),[
+           'first_name' => 'required | min:5',
+           'last_name'  => 'required',
+           'email'      => 'required | email',
+           'mobile'     => 'required',
+           'country' => 'required',
+           'address'    => 'required',
+           'city'       => 'required',
+           'state'      => 'required',
+           'zip'        => 'required',
+
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'error' => $validator->errors()
+            ]);
+        }
+
+        $user = Auth::user();
+        $country_id = (int)$request->country;
+        CustomerAddress::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'user_id'     => $user->id,
+                'first_name'  => $request->first_name,
+                'last_name'   => $request->last_name,
+                'email'       => $request->email,
+                'mobile'      => $request->mobile,
+                'address'     => $request->address,
+                'country_id'  => $country_id,
+                'state'       => $request->state,
+                'city'        => $request->city,
+                'zip'         => $request->zip
+
+            ]
+        );
+
+        return response()->json([
+            'status' => true 
+        ]);
+
     }
 
 }

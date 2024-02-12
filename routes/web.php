@@ -61,6 +61,7 @@ Route::controller(CartController::class)->group(function(){
     Route::post('/update-cart', 'updateCart')->name('front.updateCart');
     Route::delete('/delete-cart', 'deleteToCart')->name('front.deleteToCart');
     Route::get('/checkout', 'checkout')->name('front.checkout');
+    Route::post('/process-checkout', 'processCheckout')->name('front.processCheckout');
 });
 
 Route::group(["prefix" => "admin"], function () {
