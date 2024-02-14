@@ -9,8 +9,8 @@ class FrontController extends Controller
 {
     public function index(){
 
-        $featuredProducts = Product::where('is_featured', 'Yes')->orderBy('id', 'desc')->take(8)->get();
-        $latestProducts = Product::orderBy('id', 'desc')->where('status', 1)->take(8)->get();
+        $featuredProducts = Product::where('is_featured', 'Yes')->orderBy('id', 'desc')->take(10)->get();
+        $latestProducts = Product::orderBy('id', 'desc')->where('status', 1)->take(10)->get();
 
         return view('frontend.home', compact('featuredProducts', 'latestProducts'));
     }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use App\Models\CustomerAddress;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -11,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
-class CartController extends Controller
+class   CartController extends Controller
 {
     public function addToCart(Request $request){
         $product = Product::with('productImages')->find($request->id); 
@@ -149,7 +151,6 @@ class CartController extends Controller
            'city'       => 'required',
            'state'      => 'required',
            'zip'        => 'required',
-
         ]);
 
         if($validator->fails()){
@@ -159,8 +160,7 @@ class CartController extends Controller
             ]);
         }
 
-        $user = Auth::user();
-        $country_id = (int)$request->country;
+        $user = Auth::user(); 
         CustomerAddress::updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -169,8 +169,9 @@ class CartController extends Controller
                 'last_name'   => $request->last_name,
                 'email'       => $request->email,
                 'mobile'      => $request->mobile,
+                'appartment'      => $request->appartment,
                 'address'     => $request->address,
-                'country_id'  => $country_id,
+                'country_id'  => $request->country,
                 'state'       => $request->state,
                 'city'        => $request->city,
                 'zip'         => $request->zip
@@ -178,10 +179,55 @@ class CartController extends Controller
             ]
         );
 
-        return response()->json([
-            'status' => true 
-        ]);
+        if($request->payment_method == 'cod'){
 
+            $shipping = 0;
+            $discount = 0;
+            $subtotal = Cart::subtotal(2 , '.', '');
+            $grandtotal = $subtotal + $shipping - $discount;
+
+            $order = new Order;
+            $order->subtotal = $subtotal;
+            $order->shipping = $shipping;
+            $order->grand_total = $grandtotal;
+
+            $order->user_id = $user->id;
+            $order->first_name = $request->first_name;
+            $order->last_name = $request->last_name;
+            $order->email = $request->email;
+            $order->mobile = $request->mobile;
+            $order->appartment = $request->appartment;
+            $order->address = $request->address;
+            $order->country_id = $request->country;
+            $order->state = $request->state;
+            $order->city = $request->city;
+            $order->zip = $request->zip;
+            $order->notes = $request->notes;
+            $order->save();
+
+            foreach(Cart::content() as $item){
+               $orderItem = new OrderItem;
+               $orderItem->order_id = $order->id;
+               $orderItem->product_id = $item->id;
+               $orderItem->name = $item->name;
+               $orderItem->price = $item->price;
+               $orderItem->quantity = $item->qty;
+               $orderItem->save();
+            }
+
+            return redirect()->json([
+                "message" => "Order Created Successfully",
+                "orderId" => $order->id,
+                "status" => true,
+            ]);
+
+        }
+
+    }
+
+    public function thankyou($id){
+        $order = Order::find($id);
+        return view('frontend.thankyou', compact('order'));
     }
 
 }

@@ -50,7 +50,7 @@
 
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <select name="country" id="country" class="form-select">
+                                        <select name="  " id="country" class="form-select">
                                             <option value="">Select a Country</option>
                                             @foreach ($countries as $country ) 
                                             <option value="{{ $country->id }}"> {{ $country->name }} </option>
@@ -109,7 +109,7 @@
 
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <textarea name="order_notes" id="order_notes" cols="30" rows="2"
+                                        <textarea name="notes" id="notes" cols="30" rows="2"
                                             placeholder="Order Notes (optional)" class="form-control"></textarea>
                                     </div>
                                 </div>
@@ -210,6 +210,9 @@ $('#orderForm').on('submit', function(e) {
         dataType: "json",
         success: function(response) {
             console.log(response);
+
+            
+
             if (response.status == false) {
                 $.each(response.error, function(key, value) {
                     $('#' + key).siblings('p').addClass('text-danger').html(value);
