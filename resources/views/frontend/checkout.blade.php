@@ -28,13 +28,13 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <input type="text" name="first_name" id="first_name" class="form-control"
-                                            placeholder="First Name">
+                                            placeholder="First Name" value="{{ $customerAddress ? $customerAddress->first_name : "" }}">
                                         <p></p>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <input type="text" name="last_name" id="last_name" class="form-control"
+                                        <input type="text" name="last_name" id="last_name" class="form-control" value="{{ $customerAddress ? $customerAddress->last_name : "" }}"
                                             placeholder="Last Name">
                                         <p></p>
                                     </div>
@@ -42,7 +42,7 @@
 
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <input type="text" name="email" id="email" class="form-control"
+                                        <input type="text" name="email" id="email" class="form-control" value="{{ $customerAddress ? $customerAddress->email : "" }}"
                                             placeholder="Email">
                                         <p></p>
                                     </div>
@@ -50,10 +50,10 @@
 
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <select name="  " id="country" class="form-select">
+                                        <select name="country" id="country" class="form-select">
                                             <option value="">Select a Country</option>
                                             @foreach ($countries as $country ) 
-                                            <option value="{{ $country->id }}"> {{ $country->name }} </option>
+                                            <option {{ $customerAddress && $customerAddress->country_id == $country->id ? "selected" : "" }} value="{{ $country->id }}"> {{ $country->name }} </option>
                                             @endforeach
                                         </select>
                                         <p></p>
@@ -62,22 +62,22 @@
 
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <textarea name="address" id="address" cols="30" rows="3" placeholder="Address"
-                                            class="form-control"></textarea>
+                                        <textarea name="address" id="address" cols="30" rows="3" placeholder="Address" 
+                                            class="form-control"> {{ $customerAddress ? $customerAddress->address : "" }} </textarea>
                                         <p></p>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <input type="text" name="appartment" id="appartment" class="form-control"
+                                        <input type="text" name="appartment" id="appartment" class="form-control" value="{{ $customerAddress ? $customerAddress->appartment : "" }}"
                                             placeholder="Apartment, suite, unit, etc. (optional)">
                                     </div>
                                 </div>
 
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <input type="text" name="city" id="city" class="form-control"
+                                        <input type="text" name="city" id="city" class="form-control" value="{{ $customerAddress ? $customerAddress->city : "" }}"
                                             placeholder="City">
                                         <p></p>
                                     </div>
@@ -85,7 +85,7 @@
 
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <input type="text" name="state" id="state" class="form-control"
+                                        <input type="text" name="state" id="state" class="form-control" value="{{ $customerAddress ? $customerAddress->state : "" }}"
                                             placeholder="State">
                                         <p></p>
                                     </div>
@@ -93,14 +93,14 @@
 
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <input type="text" name="zip" id="zip" class="form-control" placeholder="Zip">
+                                        <input type="text" name="zip" id="zip" class="form-control" placeholder="Zip" value="{{ $customerAddress ? $customerAddress->zip : "" }}">
                                         <p></p>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <input type="text" name="mobile" id="mobile" class="form-control"
+                                        <input type="text" name="mobile" id="mobile" class="form-control" value="{{ $customerAddress ? $customerAddress->mobile : "" }}"
                                             placeholder="Mobile No.">
                                         <p></p>
                                     </div>
@@ -110,7 +110,7 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <textarea name="notes" id="notes" cols="30" rows="2"
-                                            placeholder="Order Notes (optional)" class="form-control"></textarea>
+                                            placeholder="Order Notes (optional)" class="form-control" > {{ $customerAddress ? $customerAddress->notes : "" }}</textarea>
                                     </div>
                                 </div>
 
@@ -141,7 +141,7 @@
                             </div>
                             <div class="d-flex justify-content-between mt-2 summery-end">
                                 <div class="h5"><strong>Total</strong></div>
-                                <div class="h5"><strong>${{ Cart::total() }}</strong></div>
+                                <div class="h5"><strong>${{ Cart::subtotal() }}</strong></div>
                             </div>
                         </div>
                     </div>
@@ -209,11 +209,10 @@ $('#orderForm').on('submit', function(e) {
         data: $(this).serializeArray(),
         dataType: "json",
         success: function(response) {
-            console.log(response);
-
-            
-
+            console.log(response); 
+            $('button[type="submit"]').prop('disabled', true);
             if (response.status == false) {
+                $('button[type="submit"]').prop('disabled', false);
                 $.each(response.error, function(key, value) {
                     $('#' + key).siblings('p').addClass('text-danger').html(value);
                 });
@@ -221,6 +220,8 @@ $('#orderForm').on('submit', function(e) {
                 $.each(response.errors, function(key, value) {
                     $('#' + key).siblings('p').removeClass('text-danger').html('');
                 });
+                window.location.href = "{{ route('front.thankyou', ['id' => 1]) }}";
+
             }
         }
     });

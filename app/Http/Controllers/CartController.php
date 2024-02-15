@@ -133,9 +133,11 @@ class   CartController extends Controller
 
         }
 
+        $customerAddress = CustomerAddress::where('user_id', Auth::user()->id)->first();
+
         $countries = Country::orderBy('name', 'asc')->get();
 
-        return view('frontend.checkout', compact('countries'));
+        return view('frontend.checkout', compact('countries', 'customerAddress'));
     }
 
     public function processCheckout(Request $request){
@@ -169,9 +171,9 @@ class   CartController extends Controller
                 'last_name'   => $request->last_name,
                 'email'       => $request->email,
                 'mobile'      => $request->mobile,
-                'appartment'      => $request->appartment,
+                'appartment'  => $request->appartment,
                 'address'     => $request->address,
-                'country_id'  => $request->country,
+                'country_id'     => $request->country,
                 'state'       => $request->state,
                 'city'        => $request->city,
                 'zip'         => $request->zip
@@ -211,11 +213,13 @@ class   CartController extends Controller
                $orderItem->product_id = $item->id;
                $orderItem->name = $item->name;
                $orderItem->price = $item->price;
-               $orderItem->quantity = $item->qty;
+               $orderItem->qty = $item->qty;
+               $orderItem->total = $item->price * $item->qty;
                $orderItem->save();
             }
 
-            return redirect()->json([
+            Cart::destroy();
+            return response()->json([
                 "message" => "Order Created Successfully",
                 "orderId" => $order->id,
                 "status" => true,
