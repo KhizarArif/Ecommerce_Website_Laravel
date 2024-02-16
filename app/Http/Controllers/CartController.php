@@ -208,7 +208,7 @@ class   CartController extends Controller
             $order->save();
 
             foreach(Cart::content() as $item){
-               $orderItem = new OrderItem;
+               $orderItem = new OrderItem();
                $orderItem->order_id = $order->id;
                $orderItem->product_id = $item->id;
                $orderItem->name = $item->name;

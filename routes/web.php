@@ -5,7 +5,8 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
-use App\Http\Controllers\admin\ProductController; 
+use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
@@ -121,6 +122,12 @@ Route::group(["prefix" => "admin"], function () {
 
         });
 
+
+        // Shipping Routes
+        Route::controller(ShippingController::class)->prefix('shipping')->group(function () {
+            Route::get('/create', 'create')->name('shipping.create');
+            Route::post('/store', 'store')->name('shipping.store');
+        });
         
 
 
