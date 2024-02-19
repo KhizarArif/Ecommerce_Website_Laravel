@@ -6,10 +6,7 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1>Create Category</h1>
-            </div>
-            <div class="col-sm-6 text-right">
-                <a href="categories.html" class="btn btn-primary">Back</a>
-            </div>
+            </div> 
         </div>
     </div>
 
@@ -19,7 +16,7 @@
 
     <div class="container-fluid">
         <form action="" method="POST" id="shippingForm" >
-            @csrf 
+            @csrf  
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -61,7 +58,12 @@
                         @foreach ($shippingCharges as $shippingCharge)
                             <tr>
                                 <td> {{ $shippingCharge->id }} </td>
-                                <td> {{ $shippingCharge->amount }} </td>
+                                <td> {{ $shippingCharge->country_id == "rest_of_world" ? "Rest Of The World" : $shippingCharge->name }} </td>
+                                <td> $ {{ $shippingCharge->amount }} </td>
+                                <td>
+                                    <a href="{{ route('shipping.edit', $shippingCharge->id) }}" class="btn btn-primary"> Edit  </a>
+                                    <a href="javascript:void(0)" onclick="deleteShipping('{{ $shippingCharge->id }}')" class="btn btn-danger"> Delete  </a>
+                                </td>
                             </tr>
                         @endforeach
                     @endif
@@ -98,6 +100,34 @@
         })
     });
 
+    function deleteShipping(id) {
+        var url = "{{ route('shipping.delete', 'ID') }}";
+        var newUrl = url.replace('ID', id);
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            text: "Data will be lost if you don't save it",
+            showDenyButton: true,
+            confirmButtonText: "Delete",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "delete",
+                    data: {},
+                    url: newUrl,
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        Swal.fire("Deleted Successfully!", "", "success");
+                        // window.location.reload();
+                        window.location.href = "{{ route('shipping.create') }}";
+                    }
+                });
+            }
+        });
+
+    }
   
 </script>
 @endsection

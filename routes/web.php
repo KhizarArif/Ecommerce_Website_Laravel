@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\DiscountCodeController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\ProductController;
@@ -30,17 +31,17 @@ use Illuminate\Support\Str;
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
 
 // Registration & Login Routes
-Route::group(["prefix" => "account"],function(){
-    Route::group(['middleware' => 'guest'], function(){
-        Route::controller(AuthController::class)->group(function(){
+Route::group(["prefix" => "account"], function () {
+    Route::group(['middleware' => 'guest'], function () {
+        Route::controller(AuthController::class)->group(function () {
             Route::get('/register', 'register')->name('account.register');
             Route::post('/process-register', 'processRegister')->name('account.processRegister');
             Route::get('/login', 'login')->name('account.login');
             Route::post('/login', 'authenticate')->name('account.authenticate');
         });
     });
-    
-    Route::group(['middleware' => 'auth'], function(){
+
+    Route::group(['middleware' => 'auth'], function () {
         Route::get("/profile", [AuthController::class, 'profile'])->name('account.profile');
         Route::get("/logout", [AuthController::class, 'logout'])->name('account.logout');
     });
@@ -56,7 +57,7 @@ Route::controller(ShopController::class)->prefix('shop')->group(function () {
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
 
 // Cart Controller 
-Route::controller(CartController::class)->group(function(){
+Route::controller(CartController::class)->group(function () {
     Route::get('/cart', 'cart')->name('front.cart');
     Route::post('/add-to-cart', 'addToCart')->name('front.addToCart');
     Route::post('/update-cart', 'updateCart')->name('front.updateCart');
@@ -64,6 +65,7 @@ Route::controller(CartController::class)->group(function(){
     Route::get('/checkout', 'checkout')->name('front.checkout');
     Route::post('/process-checkout', 'processCheckout')->name('front.processCheckout');
     Route::get('/thankyou/{id}', 'thankyou')->name('front.thankyou');
+    Route::post('/get-shipping-amount', 'getShippingAmount')->name('shipping.getShippingAmount');
 });
 
 Route::group(["prefix" => "admin"], function () {
@@ -110,7 +112,7 @@ Route::group(["prefix" => "admin"], function () {
             Route::get('edit/{id}', 'edit')->name('products.edit');
             Route::post('store', 'store')->name('products.store');
             Route::delete('delete/{id}', 'destroy')->name('products.delete');
-            
+
             Route::get('getSubCategory', 'GetSubCategory')->name('getSubCategory');
 
             // Update Product Controller Image
@@ -119,7 +121,6 @@ Route::group(["prefix" => "admin"], function () {
 
             // Related Products Select 2
             Route::get('getProducts', 'getProducts')->name('products.getProducts');
-
         });
 
 
@@ -127,8 +128,21 @@ Route::group(["prefix" => "admin"], function () {
         Route::controller(ShippingController::class)->prefix('shipping')->group(function () {
             Route::get('/create', 'create')->name('shipping.create');
             Route::post('/store', 'store')->name('shipping.store');
+            Route::get('edit/{id}', 'edit')->name('shipping.edit');
+            Route::put('update/{id}', 'update')->name('shipping.update');
+            Route::delete('delete/{id}', 'destroy')->name('shipping.delete');
         });
-        
+
+
+        // Discount Codes Routes
+        Route::controller(DiscountCodeController::class)->prefix('coupen-codes')->group(function () {
+            Route::get('', 'index')->name('coupen.index');
+            Route::get('create', 'create')->name('coupen.create');
+            Route::get('edit/{id}', 'edit')->name('coupen.edit');
+            Route::post('store', 'store')->name('coupen.store');
+            Route::delete('delete/{id}', 'destroy')->name('coupen.delete');
+        });
+
 
 
         // Export Data to Excel
