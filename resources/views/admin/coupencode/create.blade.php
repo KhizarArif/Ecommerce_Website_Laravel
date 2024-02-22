@@ -19,9 +19,9 @@
     <section class="content">
 
         <div class="container-fluid">
-            <form action="{{ route('categories.store') }}" method="POST" id="categoryForm" enctype="multipart/form-data">
+            <form action="{{ route('coupen.store') }}" method="POST" id="discountForm">
                 @csrf
-                <input type="hidden" name="id" id="id" value="{{ isset($category->id) ? $category->id : 0 }}">
+                <input type="hidden" name="id" id="id">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -41,13 +41,7 @@
                                     <p></p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="description">Description</label>
-                                    <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
-                                    <p></p>
-                                </div>
-                            </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="max_uses">Max Uses </label>
@@ -67,8 +61,8 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="status">Status</label>
-                                    <select name="status" id="status" class="form-control">
+                                    <label for="type">Type</label>
+                                    <select name="type" id="type" class="form-control">
                                         <option value="percent"> Percent </option>
                                         <option value="fixed"> Fixed </option>
                                     </select>
@@ -91,6 +85,17 @@
                                     <p></p>
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="status">Status</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="1"> Active </option>
+                                        <option value="0"> InActive </option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="starts_at">Starts At </label>
@@ -104,6 +109,14 @@
                                     <label for="expires_at">Expires At</label>
                                     <input type="text" name="expires_at" id="expires_at" class="form-control"
                                         placeholder="Expires At ">
+                                    <p></p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="description">Description</label>
+                                    <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
                                     <p></p>
                                 </div>
                             </div>
@@ -125,7 +138,17 @@
 
 @section('customJs')
     <script>
-        $('#categoryForm').on('submit', function(event) {
+        $(document).ready(function() {
+            $('#starts_at').datetimepicker({
+                format: 'Y-m-d H:i:s',
+            });
+
+            $('#expires_at').datetimepicker({
+                format: 'Y-m-d H:i:s',
+            });
+        });
+
+        $('#discountForm').on('submit', function(event) {
             event.preventDefault();
             var form = $(this);
             let actionUrl = form.attr('action');
@@ -136,15 +159,25 @@
                 contentType: false,
                 processData: false,
                 success: function(response) {
-                    window.location.href = "{{ route('categories.index') }}";
-                },
-                error: function(error) {
-                    if (error.status === 422) {
-                        var errors = $.parseJSON(error.responseText);
-                        $.each(errors['errors'], function(key, val) {
-                            $("#" + key + "_error").text(val[0]);
+                    if (response.status) {
+                        $('.error').removeClass('text-danger').html('');
+                        $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
+                        window.location.href = "{{ route('products.index') }}";
+
+                    } else {
+                        var errors = response.error;
+                        $('.error').removeClass('text-danger').html('');
+                        $("input[type='text'], select, input[type='number']").removeClass('is-invalid');
+                        $.each(errors, function(key, value) {
+                            $(`#${key}`).addClass('is_invalid').siblings('p').addClass(
+                                'text-danger').html(value);
                         });
                     }
+                    // window.location.href = "{{ route('categories.index') }}";
+                },
+                error: function(error) {
+                    errorMessage(error);
+                   console.log("Error");
                 }
             })
         });

@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css')}}">
     {{-- Select 2 --}}
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/select2/css/select2.min.css')}}">
+    {{-- DateTime CSS --}}
+    <link rel="stylesheet" href="{{ asset('admin-assets/css/datetimepicker.css')}}">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -56,6 +58,8 @@
     <script src="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.js') }}"></script> 
     {{-- Select 2 --}}
     <script src="{{ asset('admin-assets/plugins/select2/js/select2.min.js') }}"></script> 
+    {{-- DateTime picker --}}
+    <script src="{{ asset('admin-assets/js/datetimepicker.js') }}"></script> 
     {{-- Sweet Alert --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">

@@ -10,8 +10,7 @@ use App\Models\Product;
 use App\Models\ShippingCharge;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Validator;
 use function App\Helpers\sucessMessage;
 
