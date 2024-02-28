@@ -292,7 +292,7 @@ $(function() {
             paramName: 'image',
             params: {'product_id': '{{$product->id}}'},
             addRemoveLinks: true,
-            acceptedFiles: "image/jpeg,image/png,image/gif",
+            acceptedFiles: "image/jpeg,image/png,image/gif, image/jpg",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

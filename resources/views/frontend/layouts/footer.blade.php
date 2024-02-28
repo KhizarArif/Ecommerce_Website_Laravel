@@ -55,6 +55,14 @@
 <script src="{{ asset('front-assets/js/slick.min.js')}}"></script>
 <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js')}}"></script>
 <script src="{{ asset('front-assets/js/custom.js')}}"></script>
+{{-- JS Libraries  --}}
+<script src="{{ asset('front-assets/lib/wow/wow.min.js') }}"></script>
+<script src="{{ asset('front-assets/lib/easing/easing.min.js') }}"></script>
+<script src="{{ asset('front-assets/lib/waypoints/waypoints.min.js') }}"></script>
+<script src="{{ asset('front-assets/lib/counterup/counterup.min.js') }}"></script>
+<script src="{{ asset('front-assets/lib/lightbox/js/lightbox.min.js') }}"></script>
+<script src="{{ asset('front-assets/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('front-assets/js/main.js') }}"></script>
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
