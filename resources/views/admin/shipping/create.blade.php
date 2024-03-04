@@ -5,7 +5,7 @@
     <div class="container my-2">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Create Category</h1>
+                <h1>Create Shipping</h1>
             </div> 
         </div>
     </div>

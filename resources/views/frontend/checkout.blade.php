@@ -68,7 +68,7 @@
 
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <textarea name="address" id="address" cols="30" rows="3" placeholder="Address" class="form-control"> {{ $customerAddress ? $customerAddress->address : '' }} </textarea>
+                                            <textarea name="address" id="address" cols="30" rows="3" placeholder="Address" class="form-control">{{ $customerAddress ? $customerAddress->address : '' }}</textarea>
                                             <p></p>
                                         </div>
                                     </div>
@@ -121,7 +121,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <textarea name="notes" id="notes" cols="30" rows="2" placeholder="Order Notes (optional)"
-                                                class="form-control"> {{ $customerAddress ? $customerAddress->notes : '' }}</textarea>
+                                                class="form-control">{{ $customerAddress ? $customerAddress->notes : '' }}</textarea>
                                         </div>
                                     </div>
 
@@ -146,6 +146,10 @@
                                     <div class="h6"><strong>Subtotal</strong></div>
                                     <div class="h6"><strong> ${{ Cart::subtotal() }} </strong></div>
                                 </div>
+                                <div class="d-flex justify-content-between summery-end">
+                                    <div class="h6"><strong> Discount </strong></div>
+                                    <div class="h6"><strong id="discount_value"> ${{ $discount }} </strong></div>
+                                </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <div class="h6"><strong>Shipping</strong></div>
                                     <div class="h6"><strong id="shippingCharge">$
@@ -158,6 +162,27 @@
                                         </strong></div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div id="remove-discount-div">
+                            @if (Session::has('code'))
+                                <div class="mt-4 d-flex justify-content-between border border-5 align-items-center"
+                                    id="remove-coupen">
+                                    <div>
+                                        <strong> {{ Session::get('code')->code }} </strong>
+                                        is applied! <br> <small> Art_wings Coupen </small>
+                                    </div>
+                                    <a class="btn btn-sm " id="remove-discount">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                        {{-- Coupen Code --}}
+                        <div class="input-group apply-coupan mt-4">
+                            <input type="text" placeholder="Coupon Code" class="form-control" name="discount_code"
+                                id="discount_code">
+                            <button class="btn btn-dark" type="button" id="apply-discount">Apply Coupon</button>
                         </div>
 
                         <div class="card payment-form ">
@@ -260,5 +285,52 @@
                 }
             });
         });
+
+
+        $("#apply-discount").click(function() {
+            $.ajax({
+                url: "{{ route('shipping.applyDiscount') }}",
+                type: "POST",
+                data: {
+                    code: $("#discount_code").val(),
+                    country_id: $("#country").val()
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    if (response.status == true) {
+                        $('#shippingCharge').html('$' + response.totalShippingCharges);
+                        $('#grandTotal').html('$' + response.grandTotal);
+                        $('#discount_value').html('$' + response.discount);
+                        $('#remove-discount-div').html(response.discountString);
+                        $('#discount_code').val('');
+                    }
+
+                }
+            })
+        })
+
+        $('body').on('click', '#remove-discount', function() {
+            $.ajax({
+                url: "{{ route('shipping.removeCoupen') }}",
+                type: "POST",
+                data: {
+                    country_id: $("#country").val()
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    if (response.status == true) {
+                        $('#shippingCharge').html('$' + response.totalShippingCharges);
+                        $('#grandTotal').html('$' + response.grandTotal);
+                        $('#discount_value').html('$' + response.discount);
+                        $('#remove-coupen').removeClass('border border-5');
+                        $('#remove-coupen').html('');
+                    }
+
+                }
+            })
+        })
+
     </script>
 @endsection

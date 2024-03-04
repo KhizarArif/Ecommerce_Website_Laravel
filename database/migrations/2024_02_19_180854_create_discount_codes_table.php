@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('max_uses')->nullable();
             $table->integer('max_uses_users')->nullable();
-            $table->enum('type', ['fixed', 'percentage'])->default('fixed');
+            $table->enum('type', ['fixed', 'percent'])->default('fixed');
             $table->double('discount_amount', 10, 2)->nullable();
             $table->double('min_amount', 10, 2)->nullable();
             $table->integer('status')->default(1);

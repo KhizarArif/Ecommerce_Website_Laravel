@@ -15,55 +15,57 @@ class DiscountCodeController extends Controller
 {
     public function index(Request $request)
     {
-        if($request->get('table_search')){ 
-            $discountCoupens = DiscountCode::where('name', 'like', '%'.$request->get('table_search').'%')->paginate(10); 
-        }else{
+        if ($request->get('table_search')) {
+            $discountCoupens = DiscountCode::where('name', 'like', '%' . $request->get('table_search') . '%')->paginate(10);
+        } else {
             $discountCoupens = DiscountCode::paginate(10);
         }
         return view('admin.coupencode.index', compact('discountCoupens'));
         // return view('admin.coupencode.index');
     }
 
-    public function create(){
+    public function create()
+    {
         return view('admin.coupencode.create');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
-            'code' => 'required', 
+            'code' => 'required',
             'type' => 'required',
-            'discount_amount' => 'required | numeric', 
-            'status' => 'required', 
+            'discount_amount' => 'required | numeric',
+            'status' => 'required',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
 
             $discountCode = $request->id ? DiscountCode::find($request->id) : new DiscountCode();
 
-            if(!empty($request->starts_at)){
+            if (!empty($request->starts_at)) {
                 $now = Carbon::now();
                 $startsAt = Carbon::createFromFormat('Y-m-d H:i:s', $request->starts_at);
 
-                if($startsAt->lte($now) == true){
+                if ($startsAt->lte($now) == false) {
                     return response()->json([
                         "status" => false,
-                        "error" => ['starts_at' => "Start date can not be less than current date time" ] 
+                        "error" => ['starts_at' => "Start date can not be less than current date time"]
                     ]);
                 }
             }
 
-            if(!empty($request->expires_at) && !empty($request->expires_at)){
+            if (!empty($request->expires_at) && !empty($request->expires_at)) {
                 $expiresAt = Carbon::createFromFormat('Y-m-d H:i:s', $request->expires_at);
                 $startsAt = Carbon::createFromFormat('Y-m-d H:i:s', $request->starts_at);
 
-                if($expiresAt->gt($startsAt) == false){ 
+                if ($expiresAt->gt($startsAt) == false) {
                     return response()->json([
                         "status" => false,
-                        "error" => "Expiry date must be greater than Start Date" 
+                        "error" => ['expires_at' => "Expiry date must be greater than Start Date"]
                     ]);
                 }
-            } 
-            
+            }
+
             $discountCode->code = $request->code;
             $discountCode->name = $request->name;
             $discountCode->description = $request->description;
@@ -83,29 +85,28 @@ class DiscountCodeController extends Controller
             return response()->json([
                 "status" => true,
             ]);
-        } else { 
+        } else {
             return response()->json([
                 'status' => false,
-                'error'=>$validator->errors()
+                'error' => $validator->errors()
             ]);
         }
-
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $coupon = DiscountCode::find($id);
         // dd($coupon);
-        if($coupon == null){
+        if ($coupon == null) {
             errorMessage("Records not found");
             return redirect()->route('coupon.index');
         }
 
         return view('admin.coupencode.create', compact('coupon'));
     }
- 
 
-    public function destroy(){
 
+    public function destroy()
+    {
     }
-
 }

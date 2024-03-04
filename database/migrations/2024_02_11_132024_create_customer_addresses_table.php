@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('state');
             $table->string('zip');
             $table->string('mobile'); 
+            $table->string('notes')->nullable(); 
             $table->timestamps();
         });
     }

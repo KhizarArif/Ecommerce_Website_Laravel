@@ -115,9 +115,7 @@ h4, h5, h6, .h4, .h5, .h6 {
 }
 
 .navbar .dropdown-toggle::after {
-    border: none;
-    content: "\f107";
-    font-family: "Font Awesome 5 Free";
+    border: none;  
     font-weight: 700;
     vertical-align: middle;
     margin-left: 8px;

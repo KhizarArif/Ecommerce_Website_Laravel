@@ -9,4 +9,6 @@ class CustomerAddress extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    protected $table = 'customer_addresses';
 }

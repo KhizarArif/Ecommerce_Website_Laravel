@@ -44,8 +44,7 @@
 
 body {
     margin: 0;
-    font-family: var(--bs-body-font-family);
-    /* font-family: 'Playball', cursive !important; */
+    font-family: var(--bs-body-font-family); 
     font-size: var(--bs-body-font-size);
     font-weight: var(--bs-body-font-weight);
     line-height: var(--bs-body-line-height);
@@ -219,8 +218,7 @@ pre,
 code,
 kbd,
 samp {
-    font-family: var(--bs-font-monospace);
-    /* font-family: 'Playball', cursive !important; */
+    font-family: var(--bs-font-monospace); 
     font-size: 1em;
     direction: ltr;
     unicode-bidi: bidi-override
@@ -4392,8 +4390,7 @@ fieldset:disabled .btn {
     z-index: 1080;
     display: block;
     margin: 0;
-    font-family: var(--bs-font-sans-serif);
-    /* font-family: 'Playball', cursive !important; */
+    font-family: var(--bs-font-sans-serif); 
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -4518,8 +4515,7 @@ fieldset:disabled .btn {
     z-index: 1070;
     display: block;
     max-width: 276px;
-    /* font-family: var(--bs-font-sans-serif); */
-    font-family: 'Playball', cursive !important;
+    font-family: var(--bs-font-sans-serif); 
     font-style: normal;
     font-weight: 400;
     line-height: 1.5;
@@ -6227,8 +6223,7 @@ fieldset:disabled .btn {
 }
 
 .font-monospace {
-    /* font-family: var(--bs-font-monospace) !important */
-    font-family: 'Playball', cursive !important;
+    font-family: var(--bs-font-monospace) !important 
 }
 
 .fs-1 {
@@ -12007,7 +12002,7 @@ fieldset:disabled .btn {
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-smoothing: antialiased;
+    --font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     -webkit-touch-callout: none
 }
@@ -12021,12 +12016,11 @@ fieldset:disabled .btn {
 
 body {
     font-size: 16px;
+    font-family: 'Poppins'; 
     border: none;
     height: 100%;
     width: 100%;
-    padding: 0;
-    /* font-family: 'Poppins'; */
-    font-family: 'Playball', cursive !important;
+    padding: 0; 
     color: #001d3d;
     background-color: #f1f1f1
 }
@@ -12125,8 +12119,7 @@ a.link:hover {
 }
 
 .logo a span {
-    /* font-family: 'Roboto'; */
-    font-family: 'Playball', cursive !important;
+    font-family: 'Roboto'; 
     font-weight: bold
 }
 
@@ -12137,8 +12130,7 @@ a.link:hover {
 header .navbar .nav-link {
     color: #FFF;
     padding: 10px 15px 10px 15px !important;
-    /* font-family: 'Roboto' */
-    font-family: 'Playball', cursive !important;
+    font-family: 'Roboto' 
 }
 
 header .navbar .nav-link:hover {
@@ -12209,8 +12201,8 @@ main {
 
 .section-title h2 {
     font-size: 32px;
-    /* font-family: 'Roboto'; */
-    font-family: 'Playball', cursive !important;
+    font-family: 'Roboto';
+    /* font-family: 'Playball', cursive !important; */
     text-transform: uppercase;
     font-weight: bold;
     color: #3D464D;
@@ -12533,8 +12525,7 @@ footer a:hover {
 }
 
 .section-7 h1 {
-    /* font-family: 'Roboto'; */
-    font-family: 'Playball', cursive !important;
+    font-family: 'Roboto';
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 10px

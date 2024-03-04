@@ -65,7 +65,7 @@
                                                     <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
-                                            <input type="text" class="form-control form-control-sm  border-0 text-center"
+                                            <input type="text" class="form-control form-control-sm  border-0 text-center" name="qty"
                                                 value="{{ $item->qty}}" >
                                             <div class="input-group-btn">
                                                 <button class="btn btn-sm btn-dark btn-plus p-2 pt-1 pb-1 add" data-id="{{$item->rowId}}" >
@@ -105,10 +105,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="input-group apply-coupan mt-4">
-                        <input type="text" placeholder="Coupon Code" class="form-control">
-                        <button class="btn btn-dark" type="button" id="button-addon2">Apply Coupon</button>
-                    </div> -->
+                    
                 </div>
 
             @else
@@ -202,5 +199,7 @@
 
             }
         }
+
+       
     </script>
 @endsection

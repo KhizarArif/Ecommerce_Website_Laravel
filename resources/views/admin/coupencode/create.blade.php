@@ -6,7 +6,7 @@
         <div class="container my-2">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1> {{ $coupon->id ? "Update" : "Create"}} Coupen Discount </h1>
+                    <h1> {{ isset($coupon->id) ? "Update" : "Create"}} Coupen Discount </h1>
                 </div>
                 <div class="col-sm-6 text-right">
                     <a href="categories.html" class="btn btn-primary">Back</a>
@@ -20,7 +20,7 @@
         <div class="container-fluid">
             <form action="{{ route('coupen.store') }}" method="POST" id="discountForm">
                 @csrf
-                <input type="hidden" name="id" id="id" value="{{ $coupon->id }}">
+                <input type="hidden" name="id" id="id" value="{{ isset($coupon->id) ? $coupon->id : 0 }}">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -126,7 +126,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="description">Description</label>
-                                    <textarea name="description" id="description" cols="30" rows="5" class="form-control"> {{ isset($coupon->description) ? $coupon->description : '' }} </textarea>
+                                    <textarea name="description" id="description" cols="30" rows="5" class="form-control">{{ isset($coupon->description) ? $coupon->description : '' }}</textarea>
                                     <p></p>
                                 </div>
                             </div>
@@ -190,5 +190,7 @@
                 }
             })
         });
+
+        
     </script>
 @endsection

@@ -66,6 +66,8 @@ Route::controller(CartController::class)->group(function () {
     Route::post('/process-checkout', 'processCheckout')->name('front.processCheckout');
     Route::get('/thankyou/{id}', 'thankyou')->name('front.thankyou');
     Route::post('/get-shipping-amount', 'getShippingAmount')->name('shipping.getShippingAmount');
+    Route::post('/apply-discount', 'applyDiscount')->name('shipping.applyDiscount');
+    Route::post('/remove-discount', 'removeCoupen')->name('shipping.removeCoupen');
 });
 
 Route::group(["prefix" => "admin"], function () {

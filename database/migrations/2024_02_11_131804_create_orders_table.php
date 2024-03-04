@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->double('shipping', 10, 2);
             $table->double('subtotal', 10, 2);
-            $table->double('coupen_code')->nullable();
+            $table->string('coupen_code')->nullable();
+            $table->integer('coupen_code_id')->nullable();
             $table->double('discount', 10, 2)->nullable();
             $table->double('grand_total', 10, 2);
 
@@ -30,7 +31,7 @@ return new class extends Migration
             $table->string('state');
             $table->string('zip');
             $table->string('mobile');
-            $table->string('order_notes')->nullable();
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }

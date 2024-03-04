@@ -30,12 +30,8 @@
 	<meta name="twitter:image:alt" content="" />
 	<meta name="twitter:card" content="summary_large_image" />
 	
-
-	{{-- Google Fonts --}}
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playball&display=swap"
-        rel="stylesheet">
+ 
+  
 
 	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/bootstrap.min.css')}}" />
 	<link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick.css')}}" />
@@ -54,7 +50,8 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&family=Raleway:ital,wght@0,400;0,600;0,800;1,200&family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
-
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Playball&display=swap"
+	rel="stylesheet">
 	<!-- Fav Icon -->
 	<link rel="shortcut icon" type="image/x-icon" href="#" />
 </head>
@@ -103,7 +100,7 @@
 					<a href="event.html" class="nav-item nav-link">Events</a>
 					<a href="menu.html" class="nav-item nav-link">Menu</a>
 					<div class="nav-item dropdown">
-						<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+						<a href="#" class="nav-link" data-bs-toggle="dropdown">Pages</a>
 						<div class="dropdown-menu bg-light">
 							<a href="book.html" class="dropdown-item">Booking</a>
 							<a href="blog.html" class="dropdown-item">Our Blog</a>
@@ -150,14 +147,14 @@
                         @if ($categories->isNotEmpty())
                         @foreach (getCategories() as $category )
                         <li class="nav-item dropdown">
-                            <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+                            <button class="btn btn-dark" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 {{ $category->name }}
                             </button>
                             @if ($category->subcategories->isNotEmpty())
                             <ul class="dropdown-menu dropdown-menu-dark">
                                 @foreach ($category->subcategories as $subCategory )
-                                <li><a class="dropdown-item nav-link" href="#"> {{ $subCategory->name}} </a></li>
+                                <li><a class="dropdown-item nav-link" href=""> {{ $subCategory->name}} </a></li>
                                 @endforeach
                             </ul>
                             @endif
