@@ -155,7 +155,7 @@ class CartController extends Controller
         if ($customerAddress != '') {
 
             $userCountry = $customerAddress->country_id;
-            $shippingInfo =  ShippingCharge::where('country_id', $userCountry)->first();
+            $shippingInfo =  ShippingCharge::where('country_id', $userCountry)->first(); 
 
             foreach (Cart::content() as $item) {
                 $totalQty += $item->qty;
@@ -287,7 +287,7 @@ class CartController extends Controller
             }
 
             Cart::destroy();
-
+            session()->forget('code');
             sucessMessage("Order Created Successfully");
 
             return response()->json([
@@ -407,6 +407,26 @@ class CartController extends Controller
                 return response()->json([
                     "status" => false,
                     "message" => "Invalid Coupen Code2"
+                ]);
+            }
+        }
+
+        if ($code->max_uses > 0) {
+            $coupenUsed = Order::where("coupen_code_id", $code->id)->count();
+            if ($coupenUsed > $code->max_uses) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Coupen Code limit exceeded"
+                ]);
+            }
+        }
+
+        if ($code->max_uses_users > 0) {
+            $coupenUsed = Order::where(["coupen_code_id" => $code->id, "user_id" => Auth::user()])->count();
+            if ($coupenUsed > $code->max_uses_users) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Coupen Code Already Exists"
                 ]);
             }
         }
