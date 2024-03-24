@@ -20,7 +20,10 @@ return new class extends Migration
             $table->integer('coupen_code_id')->nullable();
             $table->double('discount', 10, 2)->nullable();
             $table->double('grand_total', 10, 2);
-
+            $table->enum('payment_status', ['paid', 'not paid'])->default('not paid');
+            $table->enum('status', ['pending', 'shipped', 'delivered', 'cancelled'])->default('pending');
+            $table->timestamp('shipped_date')->nullable();
+            
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');

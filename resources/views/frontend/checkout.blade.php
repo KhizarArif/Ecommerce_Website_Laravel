@@ -233,7 +233,7 @@
             var country_id = $(this).val();
             $.ajax({
                 url: "{{ route('shipping.getShippingAmount') }}",
-                type: "post",
+                type: "post", 
                 data: {
                     country_id: country_id
                 },
@@ -299,13 +299,26 @@
                 success: function(response) {
                     console.log(response);
                     if (response.status == true) {
+                        console.log("Response received:", response); 
+                        return toastr.success(response.message, "Success", {
+                            timeOut: 2000
+                        });
                         $('#shippingCharge').html('$' + response.totalShippingCharges);
                         $('#grandTotal').html('$' + response.grandTotal);
                         $('#discount_value').html('$' + response.discount);
                         $('#remove-discount-div').html(response.discountString);
                         $('#discount_code').val('');
-                    }
 
+                    } else {
+                        if (response.toastrMessageType === 'error') {
+                            return toastr.error(response.message, "Error", {
+                                timeOut: 2000
+                            });
+                        } else {
+                            // Handle other toastr message types if needed
+                            return toastr.warning(response.message, "Warning"); // Example
+                        }
+                    }
                 }
             })
         })
@@ -331,6 +344,5 @@
                 }
             })
         })
-
     </script>
 @endsection

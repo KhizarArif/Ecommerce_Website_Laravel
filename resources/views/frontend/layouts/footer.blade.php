@@ -55,6 +55,9 @@
 <script src="{{ asset('front-assets/js/slick.min.js')}}"></script>
 <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js')}}"></script>
 <script src="{{ asset('front-assets/js/custom.js')}}"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{-- JS Libraries  --}}
 <script src="{{ asset('front-assets/lib/wow/wow.min.js') }}"></script>
 <script src="{{ asset('front-assets/lib/easing/easing.min.js') }}"></script>

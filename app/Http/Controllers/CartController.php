@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use function App\Helpers\sucessMessage;
+use function App\Helpers\errorMessage;
 
 class CartController extends Controller
 {
@@ -154,8 +155,8 @@ class CartController extends Controller
         // Calculate Shipping Charges
         if ($customerAddress != '') {
 
-            $userCountry = $customerAddress->country_id;
-            $shippingInfo =  ShippingCharge::where('country_id', $userCountry)->first(); 
+            $userCountry = $customerAddress->country_id; 
+            $shippingInfo =  ShippingCharge::where('country_id', $userCountry)->first();
 
             foreach (Cart::content() as $item) {
                 $totalQty += $item->qty;
@@ -214,7 +215,7 @@ class CartController extends Controller
         );
         $totalQty = 0;
         $coupenCode = '';
-        $coupenCodeId = '';
+        $coupenCodeId = NULL;
         $discount = 0;
 
         if ($request->payment_method == 'cod') {
@@ -260,6 +261,8 @@ class CartController extends Controller
             $order->coupen_code = $coupenCode;
             $order->coupen_code_id = $coupenCodeId;
             $order->discount = $discount;
+            $order->payment_status = 'not paid';
+            $order->status = 'Pending';
 
             $order->user_id = $user->id;
             $order->first_name = $request->first_name;
@@ -306,6 +309,8 @@ class CartController extends Controller
 
     public function getShippingAmount(Request $request)
     {
+        dd($request);
+        die();
         $discount = 0;
         $subTotal = Cart::subtotal(2, '.', '');
         $discountString = '';
@@ -381,9 +386,11 @@ class CartController extends Controller
         $code = DiscountCode::where('code', $request->code)->first();
 
         if ($code == null) {
+            toastr()->error("Invalid Coupen Code", "error", ['timeOut' => 2000]);
             return response()->json([
                 "status" => false,
-                "message" => "Invalid Coupen Code."
+                "message" => "Invalid Coupen Code.",
+                "toastrMessageType" => "error"
             ]);
         }
 
@@ -393,9 +400,11 @@ class CartController extends Controller
             $startsDate = Carbon::createFromFormat("Y-m-d H:i:s", $code->starts_at);
 
             if ($now->lt($startsDate)) {
+                toastr()->error("Invalid Coupen Code", "error", ['timeOut' => 2000]);
                 return response()->json([
                     "status" => false,
-                    "message" => "Invalid Coupen Code1"
+                    "message" => "Invalid Coupen Code1",
+                    "toastrMessageType" => "error"
                 ]);
             }
         }
@@ -404,9 +413,11 @@ class CartController extends Controller
             $endDate = Carbon::createFromFormat("Y-m-d H:i:s", $code->expires_at);
 
             if ($now->gt($endDate)) {
+                errorMessage('Invalid Coupen Code or coupen may be expired');
                 return response()->json([
                     "status" => false,
-                    "message" => "Invalid Coupen Code2"
+                    "message" => "Invalid Coupen Code or coupen may be expired",
+                    "toastrMessageType" => "error"
                 ]);
             }
         }
@@ -414,9 +425,11 @@ class CartController extends Controller
         if ($code->max_uses > 0) {
             $coupenUsed = Order::where("coupen_code_id", $code->id)->count();
             if ($coupenUsed > $code->max_uses) {
+                errorMessage("Coupen Code limit exceeded");
                 return response()->json([
                     "status" => false,
-                    "message" => "Coupen Code limit exceeded"
+                    "message" => "Coupen Code limit exceeded",
+                    "toastrMessageType" => "error"
                 ]);
             }
         }
@@ -424,9 +437,11 @@ class CartController extends Controller
         if ($code->max_uses_users > 0) {
             $coupenUsed = Order::where(["coupen_code_id" => $code->id, "user_id" => Auth::user()])->count();
             if ($coupenUsed > $code->max_uses_users) {
+                errorMessage("Coupen Code Already Exists");
                 return response()->json([
                     "status" => false,
-                    "message" => "Coupen Code Already Exists"
+                    "message" => "Coupen Code Already Exists",
+                    "toastrMessageType" => "error"
                 ]);
             }
         }

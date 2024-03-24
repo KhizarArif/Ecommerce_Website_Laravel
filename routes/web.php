@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DiscountCodeController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\ProductController;
@@ -43,6 +44,8 @@ Route::group(["prefix" => "account"], function () {
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get("/profile", [AuthController::class, 'profile'])->name('account.profile');
+        Route::get("/my-orders", [AuthController::class, 'orders'])->name('account.orders');
+        Route::get("/order_details/{orderId}", [AuthController::class, 'orderDetail'])->name('account.orderDetail');
         Route::get("/logout", [AuthController::class, 'logout'])->name('account.logout');
     });
 });
@@ -144,6 +147,13 @@ Route::group(["prefix" => "admin"], function () {
             Route::post('store', 'store')->name('coupen.store');
             Route::delete('delete/{id}', 'destroy')->name('coupen.delete');
         });
+
+
+        // Orders Route 
+        Route::controller(OrderController::class)->prefix('orders')->group((function(){
+            Route::get('', 'index')->name('orders.index');
+            Route::get('/{id}', 'details')->name('orders.details');
+        }));
 
 
 
