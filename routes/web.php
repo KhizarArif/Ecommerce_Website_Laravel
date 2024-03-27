@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\DiscountCodeController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\ProductController;
@@ -11,7 +12,7 @@ use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HomeController; 
 use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -145,6 +146,15 @@ Route::group(["prefix" => "admin"], function () {
             Route::get('edit/{id}', 'edit')->name('coupen.edit');
             Route::post('store', 'store')->name('coupen.store');
             Route::delete('delete/{id}', 'destroy')->name('coupen.delete');
+        });
+
+
+        // Order Details 
+        Route::controller(OrderController::class)->prefix('orders')->group(function () {
+            Route::get('', 'index')->name('orders.index');
+            Route::get('edit/{id}', 'edit')->name('orders.edit');
+            Route::put('update/{id}', 'update')->name('orders.update');
+            Route::delete('delete/{id}', 'destroy')->name('orders.delete');
         });
 
 

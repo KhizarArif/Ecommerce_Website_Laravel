@@ -214,7 +214,7 @@ class CartController extends Controller
         );
         $totalQty = 0;
         $coupenCode = '';
-        $coupenCodeId = '';
+        $coupenCodeId = Null;
         $discount = 0;
 
         if ($request->payment_method == 'cod') {
