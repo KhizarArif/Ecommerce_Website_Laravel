@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 use function App\Helpers\errorMessage;
-use function App\Helpers\sucessMessage;
+use function App\Helpers\successMessage;
 
 class DiscountCodeController extends Controller
 {
@@ -80,7 +80,7 @@ class DiscountCodeController extends Controller
             $discountCode->save();
 
             $msg = $request->id ? "Discount coupen  Updated successfully" : "Discount coupen  added successfully";
-            sucessMessage($msg);
+            successMessage($msg);
 
             return response()->json([
                 "status" => true,

@@ -14,7 +14,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use function App\Helpers\sucessMessage;
+use function App\Helpers\successMessage;
 
 class CartController extends Controller
 {
@@ -288,7 +288,7 @@ class CartController extends Controller
 
             Cart::destroy();
             session()->forget('code');
-            sucessMessage("Order Created Successfully");
+            successMessage("Order Created Successfully");
 
             return response()->json([
                 "message" => "Order Created Successfully",

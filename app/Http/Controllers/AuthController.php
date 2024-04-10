@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -101,7 +102,9 @@ class AuthController extends Controller
     public function orderDetail($id){
         $user = Auth::user();
         $order = Order::where('user_id', $user->id)->with('orderItems')->where('id', $id)->first();
-        return view('frontend.account.order_detail', compact('order'));
+        $orderCount = OrderItem::where('order_id', $id)->count(); 
+        return view('frontend.account.order_detail', compact('order', 'orderCount'));
     }
+
 
 }

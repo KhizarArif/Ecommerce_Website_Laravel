@@ -12,7 +12,7 @@ use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
-use App\Http\Controllers\HomeController; 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -72,6 +72,9 @@ Route::controller(CartController::class)->group(function () {
     Route::post('/apply-discount', 'applyDiscount')->name('shipping.applyDiscount');
     Route::post('/remove-discount', 'removeCoupen')->name('shipping.removeCoupen');
 });
+
+
+// All Admin Routes 
 
 Route::group(["prefix" => "admin"], function () {
 
@@ -153,7 +156,7 @@ Route::group(["prefix" => "admin"], function () {
         Route::controller(OrderController::class)->prefix('orders')->group(function () {
             Route::get('', 'index')->name('orders.index');
             Route::get('edit/{id}', 'edit')->name('orders.edit');
-            Route::put('update/{id}', 'update')->name('orders.update');
+            Route::post('change_status/{id}', 'changeOrderStatus')->name('orders.changeOrderStatus');
             Route::delete('delete/{id}', 'destroy')->name('orders.delete');
         });
 

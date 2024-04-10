@@ -8,7 +8,7 @@ use App\Models\ShippingCharge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-use function App\Helpers\sucessMessage;
+use function App\Helpers\successMessage;
 
 class ShippingController extends Controller
 {
@@ -100,7 +100,7 @@ class ShippingController extends Controller
 
     public function destroy($id){
         $shipping = ShippingCharge::find($id)->delete();
-        sucessMessage("Shipping Deleted Successfully!. ");
+        successMessage("Shipping Deleted Successfully!. ");
         return response()->json([
             "status" => true,
         ]);

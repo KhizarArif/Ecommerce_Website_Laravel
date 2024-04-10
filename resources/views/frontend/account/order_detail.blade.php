@@ -47,13 +47,11 @@ use function App\Helpers\getProductImage;
                                             <h6 class="heading-xxxs text-muted">Shipped date:</h6>
                                             <!-- Text -->
                                             <p class="mb-lg-0 fs-sm fw-bold">
-                                                {{ \Carbon\Carbon::parse($order->created_at)->format('d M, Y') }}
+                                                {{ \Carbon\Carbon::parse($order->shipped_date)->format('d M, Y') }}
                                             </p>
                                         </div>
-                                        <div class="col-6 col-lg-3">
-                                            <!-- Heading -->
-                                            <h6 class="heading-xxxs text-muted">Status:</h6>
-                                            <!-- Text -->
+                                        <div class="col-6 col-lg-3"> 
+                                            <h6 class="heading-xxxs text-muted">Status:</h6> 
                                             <p class="mb-0 fs-sm fw-bold">
                                                 @if ($order->status == 'pending')
                                                     <span class="badge bg-danger">Pending</span>
@@ -66,10 +64,8 @@ use function App\Helpers\getProductImage;
                                                 @endif
                                             </p>
                                         </div>
-                                        <div class="col-6 col-lg-3">
-                                            <!-- Heading -->
-                                            <h6 class="heading-xxxs text-muted">Order Amount:</h6>
-                                            <!-- Text -->
+                                        <div class="col-6 col-lg-3"> 
+                                            <h6 class="heading-xxxs text-muted">Order Amount:</h6> 
                                             <p class="mb-0 fs-sm fw-bold">
                                                 ${{ number_format($order->grand_total, 2) }}
                                             </p>
@@ -79,24 +75,15 @@ use function App\Helpers\getProductImage;
                             </div>
                         </div>
 
-                        <div class="card-footer p-3">
-
-                            <!-- Heading -->
-                            <h6 class="mb-7 h5 mt-4">Order Items (3)</h6>
-
-                            <!-- Divider -->
-                            <hr class="my-3">
-
-                            <!-- List group -->
+                        <div class="card-footer p-3"> 
+                            <h6 class="mb-7 h5 mt-4">Order Items ({{$orderCount}})</h6> 
+                            <hr class="my-3"> 
                             <ul>
                                 @if ($order->orderItems != '')
                                     @foreach ($order->orderItems as $orderItem)
                                         <li class="list-group-item">
                                             <div class="row align-items-center">
-                                                <div class="col-4 col-md-3 col-xl-2">
-                                                    <!-- Image -->
-                                                    {{-- <a href="product.html"><img src="images/product-1.jpg" alt="..."
-                                                            class="img-fluid"></a> --}}
+                                                <div class="col-4 col-md-3 col-xl-2"> 
                                                     @php
                                                         $productImage = getProductImage($orderItem->product_id);
                                                     @endphp
