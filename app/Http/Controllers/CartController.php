@@ -14,6 +14,8 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+
+use function App\Helpers\orderEmail;
 use function App\Helpers\successMessage;
 
 class CartController extends Controller
@@ -155,7 +157,7 @@ class CartController extends Controller
         if ($customerAddress != '') {
 
             $userCountry = $customerAddress->country_id;
-            $shippingInfo =  ShippingCharge::where('country_id', $userCountry)->first(); 
+            $shippingInfo =  ShippingCharge::where('country_id', $userCountry)->first();
 
             foreach (Cart::content() as $item) {
                 $totalQty += $item->qty;
@@ -284,7 +286,18 @@ class CartController extends Controller
                 $orderItem->qty = $item->qty;
                 $orderItem->total = $item->price * $item->qty;
                 $orderItem->save();
+
+                $productData = Product::find($item->id);
+                if ($productData->track_qty == 'Yes') {
+                    $currentQty = $productData->qty;
+                    $updatedQty = $currentQty - $item->qty;
+                    $productData->qty = $updatedQty;
+                    $productData->save();
+                }
             }
+
+            // Send Order Email
+            orderEmail($order->id, "customer");
 
             Cart::destroy();
             session()->forget('code');

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-   public function index(Request $request, $categorySlug = null, $subcategorySlug = null)
+    public function index(Request $request, $categorySlug = null, $subcategorySlug = null)
     {
         $categorySelected = "";
         $subcategorySelected = "";
@@ -60,21 +60,20 @@ class ShopController extends Controller
         return view('frontend.shop', compact('categories', 'brands', 'products', 'categorySelected', 'subcategorySelected', 'brandsArray'))->with($data);
     }
 
-    
-    public function product($slug){
+
+    public function product($slug)
+    {
         $product = Product::where('slug', $slug)->with('productImages')->first();
-        if($product == null){
+        if ($product == null) {
             abort(404);
-        } 
-        
+        }
+
         $relatedProducts = [];
-        if($product->related_products != ""){
-            $productArray = explode(',', $product->related_products); 
-            $relatedProducts = Product::whereIn('id', $productArray)->with('productImages')->get(); 
-        }   
+        if ($product->related_products != "") {
+            $productArray = explode(',', $product->related_products);
+            $relatedProducts = Product::whereIn('id', $productArray)->where('status', 1)->with('productImages')->get();
+        }
 
         return view('frontend.product', compact('product', 'relatedProducts'));
-
-
     }
 }

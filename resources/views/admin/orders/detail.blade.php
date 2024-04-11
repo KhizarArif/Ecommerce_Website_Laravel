@@ -34,9 +34,9 @@
                                         Phone: {{ $order->mobile }}<br>
                                         Email: {{ $order->email }}
                                     </address>
-                                    <strong> Shipped Date </strong>
-                                    @if (!empty($order->shipped_date))
-                                        {{ \Carbon\Carbon::parse($order->shipped_date)->format('d M, Y') }}
+                                    <strong> Shipped Date </strong> <br>
+                                    @if (!empty($order->shipping_date))
+                                        {{ \Carbon\Carbon::parse($order->shipping_date)->format('d M, Y') }}
                                     @else
                                         N/A
                                     @endif
@@ -142,15 +142,17 @@
                     <div class="card">
                         <div class="card-body">
                             <h2 class="h4 mb-3">Send Inovice Email</h2>
-                            <div class="mb-3">
-                                <select name="status" id="status" class="form-control">
-                                    <option value="">Customer</option>
-                                    <option value="">Admin</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <button class="btn btn-primary">Send</button>
-                            </div>
+                            <form action="" method="post" name="sendEmailInvoiceForm" id="sendEmailInvoiceForm">
+                                <div class="mb-3">
+                                    <select name="userType" id="userType" class="form-control">
+                                        <option value="customer">Customer</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-primary">Send</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -166,17 +168,32 @@
         //     format: "Y-m-d H:i:s"
         // });
 
-        $("#changeOrderStatusForm").on('submit', function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: "{{ route('orders.changeOrderStatus', $order->id) }}",
-                type: "post",
-                data: $(this).serialize(),
-                success: function(response) {
-                    console.log("response", response);
-                    window.location.href = "{{ route('orders.edit', $order->id) }}";
-                }
+        if (confirm(" Are you sure you want to change status?")) {
+            $("#changeOrderStatusForm").on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{{ route('orders.changeOrderStatus', $order->id) }}",
+                    type: "post",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        window.location.href = "{{ route('orders.edit', $order->id) }}";
+                    }
+                })
             })
-        })
+        }
+
+        if (confirm("Do you want to send invoice email?")) {
+            $("#sendEmailInvoiceForm").on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "{{ route('orders.sendEmailInvoice', $order->id) }}",
+                    type: "post",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        window.location.href = "{{ route('orders.edit', $order->id) }}";
+                    }
+                })
+            })
+        }
     </script>
 @endsection

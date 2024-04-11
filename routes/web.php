@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
+use function App\Helpers\orderEmail;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,7 +31,11 @@ use Illuminate\Support\Str;
 |
 */
 
+
+
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
+Route::post('/add_wishlist', [FrontController::class, 'addToWishlist'])->name('frontend.addToWishlist');
+
 
 // Registration & Login Routes
 Route::group(["prefix" => "account"], function () {
@@ -44,8 +50,10 @@ Route::group(["prefix" => "account"], function () {
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get("/profile", [AuthController::class, 'profile'])->name('account.profile');
-        Route::get("/my-orders", [AuthController::class, 'orders'])->name('account.orders');
-        Route::get("/order-detail/{id}", [AuthController::class, 'orderDetail'])->name('account.orderDetail');
+        Route::get("/my_orders", [AuthController::class, 'orders'])->name('account.orders');
+        Route::get("/my_wishlists", [AuthController::class, 'wishlists'])->name('account.wishlists');
+        Route::get("/order_detail/{id}", [AuthController::class, 'orderDetail'])->name('account.orderDetail');
+        Route::post("/remove_from_wishlist", [AuthController::class, 'removeFromWishlist'])->name('account.removeFromWishlist');
         Route::get("/logout", [AuthController::class, 'logout'])->name('account.logout');
     });
 });
@@ -156,10 +164,9 @@ Route::group(["prefix" => "admin"], function () {
         Route::controller(OrderController::class)->prefix('orders')->group(function () {
             Route::get('', 'index')->name('orders.index');
             Route::get('edit/{id}', 'edit')->name('orders.edit');
-            Route::post('change_status/{id}', 'changeOrderStatus')->name('orders.changeOrderStatus');
-            Route::delete('delete/{id}', 'destroy')->name('orders.delete');
+            Route::post('change_status/{id}', 'changeOrderStatus')->name('orders.changeOrderStatus'); 
+            Route::post('send_email_invoice/{id}', 'sendEmailInvoice')->name('orders.sendEmailInvoice'); 
         });
-
 
 
         // Export Data to Excel

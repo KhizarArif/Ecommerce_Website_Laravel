@@ -48,13 +48,17 @@
         </div>
     </div>
 </footer>
-<script src="{{ asset('front-assets/js/jquery-3.6.0.min.js')}}"></script>
-<script src="{{ asset('front-assets/js/bootstrap.bundle.5.1.3.min.js')}}"></script>
-<script src="{{ asset('front-assets/js/instantpages.5.1.0.min.js')}}"></script>
-<script src="{{ asset('front-assets/js/lazyload.17.6.0.min.js')}}"></script>
-<script src="{{ asset('front-assets/js/slick.min.js')}}"></script>
-<script src="{{ asset('front-assets/js/ion.rangeSlider.min.js')}}"></script>
-<script src="{{ asset('front-assets/js/custom.js')}}"></script>
+<script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
+<script src="{{ asset('front-assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
+<script src="{{ asset('front-assets/js/instantpages.5.1.0.min.js') }}"></script>
+<script src="{{ asset('front-assets/js/lazyload.17.6.0.min.js') }}"></script>
+<script src="{{ asset('front-assets/js/slick.min.js') }}"></script>
+<script src="{{ asset('front-assets/js/ion.rangeSlider.min.js') }}"></script>
+<script src="{{ asset('front-assets/js/custom.js') }}"></script>
+
+{{-- Carousel  --}}
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
 {{-- JS Libraries  --}}
 <script src="{{ asset('front-assets/lib/wow/wow.min.js') }}"></script>
 <script src="{{ asset('front-assets/lib/easing/easing.min.js') }}"></script>
@@ -66,52 +70,75 @@
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    function addToCart(id) { 
-            console.log("id: ", id);
-            $.ajax({
-                url: "{{ route('front.addToCart') }}",
-                type: "POST",
-                data: {
-                    id: id 
-                },
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    console.log(response);
-                    if(response.status == true){
-                        window.location.href = "{{ route('front.cart') }}";
-                    }else{
-                        console.log("Errrorr");
-                        alert(response.message);
-                    }   
+    function addToCart(id) {
+        console.log("id: ", id);
+        $.ajax({
+            url: "{{ route('front.addToCart') }}",
+            type: "POST",
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.status == true) {
+                    window.location.href = "{{ route('front.cart') }}";
+                } else {
+                    console.log("Errrorr");
+                    alert(response.message);
                 }
-            })
-        }
-        
+            }
+        })
+    }
+
+    function addToWishList(id) {
+        console.log("id: ", id);
+        $.ajax({
+            url: "{{ route('frontend.addToWishlist') }}",
+            type: "POST",
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.status == true) {
+                    $("#wishlistModal .modal-body").html(response.message);
+                    $("#wishlistModal").modal('show');
+                } else {
+                    window.location.href = "{{ route('account.login') }}";
+                }
+            }
+        })
+    }
 </script>
 <script>
-window.onscroll = function() {
-    myFunction()
-};
+    window.onscroll = function() {
+        myFunction()
+    };
 
-var navbar = document.getElementById("navbar");
-var sticky = navbar.offsetTop;
+    var navbar = document.getElementById("navbar");
+    var sticky = navbar.offsetTop;
 
-function myFunction() {
-    if (window.pageYOffset >= sticky) {
-        navbar.classList.add("sticky")
-    } else {
-        navbar.classList.remove("sticky");
+    function myFunction() {
+        if (window.pageYOffset >= sticky) {
+            navbar.classList.add("sticky")
+        } else {
+            navbar.classList.remove("sticky");
+        }
     }
-}
 </script>
-@yield('customJs')      
+@yield('customJs')
 </body>
 
 </html>

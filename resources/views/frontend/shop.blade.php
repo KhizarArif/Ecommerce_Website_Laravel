@@ -119,16 +119,28 @@
                                         <div class="card product-card">
                                             <div class="product-image position-relative">
                                                 @if (!empty($product->productImages->first()->image))
-                                                    <a href="{{ route('front.product', $product->slug) }}" class="product-img">
+                                                    <a href="{{ route('front.product', $product->slug) }}"
+                                                        class="product-img">
                                                         <img src="{{ asset('uploads/product/small/' . $product->productImages->first()->image) }}"
                                                             class="card-img-top">
                                                     </a>
                                                 @endif
-                                                <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                                <a onclick="addToWishList('{{ $product->id }}')" class="whishlist"
+                                                    href="javascript:void(0)"><i class="far fa-heart"></i></a>
+
                                                 <div class="product-action">
-                                                    <a class="btn btn-dark" href="javascript:void(0)" onclick="addToCart('{{ $product->id }}')" >
-                                                        <i class="fa fa-shopping-cart"></i> Add To Cart
-                                                    </a>
+                                                    @if ($product->track_qty == 'Yes')
+                                                        @if ($product->qty > 0)
+                                                            <a class="btn btn-dark" href="javascript:void(0)"
+                                                                onclick="addToCart('{{ $product->id }}')">
+                                                                <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                            </a>
+                                                        @else
+                                                            <a class="btn btn-dark" href="javascript:void(0)">
+                                                                 Out Of Stock
+                                                            </a>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="card-body text-center mt-3">

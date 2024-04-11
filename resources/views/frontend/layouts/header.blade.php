@@ -48,6 +48,9 @@
     <link href="{{ asset('front-assets/lib/lightbox/css/lightbox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('front-assets/lib/owlcarousel/owl.carousel.min.css') }}" rel="stylesheet">
 
+    {{-- Carousel --}}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,7 +92,7 @@
     <div class="container-fluid nav-bar ">
         <div class="container">
             <nav class="navbar navbar-light navbar-expand-lg py-4">
-                <a href="index.html" class="navbar-brand">
+                <a href="{{ route('frontend.home') }}" class="navbar-brand">
                     <h1 class="text-primary fw-bold mb-0">Art Wings </h1>
                 </a>
                 <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
@@ -98,7 +101,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto">
-                        <a href="index.html" class="nav-item nav-link active">Home</a>
+                        <a href="{{ route('frontend.home') }}" class="nav-item nav-link active">Home</a>
                         <a href="about" class="nav-item nav-link">About</a>
                         <a href="service" class="nav-item nav-link">Services</a>
                         <a href="event.html" class="nav-item nav-link">Events</a>
@@ -184,3 +187,27 @@
             </nav>
         </div>
     </header>
+
+
+    {{-- Modal  --}}
+    <div class="modal-dialog modal-dialog-centered">
+        <!-- Modal -->
+        <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

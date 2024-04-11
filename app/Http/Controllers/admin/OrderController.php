@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+
+use function App\Helpers\orderEmail;
 use function App\Helpers\successMessage;
 
 class OrderController extends Controller
@@ -35,9 +37,18 @@ class OrderController extends Controller
     {
         $order = Order::find($id);
         $order->status = $request->status;
-       $order->shipping_date = $request->shipping_date;
+        $order->shipping_date = $request->shipping_date;
         $order->save();
         $message = "Order Status Updated Successfully";
+        successMessage($message);
+        return response()->json(['status' => true, 'message' => $message]);
+    }
+
+
+    public function sendEmailInvoice(Request $request, $id)
+    { 
+        orderEmail($id, $request->userType);
+        $message = "Order email invoice sent Successfully";
         successMessage($message);
         return response()->json(['status' => true, 'message' => $message]);
     }
