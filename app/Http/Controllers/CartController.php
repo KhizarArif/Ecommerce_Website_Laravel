@@ -408,7 +408,7 @@ class CartController extends Controller
             if ($now->lt($startsDate)) {
                 return response()->json([
                     "status" => false,
-                    "message" => "Invalid Coupen Code1"
+                    "message" => "Start date must be less than current date"
                 ]);
             }
         }
@@ -419,7 +419,7 @@ class CartController extends Controller
             if ($now->gt($endDate)) {
                 return response()->json([
                     "status" => false,
-                    "message" => "Invalid Coupen Code2"
+                    "message" => "End Date Must be greater than current date"
                 ]);
             }
         }

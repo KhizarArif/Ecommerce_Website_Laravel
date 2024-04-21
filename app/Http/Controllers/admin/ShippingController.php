@@ -33,6 +33,7 @@ class ShippingController extends Controller
             $count = ShippingCharge::where('country_id', $request->country)->count();
 
             if ($count > 0) {
+                successMessage("Shipping Already Exists");
                 return response()->json([
                     "status" => true,
                     "message" => "Shipping Already Exists"
@@ -43,7 +44,7 @@ class ShippingController extends Controller
             $shipping->country_id = $request->country;
             $shipping->amount = $request->amount;
             $shipping->save();
-
+            successMessage("Shipping charge created successfully");
             return response()->json([
                 "status" => true,
                 "message" => "Shipping charge created successfully"
@@ -72,9 +73,9 @@ class ShippingController extends Controller
 
         if ($validator->passes()) {
 
-            $count = ShippingCharge::where('country_id', $request->country)->count();
-
-            if ($count > 0) {
+            $count = ShippingCharge::where('country_id', $request->country)->count(); 
+            if ($count > 1) {
+                successMessage("Shipping Already Exists");
                 return response()->json([
                     "status" => true,
                     "message" => "Shipping Already Exists"
@@ -84,7 +85,9 @@ class ShippingController extends Controller
             $shipping = ShippingCharge::find($id);
             $shipping->country_id = $request->country;
             $shipping->amount = $request->amount;
-            $shipping->save();
+            $shipping->save(); 
+
+            successMessage("Shipping charge Updated successfully!.");
 
             return response()->json([
                 "status" => true,

@@ -9,7 +9,7 @@
                     <h1> {{ isset($coupon->id) ? "Update" : "Create"}} Coupen Discount </h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="categories.html" class="btn btn-primary">Back</a>
+                    <a href="{{ route('coupen.index') }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>

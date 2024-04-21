@@ -7,10 +7,10 @@
     <div class="container-fluid my-2">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Create Sub Category</h1>
+                <h1> {{ isset($subcategory->id) ? 'Update Subcategory' : 'Create Subcategory' }} </h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="subcategory.html" class="btn btn-primary">Back</a>
+                <a href="{{ route('subcategories.index') }}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>

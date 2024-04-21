@@ -14,7 +14,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
 
-class   CategoryService
+class CategoryService
 { 
 
     public function index(Request $request)
@@ -29,7 +29,7 @@ class   CategoryService
 
 
     public function store(Request $request)
-    {  
+    {   
         $category = $request->id > 0 ?  Category::find($request->id) : new Category();
         $category->name = $request->name;
         $category->slug = $request->slug;
@@ -37,8 +37,7 @@ class   CategoryService
         $category->showHome = $request->showHome;
         $category->save();
 
-        $oldImage = $category->image;
-
+        $oldImage = $category->image; 
         if (!empty($request->image_id)) {
             $tempImage = TempImage::find($request->image_id); 
 

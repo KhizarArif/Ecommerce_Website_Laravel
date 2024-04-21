@@ -113,7 +113,7 @@
                                             <input type="text" name="mobile" id="mobile" class="form-control"
                                                 value="{{ $customerAddress ? $customerAddress->mobile : '' }}"
                                                 placeholder="Mobile No.">
-                                            <p></p>
+                                            <p></p> 
                                         </div>
                                     </div>
 
@@ -166,7 +166,7 @@
 
                         <div id="remove-discount-div">
                             @if (Session::has('code'))
-                                <div class="mt-4 d-flex justify-content-between border border-5 align-items-center"
+                                <div class="mt-4 d-flex justify-content-between border border-1 px-3 py-1 border-primary rounded align-items-center bg-white shadow "
                                     id="remove-coupen">
                                     <div>
                                         <strong> {{ Session::get('code')->code }} </strong>

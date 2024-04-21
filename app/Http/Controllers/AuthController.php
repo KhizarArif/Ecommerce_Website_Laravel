@@ -82,8 +82,38 @@ class AuthController extends Controller
 
     public function profile()
     {
+        $user = User::where('id', Auth::user()->id)->first();
+        return view("frontend.account.profile", compact('user'));
+    }
 
-        return view("frontend.account.profile");
+    public function updateProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required | min:3 | max:100',
+            'email' => 'required | email | unique:users,email,' . Auth::user()->id . ',id',
+            'phone' => 'required ',
+        ]);
+
+        if ($validator->passes()) {
+            $user = User::find(Auth::user()->id); 
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->phone = $request->phone;
+            $user->save();
+
+            session()->flash('success', "Profile Updated Successfully");
+
+            return response()->json([
+                'status' => true, 
+                'user' => $user
+            ]);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
     }
 
     public function logout()
@@ -113,15 +143,15 @@ class AuthController extends Controller
         return view('frontend.account.wishlists', compact('wishlists'));
     }
 
-    public function removeFromWishlist(Request $request){
+    public function removeFromWishlist(Request $request)
+    {
         $wishlist = Wishlist::where('user_id', Auth::user()->id)->where('product_id', $request->id)->first();
 
-        if($wishlist == null ){
+        if ($wishlist == null) {
             return response()->json(['status' => true, 'message' => "Product Already Removed From Wishlist"]);
         } else {
             $wishlist->delete();
             return response()->json(['status' => true, 'message' => "Product Removed From Wishlist"]);
         }
     }
-
 }

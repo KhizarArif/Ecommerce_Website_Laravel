@@ -6,10 +6,10 @@
     <div class="container-fluid my-2">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Discount Coupen</h1>
+                <h1> Users</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route('coupen.create') }}" class="btn btn-primary">New Discount Coupen</a>
+                <a href="{{ route('users.create') }}" class="btn btn-primary">New User</a>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
                 <!-- Reset Button Start -->
                 <div class="card-title">
                     <form action="">
-                        <button type="button" class="btn btn-danger"> <a href="{{ route('coupen.index')}}"
+                        <button type="button" class="btn btn-danger"> <a href="{{ route('users.index')}}"
                                 class="text-white text-decoration-none"> Reset </a> </button>
                     </form>
                 </div>
@@ -63,37 +63,23 @@
                     <thead>
                         <tr>
                             <th width="60"> ID </th>
-                            <th> Code </th>
                             <th> Name </th>
-                            <th> Discount </th>
-                            <th> Start Date </th>
-                            <th> End Date </th>
+                            <th> Email </th>
+                            <th> Phone </th>
                             <th width="100"> Status </th>
                             <th width="100">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($discountCoupens->isNotEmpty())
-                        @foreach ($discountCoupens as $discountCoupen)
+                        @if ($users->isNotEmpty())
+                        @foreach ($users as $user)
                         <tr>
-                            <td> {{ $discountCoupen->id }} </td>
-                            <td> {{ $discountCoupen->code }} </td>
-                            <td> {{ $discountCoupen->name }} </td>
+                            <td> {{ $user->id }} </td>
+                            <td> {{ $user->name }} </td>
+                            <td> {{ $user->email }} </td>
+                            <td> {{ $user->phone }} </td>
                             <td>
-                                @if ($discountCoupen-> type == "percent"  )
-                                    {{ $discountCoupen->discount_amount }}% 
-                                @else
-                                    $ {{ $discountCoupen-> discount_amount }}
-                                @endif
-                            </td>
-                            <td>
-                               {{  (!empty($discountCoupen->starts_at)) ? \Carbon\Carbon::parse($discountCoupen->starts_at)->format('d M Y'): '' }}
-                            </td>
-                            <td>
-                               {{  (!empty($discountCoupen->expires_at)) ? \Carbon\Carbon::parse($discountCoupen->expires_at)->format('d M Y'): '' }}
-                            </td>
-                            <td>
-                                @if ($discountCoupen->status == 1)
+                                @if ($user->status == 1)
                                 <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                     aria-hidden="true">
@@ -110,7 +96,7 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('coupen.edit', $discountCoupen->id) }}">
+                                <a href="{{ route('users.edit', $user->id) }}">
                                     <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path
@@ -119,7 +105,7 @@
                                     </svg>
                                 </a>
 
-                                <a href="#" class="btn btn-light btn-sm" onclick="deleteItem('{{$discountCoupen->id}}')">
+                                <a href="#" class="btn btn-light btn-sm" onclick="deleteItem('{{$user->id}}')">
                                     <i class="fas fa-trash text-danger"></i>
                                 </a>
 
@@ -152,9 +138,9 @@
 
 @section('customJs')
 <script>
-    function deleteItem(categoryId) {
-        var url = "{{ route('categories.delete', 'ID') }}";
-        var newUrl = url.replace('ID', categoryId);
+    function deleteItem(userId) {
+        var url = "{{ route('users.delete', 'ID') }}";
+        var newUrl = url.replace('ID', userId);
         Swal.fire({
             title: "Do you want to save the changes?",
             text: "Data will be lost if you don't save it",
@@ -173,7 +159,7 @@
                     success: function (response) {
                         Swal.fire("Deleted Successfully!", "", "success");
                         // window.location.reload();
-                        window.location.href = "{{ route('categories.index') }}";
+                        window.location.href = "{{ route('users.index') }}";
                     }
                 });
             }
