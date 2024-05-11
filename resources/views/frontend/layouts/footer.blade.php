@@ -1,42 +1,46 @@
 <footer class="bg-dark mt-5">
-    <div class="container pb-5 pt-3">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="footer-card">
-                    <h3>Get In Touch</h3>
-                    <p>No dolore ipsum accusam no lorem. <br>
-                        123 Street, New York, USA <br>
-                        exampl@example.com <br>
-                        000 000 0000</p>
+    <div class="container-fluid footer py-6 my-6 mb-0 wow bounceInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-item">
+                        <h1 class="text-primary">Art<span class="text-light">Wings</span></h1>
+                        <p class="lh-lg mb-4 text-light">There cursus massa at urnaaculis estieSed aliquamellus vitae ultrs condmentum leo massamollis its estiegittis miristum.</p>
+                        <div class="footer-icon d-flex">
+                            <a class="btn btn-primary btn-sm-square me-2 rounded-circle" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-primary btn-sm-square me-2 rounded-circle" href=""><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-primary btn-sm-square me-2 rounded-circle"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="btn btn-primary btn-sm-square rounded-circle"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="footer-card">
-                    <h3>Important Links</h3>
-                    <ul>
-                        <li><a href="about-us.php" title="About">About</a></li>
-                        <li><a href="contact-us.php" title="Contact Us">Contact Us</a></li>
-                        <li><a href="#" title="Privacy">Privacy</a></li>
-                        <li><a href="#" title="Privacy">Terms & Conditions</a></li>
-                        <li><a href="#" title="Privacy">Refund Policy</a></li>
-                    </ul>
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-item">
+                        <h4 class="mb-4 text-light">Special Facilities</h4>
+                        <div class="d-flex flex-column align-items-start">
+                            <a class="mb-3" href=""><i class="fa fa-check text-primary me-2"></i>Jewellery</a>
+                            <a class="mb-3" href=""><i class="fa fa-check text-primary me-2"></i>Wall Clock</a>
+                            <a class="mb-3" href=""><i class="fa fa-check text-primary me-2"></i>Costers</a>
+                            <a class="mb-3" href=""><i class="fa fa-check text-primary me-2"></i>Candles</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="footer-card">
-                    <h3>My Account</h3>
-                    <ul>
-                        <li><a href="#" title="Sell">Login</a></li>
-                        <li><a href="#" title="Advertise">Register</a></li>
-                        <li><a href="#" title="Contact Us">My Orders</a></li>
-                    </ul>
-                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-item">
+                        <h4 class="mb-4 text-light">Contact Us</h4>
+                        <div class="d-flex flex-column align-items-start">
+                            <p><i class="fa fa-map-marker-alt text-primary me-2"></i> Faisalabad, Pakistan</p>
+                            <p><i class="fa fa-phone-alt text-primary me-2"></i> (+92) 324 9660909</p>
+                            <p><i class="fas fa-envelope text-primary me-2"></i> info@example.com</p>
+                            <p><i class="fa fa-clock text-primary me-2"></i> 24/7 Hours Service</p>
+                        </div>
+                    </div>
+                </div> 
             </div>
         </div>
     </div>
-    <div class="copyright-area">
+
+    <div class="copyright-area bg-light text-dark">
         <div class="container">
             <div class="row">
                 <div class="col-12 mt-3">

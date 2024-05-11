@@ -48,7 +48,7 @@
                                     </div>
 
                                     <div class="d-flex">
-                                        <button class="btn btn-dark" type="submit">Update</button>
+                                        <button class="btn btn-dark rounded" type="submit">Update</button>
                                     </div>
                                 </div>
                             </form>

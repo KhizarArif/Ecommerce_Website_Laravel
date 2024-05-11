@@ -16,6 +16,7 @@ class OrderController extends Controller
         $orders = Order::latest('orders.created_at')->select('orders.*', 'users.name', 'users.email');
         $orders = $orders->leftJoin('users', 'users.id', 'orders.user_id');
 
+
         if ($request->get("table_search") != "") {
             $orders = $orders->where('users.name', 'like', '%' . $request->get("table_search") . '%');
             $orders = $orders->orWhere('users.email', 'like', '%' . $request->get("table_search") . '%');

@@ -182,7 +182,7 @@
                         <div class="input-group apply-coupan mt-4">
                             <input type="text" placeholder="Coupon Code" class="form-control" name="discount_code"
                                 id="discount_code">
-                            <button class="btn btn-dark" type="button" id="apply-discount">Apply Coupon</button>
+                            <button class="btn btn-dark rounded" type="button" id="apply-discount">Apply Coupon</button>
                         </div>
 
                         <div class="card payment-form ">
@@ -215,7 +215,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn-dark btn btn-block w-100"> Pay Now </button>
+                            <button type="submit" class="btn-dark btn btn-block w-100 rounded"> Pay Now </button>
                         </div>
 
                         <!-- CREDIT CARD FORM ENDS HERE -->

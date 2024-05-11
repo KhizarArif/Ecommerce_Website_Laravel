@@ -14,28 +14,32 @@
 
     <section class=" section-10">
         <div class="container">
-            <div class="login-form">    
+            <div class="login-form">
                 <form action="{{ route('account.authenticate') }}" method="post">
-                @csrf
+                    @csrf
                     <h4 class="modal-title">Login to Your Account</h4>
                     <div class="form-group">
-                        <input type="text" class="form-control @error('email')  is-invalid @enderror" placeholder="Email" name="email" value="{{ old('email') }}">
+                        <input type="text" class="form-control @error('email')  is-invalid @enderror" placeholder="Email"
+                            name="email" value="{{ old('email') }}">
                         @error('email')
                             <p class="text-danger"> {{ $message }} </p>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control @error('password')  is-invalid @enderror" placeholder="Password" name="password" >
-                        @error('password') 
+                        <input type="password" class="form-control @error('password')  is-invalid @enderror"
+                            placeholder="Password" name="password">
+                        @error('password')
                             <p class="text-danger"> {{ $message }} </p>
                         @enderror
                     </div>
                     <div class="form-group small">
-                        <a href="#" class="forgot-link">Forgot Password?</a>
-                    </div> 
-                    <input type="submit" class="btn btn-dark btn-block btn-lg" value="Login">              
-                </form>			
-                <div class="text-center small">Don't have an account? <a href="{{ route('account.register') }}">Sign up</a></div>
+                        <a href="{{ route('account.userForgotPassword') }}" class="forgot-link">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-dark rounded w-40 " > Login</button>             
+                    
+                </form>
+                <div class="text-center small">Don't have an account? <a href="{{ route('account.register') }}">Sign up</a>
+                </div>
             </div>
         </div>
     </section>

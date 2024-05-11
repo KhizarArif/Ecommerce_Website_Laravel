@@ -17,7 +17,9 @@
 </section>
 
 <section class="content">
-
+    <div id="loader" style="display: none;"> 
+        <p>Loading...</p> 
+      </div>
     <div class="container-fluid">
         <form action="{{ route('categories.store') }}" method="POST" id="categoryForm" enctype="multipart/form-data">
             @csrf
@@ -87,7 +89,7 @@
                 </div>
             </div>
             <div class="pb-5 pt-3">
-                <button type="submit" class="btn btn-primary"> {{ isset($category->id) ? 'Update' : 'Create'}} </button>
+                <button type="submit" class="btn btn-primary btn-submit"> {{ isset($category->id) ? 'Update' : 'Create'}} </button>
                 <a href="{{ route('categories.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
             </div>
         </form>
@@ -103,6 +105,8 @@
         event.preventDefault();
         var form = $(this);
         let actionUrl = form.attr('action');
+        $(".btn-submit").prop('disabled', true);
+        $("#loader").show(); 
         $.ajax({
             url: actionUrl,
             type: "POST",
@@ -110,9 +114,13 @@
             contentType: false,
             processData: false,
             success: function (response) {
+                $(".btn-submit").prop('disabled', false);
+                $("#loader").show(); 
                 window.location.href = "{{ route('categories.index') }}";
             },
             error: function (error) {
+                $("#loader").show(); 
+                $(".btn-submit").prop('disabled', false);
                 if (error.status === 422) {
                     var errors = $.parseJSON(error.responseText);
                     $.each(errors['errors'], function (key, val) {

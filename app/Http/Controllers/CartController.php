@@ -156,8 +156,11 @@ class CartController extends Controller
         // Calculate Shipping Charges
         if ($customerAddress != '') {
 
-            $userCountry = $customerAddress->country_id;
+            $userCountry = $customerAddress->country_id; 
             $shippingInfo =  ShippingCharge::where('country_id', $userCountry)->first();
+            if (!$shippingInfo) {
+                $shippingInfo = ShippingCharge::where('country_id', 'rest_of_world')->first();
+            } 
 
             foreach (Cart::content() as $item) {
                 $totalQty += $item->qty;
@@ -196,7 +199,7 @@ class CartController extends Controller
             ]);
         }
 
-        $user = Auth::user();
+        $user = Auth::user(); 
         CustomerAddress::updateOrCreate(
             ['user_id' => $user->id],
             [

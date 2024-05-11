@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\PageController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\AuthController;
@@ -38,6 +39,11 @@ use function App\Helpers\orderEmail;
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
 Route::post('/add_wishlist', [FrontController::class, 'addToWishlist'])->name('frontend.addToWishlist');
 
+Route::get('/user_forgot_password', [AuthController::class, 'userForgotPassword'])->name('account.userForgotPassword');
+Route::get('/user_reset_password/{token}', [AuthController::class, 'userResetPassword'])->name('account.userResetPassword'); 
+Route::post('/process_forgot_password', [AuthController::class, 'processForgotPassword'])->name('account.processForgotPassword');
+Route::post('/process_update_password', [AuthController::class, 'processUpdatePassword'])->name('account.processUpdatePassword');
+
 
 // Registration & Login Routes
 Route::group(["prefix" => "account"], function () {
@@ -57,6 +63,8 @@ Route::group(["prefix" => "account"], function () {
         Route::get("/my_wishlists", [AuthController::class, 'wishlists'])->name('account.wishlists');
         Route::get("/order_detail/{id}", [AuthController::class, 'orderDetail'])->name('account.orderDetail');
         Route::post("/remove_from_wishlist", [AuthController::class, 'removeFromWishlist'])->name('account.removeFromWishlist');
+        Route::get("/show_change_password", [AuthController::class, 'showChangePassword'])->name('account.showChangePassword');
+        Route::post("/change_password", [AuthController::class, 'changePassword'])->name('account.changePassword');
         Route::get("/logout", [AuthController::class, 'logout'])->name('account.logout');
     });
 });
@@ -85,12 +93,20 @@ Route::controller(CartController::class)->group(function () {
 });
 
 
-// All Admin Routes 
+
+
+
+//======================= All Admin Routes =========================================================
 
 Route::group(["prefix" => "admin"], function () {
 
     Route::get('/login', [AdminController::class, 'index'])->name('admin.login');
     Route::post('/authenticate', [AdminController::class, 'authenticate'])->name('admin.authenticate');
+    Route::get('/forgot_admin_password', [AdminController::class, 'forgotAdminPassword'])->name('admin.forgotAdminPassword');
+    Route::get('/update_admin_password/{token}', [AdminController::class, 'updateAdminPassword'])->name('admin.updateAdminPassword');
+    Route::post('/process_admin_password', [AdminController::class, 'processAdminPassword'])->name('admin.processAdminPassword');
+    Route::post('/process_update_admin_password', [AdminController::class, 'processUpdateAdminPassword'])->name('admin.processUpdateAdminPassword');
+    
 
     Route::group(["middleware" => "is_admin"], function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
@@ -189,6 +205,12 @@ Route::group(["prefix" => "admin"], function () {
             Route::get('/edit/{id}', 'edit')->name('pages.edit');
             Route::post('/store', 'store')->name('pages.store');
             Route::delete('/delete/{id}', 'destroy')->name('pages.delete');
+        });
+
+
+        Route::controller(SettingController::class)->prefix('setting')->group(function () {
+            Route::get('change_admin_password', 'changeAdminPassword')->name('setting.changeAdminPassword');
+            Route::post('update_admin_password', 'updateAdminPassword')->name('setting.updateAdminPassword');
         });
 
 

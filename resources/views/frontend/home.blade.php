@@ -1,9 +1,30 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    {{-- Modal  --}}
+    <div class="modal-dialog modal-dialog-centered">
+        <!-- Modal -->
+        <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close rounded" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary rounded" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <main>
         <section>
-            <div class="container bg-light mt-5 ">
+            <div class="container bg-light mt-5 wow bounceInUp">
                 <div class="container">
                     <div class="row g-5 align-items-center">
                         <div class="col-lg-7 col-md-12">
@@ -27,7 +48,7 @@
         </section>
 
 
-        <section class="section-2">
+        <section class="section-2 wow bounceInUp">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3">
@@ -36,18 +57,8 @@
                             <h2 class="font-weight-semi-bold m-0">Quality Product</h5>
                         </div>
                     </div>
-                    <div class="col-lg-3 ">
-                        <div class="box shadow-lg">
-                            <div class="fa icon fa-shipping-fast text-primary m-0 mr-3"></div>
-                            <h2 class="font-weight-semi-bold m-0">Free Shipping</h2>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="box shadow-lg">
-                            <div class="fa icon fa-exchange-alt text-primary m-0 mr-3"></div>
-                            <h2 class="font-weight-semi-bold m-0">14-Day Return</h2>
-                        </div>
-                    </div>
+
+
                     <div class="col-lg-3 ">
                         <div class="box shadow-lg">
                             <div class="fa icon fa-phone-volume text-primary m-0 mr-3"></div>
@@ -57,7 +68,7 @@
                 </div>
             </div>
         </section>
-        <section class="section-3">
+        <section class="section-3 wow bounceInUp">
             <div class="container">
                 <div class="section-title">
                     <h2>Categories</h2>
@@ -90,7 +101,7 @@
             </div>
         </section>
 
-        <section class="section-4 pt-5">
+        <section class="section-4 pt-5 wow bounceInUp">
             <div class="container">
                 <div class="section-title">
                     <h2>Featured Products</h2>
@@ -113,13 +124,13 @@
                                         <div class="product-action">
                                             @if ($featuredProduct->track_qty == 'Yes')
                                                 @if ($featuredProduct->qty > 0)
-                                                    <a class="btn btn-dark" href="javascript:void(0)"
+                                                    <a class="btn btn-dark rounded" href="javascript:void(0)"
                                                         onclick="addToCart('{{ $featuredProduct->id }}')">
                                                         <i class="fa fa-shopping-cart"></i> Add To Cart
                                                     </a>
                                                 @else
                                                     <a class="btn btn-dark" href="javascript:void(0)">
-                                                         Out Of Stock
+                                                        Out Of Stock
                                                     </a>
                                                 @endif
                                             @endif
@@ -145,7 +156,7 @@
             </div>
         </section>
 
-        <section class="section-4 pt-5">
+        <section class="section-4 pt-5 wow bounceInUp">
             <div class="container">
                 <div class="section-title">
                     <h2>Latest Produsts</h2>
@@ -168,13 +179,13 @@
                                         <div class="product-action">
                                             @if ($featuredProduct->track_qty == 'Yes')
                                                 @if ($featuredProduct->qty > 0)
-                                                    <a class="btn btn-dark" href="javascript:void(0)"
+                                                    <a class="btn btn-dark rounded" href="javascript:void(0)"
                                                         onclick="addToCart('{{ $featuredProduct->id }}')">
                                                         <i class="fa fa-shopping-cart"></i> Add To Cart
                                                     </a>
                                                 @else
-                                                    <a class="btn btn-dark" href="javascript:void(0)">
-                                                         Out Of Stock
+                                                    <a class="btn btn-dark rounded" href="javascript:void(0)">
+                                                        Out Of Stock
                                                     </a>
                                                 @endif
                                             @endif

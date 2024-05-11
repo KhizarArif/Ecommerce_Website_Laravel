@@ -61,14 +61,14 @@
                                     <td>
                                         <div class="input-group quantity mx-auto" style="width: 100px;">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-dark btn-minus p-2 pt-1 pb-1 sub" data-id="{{$item->rowId}}">
+                                                <button class="btn btn-sm btn-dark btn-minus p-2 pt-1 pb-1 sub rounded" data-id="{{$item->rowId}}">
                                                     <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
                                             <input type="text" class="form-control form-control-sm  border-0 text-center" name="qty"
                                                 value="{{ $item->qty}}" >
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-dark btn-plus p-2 pt-1 pb-1 add" data-id="{{$item->rowId}}" >
+                                                <button class="btn btn-sm btn-dark btn-plus p-2 pt-1 pb-1 add rounded" data-id="{{$item->rowId}}" >
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
@@ -78,7 +78,7 @@
                                         ${{ $item-> price * $item->qty }}
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteToCart('{{ $item->rowId }}')"><i class="fa fa-times"></i></button>
+                                        <button class="btn btn-sm btn-danger rounded" onclick="deleteToCart('{{ $item->rowId }}')"><i class="fa fa-times"></i></button>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -101,7 +101,7 @@
                                 <div>${{Cart::subtotal()}}</div>
                             </div> 
                             <div class="pt-3">
-                                <a href="{{ route('front.checkout') }}" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>
+                                <a href="{{ route('front.checkout') }}" class="btn-dark btn btn-block rounded w-100">Proceed to Checkout</a>
                             </div>
                         </div>
                     </div>

@@ -62,7 +62,7 @@ use function App\Helpers\getProductImage;
                                                     </div>
                                                 </div>
                                                 <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-                                                    <button class="btn btn-outline-danger btn-sm" type="button"
+                                                    <button class="btn btn-outline-danger btn-sm rounded" type="button"
                                                         onclick="removeWishlist({{ $wishlist->id }})"><i
                                                             class="fas fa-trash-alt me-2"></i>Remove</button>
                                                 </div>

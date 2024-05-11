@@ -111,6 +111,7 @@
                 <div class="col-md-3">
                     <div class="card">
                         <form action="" method="post" name="changeOrderStatusForm" id="changeOrderStatusForm">
+                            @csrf
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Order Status</h2>
                                 <div class="mb-3">
@@ -168,8 +169,8 @@
         //     format: "Y-m-d H:i:s"
         // });
 
-        if (confirm(" Are you sure you want to change status?")) {
-            $("#changeOrderStatusForm").on('submit', function(e) {
+        $("#changeOrderStatusForm").on('submit', function(e) {
+            if (confirm(" Are you sure you want to change status?")) {
                 e.preventDefault();
                 $.ajax({
                     url: "{{ route('orders.changeOrderStatus', $order->id) }}",
@@ -179,11 +180,11 @@
                         window.location.href = "{{ route('orders.edit', $order->id) }}";
                     }
                 })
-            })
-        }
+            }
+        })
 
-        if (confirm("Do you want to send invoice email?")) {
-            $("#sendEmailInvoiceForm").on('submit', function(e) {
+        $("#sendEmailInvoiceForm").on('submit', function(e) {
+            if (confirm("Do you want to send invoice email?")) {
                 e.preventDefault();
                 $.ajax({
                     url: "{{ route('orders.sendEmailInvoice', $order->id) }}",
@@ -193,7 +194,7 @@
                         window.location.href = "{{ route('orders.edit', $order->id) }}";
                     }
                 })
-            })
-        }
+            }
+        })
     </script>
 @endsection
