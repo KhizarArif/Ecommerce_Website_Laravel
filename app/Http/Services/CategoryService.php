@@ -37,7 +37,8 @@ class CategoryService
         $category->showHome = $request->showHome;
         $category->save();
 
-        $oldImage = $category->image; 
+        
+        $oldImage = $category->image;  
         if (!empty($request->image_id)) {
             $tempImage = TempImage::find($request->image_id); 
 
@@ -86,6 +87,7 @@ class CategoryService
         $category = Category::find($id);
         return view('admin.category.create', compact('category'));
     }
+    
     public function destroy($id)
     {  
         $category = Category::find($id);

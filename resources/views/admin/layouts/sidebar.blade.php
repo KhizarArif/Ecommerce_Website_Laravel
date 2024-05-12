@@ -48,6 +48,12 @@
                         <p>Products</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('exhibitions.index') }}" class="nav-link"> 
+                        <i class="fas fa-store nav-icon"></i>
+                        <p>Exhibition</p>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a href="{{ route('shipping.create') }}" class="nav-link">

@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
@@ -119,6 +120,15 @@ Route::group(["prefix" => "admin"], function () {
             Route::get('edit/{id}', 'edit')->name('categories.edit');
             Route::post('store', 'store')->name('categories.store');
             Route::delete('delete/{id}', 'destroy')->name('categories.delete');
+        });
+
+        // Exhibitions 
+        Route::controller(ExhibitionController::class)->prefix('exhibitions')->group(function () {
+            Route::get('', 'index')->name('exhibitions.index');
+            Route::get('create', 'create')->name('exhibitions.create');
+            Route::get('edit/{id}', 'edit')->name('exhibitions.edit');
+            Route::post('store', 'store')->name('exhibitions.store');
+            Route::delete('delete/{id}', 'destroy')->name('exhibitions.delete');
         });
 
 
