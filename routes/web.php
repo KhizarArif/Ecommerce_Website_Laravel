@@ -129,6 +129,10 @@ Route::group(["prefix" => "admin"], function () {
             Route::get('edit/{id}', 'edit')->name('exhibitions.edit');
             Route::post('store', 'store')->name('exhibitions.store');
             Route::delete('delete/{id}', 'destroy')->name('exhibitions.delete');
+
+            // Update Exhibition Controller Image
+            Route::post('exhibition_image/update', 'updateExhibitionImage')->name('exhibitions.updateExhibitionImage');
+            Route::delete('exhibition_image', 'deleteExhibitionImage')->name('exhibitions.deleteExhibitionImage');
         });
 
 

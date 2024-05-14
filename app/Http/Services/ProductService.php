@@ -176,7 +176,7 @@ class ProductService
     }
 
     // Get Related Products Select 2
-    public function getProducts($request){
+    public function getProducts(Request $request){
         
         $tempProduct = [];
         if($request->term != ""){
@@ -241,7 +241,7 @@ class ProductService
     }
 
     // Get Sub categories
-    public function GetSubCategory($request)
+    public function GetSubCategory(Request $request)
     { 
         $subCategories = SubCategory::where('category_id', $request->category_id)->get();
         return response()->json([
@@ -251,7 +251,7 @@ class ProductService
     }
 
 
-    public function deleteProductImage($request){ 
+    public function deleteProductImage(Request $request){ 
         $productImage = ProductImage::find($request-> id);
         File::delete(public_path() . '/uploads/product/large/' . $productImage->image);
         File::delete(public_path() . '/uploads/product/small/' . $productImage->image);

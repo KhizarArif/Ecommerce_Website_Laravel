@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('exhibitions', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("slug");
-            $table->string("image")->nullable();
+            $table->string("slug"); 
             $table->integer("status")->default(1);
             $table->enum('showHome', ['Yes', 'No'])->after('status')->default('No');
             $table->timestamps();

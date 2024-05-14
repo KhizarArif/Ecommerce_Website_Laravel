@@ -17,9 +17,7 @@
 </section>
 
 <section class="content">
-    <div id="loader" style="display: none;"> 
-        <p>Loading...</p> 
-      </div>
+   
     <div class="container-fluid">
         <form action="{{ route('categories.store') }}" method="POST" id="categoryForm" enctype="multipart/form-data">
             @csrf
