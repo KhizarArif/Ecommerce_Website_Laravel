@@ -5,13 +5,9 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-item">
                         <h1 class="text-primary">Art<span class="text-light">Wings</span></h1>
-                        <p class="lh-lg mb-4 text-light">There cursus massa at urnaaculis estieSed aliquamellus vitae ultrs condmentum leo massamollis its estiegittis miristum.</p>
-                        <div class="footer-icon d-flex">
-                            <a class="btn btn-primary btn-sm-square me-2 rounded-circle" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-primary btn-sm-square me-2 rounded-circle" href=""><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="btn btn-primary btn-sm-square me-2 rounded-circle"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="btn btn-primary btn-sm-square rounded-circle"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
+                        <p class="lh-lg mb-4 text-light"> Art Wings Where art meets precision. Handcrafted resin
+                            creations for the modern home, sustainably made with love. </p>
+
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
@@ -35,7 +31,7 @@
                             <p><i class="fa fa-clock text-primary me-2"></i> 24/7 Hours Service</p>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
     </div>

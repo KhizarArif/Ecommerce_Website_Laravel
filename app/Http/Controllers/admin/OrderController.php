@@ -13,9 +13,8 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $orders = Order::latest('orders.created_at')->select('orders.*', 'users.name', 'users.email');
+        $orders = Order::latest('orders.created_at')->select('orders.*', 'users.name', 'users.email'); 
         $orders = $orders->leftJoin('users', 'users.id', 'orders.user_id');
-
 
         if ($request->get("table_search") != "") {
             $orders = $orders->where('users.name', 'like', '%' . $request->get("table_search") . '%');

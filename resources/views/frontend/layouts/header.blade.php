@@ -100,23 +100,18 @@
                     <span class="fa fa-bars text-primary"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <div class="navbar-nav mx-auto">
-                        <a href="{{ route('frontend.home') }}" class="nav-item nav-link active">Home</a>
-                        <a href="about" class="nav-item nav-link">About</a>
-                        <a href="service" class="nav-item nav-link">Services</a>
-                        <a href="event.html" class="nav-item nav-link">Events</a>
-                        <a href="menu.html" class="nav-item nav-link">Menu</a>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-bs-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu bg-light">
-                                <a href="book.html" class="dropdown-item">Booking</a>
-                                <a href="blog.html" class="dropdown-item">Our Blog</a>
-                                <a href="team.html" class="dropdown-item">Our Team</a>
-                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                <a href="404.html" class="dropdown-item">404 Page</a>
-                            </div>
+                    <div class="navbar-nav ms-auto">
+                        <div class="footer-icon d-flex">
+                            <a class="btn btn-primary btn-sm-square me-2 rounded-circle"
+                                href="{{ url('https://www.facebook.com/art.wings.sm?mibextid=kFxxJD') }}"><i
+                                    class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-primary btn-sm-square me-2 rounded-circle"
+                                href="{{ url('https://www.threads.net/@art_wings_sm') }}"><i
+                                    class="fab fa-twitter"></i></a>
+                            <a href="{{ url('https://www.instagram.com/art_wings_sm/') }}"
+                                class="btn btn-primary btn-sm-square me-2 rounded-circle" target="_blank"><i
+                                    class="fab fa-instagram"></i></a>
                         </div>
-                        <a href="contact.html" class="nav-item nav-link">Contact</a>
                     </div>
                     @if (Auth::check())
                         <a href="{{ route('account.profile') }}"

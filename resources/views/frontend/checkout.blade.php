@@ -113,7 +113,7 @@
                                             <input type="text" name="mobile" id="mobile" class="form-control"
                                                 value="{{ $customerAddress ? $customerAddress->mobile : '' }}"
                                                 placeholder="Mobile No.">
-                                            <p></p> 
+                                            <p></p>
                                         </div>
                                     </div>
 
@@ -215,7 +215,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn-dark btn btn-block w-100 rounded"> Pay Now </button>
+                            <button type="submit" class="btn-dark btn btn-block w-100 rounded" id="btn_payNow"> Pay Now
+                            </button>
                         </div>
 
                         <!-- CREDIT CARD FORM ENDS HERE -->
@@ -261,6 +262,7 @@
 
         $('#orderForm').on('submit', function(e) {
             e.preventDefault();
+            $("#btn_payNow").prop('disabled', true);
 
             $.ajax({
                 url: "{{ route('front.processCheckout') }}",
@@ -269,7 +271,7 @@
                 dataType: "json",
                 success: function(response) {
                     console.log(response);
-                    $('button[type="submit"]').prop('disabled', true);
+                    $("#btn_payNow").prop('disabled', false);
                     if (response.status == false) {
                         $('button[type="submit"]').prop('disabled', false);
                         $.each(response.error, function(key, value) {
@@ -331,6 +333,5 @@
                 }
             })
         })
-
     </script>
 @endsection
