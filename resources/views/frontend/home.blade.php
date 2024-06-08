@@ -93,22 +93,7 @@
                                 Our passion is to provide high-quality, eco-friendly, and sustainable resin creations that
                                 inspire and delight. Explore our collection and discover the beauty of handmade resin art!"
                             </p>
-                            <h5 class="mb-4">Feel free to customize it to fit your brand's voice and style!</h5>
-                            <div class="row g-4 text-dark mb-5">
-                                <div class="col-sm-6">
-                                    <i class="fas fa-share text-primary me-2"></i>Fresh and Fast food Delivery
-                                </div>
-                                <div class="col-sm-6">
-                                    <i class="fas fa-share text-primary me-2"></i>24/7 Customer Support
-                                </div>
-                                <div class="col-sm-6">
-                                    <i class="fas fa-share text-primary me-2"></i>Easy Customization Options
-                                </div>
-                                <div class="col-sm-6">
-                                    <i class="fas fa-share text-primary me-2"></i>Delicious Deals for Delicious Meals
-                                </div>
-                            </div>
-                          
+                            
                         </div>
                     </div>
                 </div>
