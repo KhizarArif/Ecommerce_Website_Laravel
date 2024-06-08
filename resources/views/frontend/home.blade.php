@@ -63,13 +63,7 @@
                         <div class="col-lg-7 col-md-12">
                             <h1 class=" mb-4 animated bounceInDown"> Art wings offers a <span class="text-primary">
                                     hassle-free and convenient way </span> to enhance your interior design. </h1>
-                            <a href=""
-                                class="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5 me-4 animated bounceInLeft">
-                                Book your
-                                order </a>
-                            <a href=""
-                                class="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5 animated bounceInLeft">All
-                                products</a>
+                            
                         </div>
                         <div class="col-lg-5 col-md-12">
                             <img src="{{ asset('front-assets/images/hero.png') }}" class="img-fluid rounded animated zoomIn"
