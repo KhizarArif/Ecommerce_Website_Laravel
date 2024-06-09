@@ -29,6 +29,10 @@ class CartController extends Controller
                 "status" => false,
                 "message" => "Product Not Found"
             ]);
+        } 
+        $productImage = null;
+        if (!empty($request->image_id)) {
+            $productImage = $product->productImages->where('id', $request->image_id)->first();
         }
 
         if (Cart::count() > 0) {
@@ -42,7 +46,7 @@ class CartController extends Controller
             }
 
             if ($productAlreadyExists == false) {
-                Cart::add($product->id, $product->title, 1, $product->price, ["productImage" => (!empty($product->productImages)) ? $product->productImages->first() : '']);
+                Cart::add($product->id, $product->title, 1, $product->price, ["productImage" => $productImage]); 
                 $status = true;
                 $message = $product->title . ' added to Cart';
             } else {
@@ -50,7 +54,7 @@ class CartController extends Controller
                 $message = $product->title . ' already added to Cart';
             }
         } else {
-            Cart::add($product->id, $product->title, 1, $product->price, ["productImage" => (!empty($product->productImages)) ? $product->productImages->first() : '']);
+            Cart::add($product->id, $product->title, 1, $product->price, ["productImage" => $productImage]); 
             $status = true;
             $message = $product->title . ' added to Cart';
         }
@@ -60,6 +64,9 @@ class CartController extends Controller
             "message" => $message
         ]);
     }
+
+
+
     public function cart()
     {
         $contentCart = Cart::content();
@@ -122,7 +129,7 @@ class CartController extends Controller
     }
 
     public function checkout()
-    {
+    { 
         $discount = 0;
         $subTotal = Cart::subTotal(2, '.', '');
         if (Cart::count() == 0) {
@@ -156,11 +163,11 @@ class CartController extends Controller
         // Calculate Shipping Charges
         if ($customerAddress != '') {
 
-            $userCountry = $customerAddress->country_id; 
+            $userCountry = $customerAddress->country_id;
             $shippingInfo =  ShippingCharge::where('country_id', $userCountry)->first();
             if (!$shippingInfo) {
                 $shippingInfo = ShippingCharge::where('country_id', 'rest_of_world')->first();
-            } 
+            }
 
             foreach (Cart::content() as $item) {
                 $totalQty += $item->qty;
@@ -179,7 +186,7 @@ class CartController extends Controller
     }
 
     public function processCheckout(Request $request)
-    {
+    { 
         $validator = Validator::make($request->all(), [
             'first_name' => 'required | min:5',
             'last_name'  => 'required',
@@ -199,7 +206,7 @@ class CartController extends Controller
             ]);
         }
 
-        $user = Auth::user(); 
+        $user = Auth::user();
         CustomerAddress::updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -279,11 +286,12 @@ class CartController extends Controller
             $order->zip = $request->zip;
             $order->notes = $request->notes;
             $order->save();
-
-            foreach (Cart::content() as $item) {
-                $orderItem = new OrderItem();
+ 
+            foreach (Cart::content() as $item) { 
+                $orderItem = new OrderItem(); 
                 $orderItem->order_id = $order->id;
                 $orderItem->product_id = $item->id;
+                $orderItem->product_image_id = $item->options->productImage->id;
                 $orderItem->name = $item->name;
                 $orderItem->price = $item->price;
                 $orderItem->qty = $item->qty;

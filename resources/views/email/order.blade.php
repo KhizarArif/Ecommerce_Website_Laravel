@@ -60,6 +60,7 @@
     <table cellpadding="3" cellspacing="3" border="0">
         <thead>
             <tr>
+                <th>Product Image </th>
                 <th>Product</th>
                 <th>Price</th>
                 <th>Qty</th>
@@ -70,6 +71,21 @@
             @if ($mailData['order']->orderItems)
                 @foreach ($mailData['order']->orderItems as $item)
                     <tr>
+                        <td>
+                            <div class="d-flex align-items-center"> 
+                                @if ($item->orderProductImages)
+                                    @php
+                                        $imageUrl = asset('uploads/product/small/' . $item->orderProductImages->image);
+                                      
+                                        // Extracting URL after #
+                                        $imageUrlParts = explode('#', $imageUrl);
+                                        $imageUrl = end($imageUrlParts); 
+                                    @endphp
+                                    <img src="{{ $imageUrl }}"
+                                        alt="{{ $item->name }}" style="width: 50px; height: auto;">
+                                @endif
+                            </div>
+                        </td>
                         <td>{{ $item->name }}</td>
                         <td>${{ number_format($item->price, 2) }}</td>
                         <td>{{ $item->qty }}</td>

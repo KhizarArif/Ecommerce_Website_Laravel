@@ -284,6 +284,10 @@
                         window.location.href = "{{ route('front.thankyou', ['id' => 1]) }}";
 
                     }
+                }, error: function(error) {
+                    console.log(error);
+                    $("#btn_payNow").prop('disabled', false);
+                    
                 }
             });
         });

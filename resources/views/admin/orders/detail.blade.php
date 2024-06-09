@@ -48,7 +48,7 @@
                                     <b>Invoice #007612</b><br>
                                     <br>
                                     <b>Order ID:</b> {{ $order->id }} <br>
-                                    <b>Total:</b> ${{ number_format($order->grand_total, 2) }}<br>
+                                    <b>Total:</b> Rs {{ number_format($order->grand_total, 2) }}<br>
                                     <b>Status:</b>
                                     @if ($order->status == 'pending')
                                         <span class="badge bg-danger">Pending</span>
@@ -78,30 +78,30 @@
                                         @foreach ($order->orderItems as $item)
                                             <tr>
                                                 <td> {{ $item->name }} </td>
-                                                <td> ${{ number_format($item->price, 2) }} </td>
+                                                <td> Rs {{ number_format($item->price, 2) }} </td>
                                                 <td> {{ $item->qty }} </td>
-                                                <td> ${{ number_format($item->total, 2) }} </td>
+                                                <td> Rs {{ number_format($item->total, 2) }} </td>
                                             </tr>
                                         @endforeach
                                     @endif
                                     <tr>
                                     <tr>
                                         <th colspan="3" class="text-right">Subtotal:</th>
-                                        <td>${{ number_format($order->subtotal, 2) }}</td>
+                                        <td>Rs {{ number_format($order->subtotal, 2) }}</td>
                                     </tr>
 
                                     <tr>
                                         <th colspan="3" class="text-right">Shipping:</th>
-                                        <td>${{ number_format($order->shipping, 2) }}</td>
+                                        <td> Rs {{ number_format($order->shipping, 2) }}</td>
                                     </tr>
 
                                     <tr>
                                         <th colspan="3" class="text-right">Discount:</th>
-                                        <td>${{ number_format($order->discount, 2) }}</td>
+                                        <td> Rs{{ number_format($order->discount, 2) }}</td>
                                     </tr>
                                     <tr>
                                         <th colspan="3" class="text-right">Grand Total:</th>
-                                        <td>${{ number_format($order->grand_total, 2) }}</td>
+                                        <td> Rs {{ number_format($order->grand_total, 2) }}</td>
                                     </tr>
                                 </tbody>
                             </table>

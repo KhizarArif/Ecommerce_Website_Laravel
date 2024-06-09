@@ -59,10 +59,10 @@
                             <small class="pt-1">(99 Reviews)</small>
                         </div>
                         @if ($product->compare_price > 0)
-                            <span class="text-underline"><del>${{ $product->compare_price }}</del></span>
+                            <span class="text-underline"><del> Rs {{ $product->compare_price }}</del></span>
                         @endif
 
-                        <h4 class="mb-2">${{ $product->price }}</h4>
+                        <h4 class="mb-2"> Rs {{ $product->price }}</h4>
 
                         {!! $product->short_description !!}
 

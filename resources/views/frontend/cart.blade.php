@@ -49,8 +49,8 @@
                                 @foreach ($contentCart as $item )
                                 <tr>
                                     <td>
-                                        <div class="d-flex align-items-center ">
-                                            @if ($item->options->productImage->image)
+                                        <div class="d-flex align-items-center ">  
+                                            @if ($item->options->productImage)
                                             <img
                                                 src="{{ asset('uploads/product/large/'. $item->options->productImage->image) }}">
                                             @endif

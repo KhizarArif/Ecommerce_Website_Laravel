@@ -66,7 +66,7 @@
                                 @endif
                             </td>
                             <td><a href="#"> {{ $product->title}} </a></td>
-                            <td> ${{ $product->price}} </td>
+                            <td> Rs {{ $product->price}} </td>
                             <td> {{ $product->qty}} left in stock </td>
                             <td> {{ $product->sku}} </td>
                             <td>

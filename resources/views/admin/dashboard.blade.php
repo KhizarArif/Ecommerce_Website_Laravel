@@ -64,7 +64,7 @@
             <div class="col-lg-4 col-6">
                 <div class="small-box card">
                     <div class="inner">
-                        <h3> ${{ number_format($totalRevenue) }} </h3>
+                        <h3> Rs.{{ number_format($totalRevenue) }} </h3>
                         <p>Total Sale</p>
                     </div>
                     <div class="icon">
@@ -77,7 +77,7 @@
             <div class="col-lg-4 col-6">
                 <div class="small-box card">
                     <div class="inner">
-                        <h3> ${{ number_format($thisMonthRevenue) }} </h3>
+                        <h3> Rs.{{ number_format($thisMonthRevenue) }} </h3>
                         <p>Revenue This Month </p>
                     </div>
                     <div class="icon">
@@ -90,7 +90,7 @@
             <div class="col-lg-4 col-6">
                 <div class="small-box card">
                     <div class="inner">
-                        <h3> ${{ number_format($lastMonthRevenue) }} </h3>
+                        <h3> Rs.{{ number_format($lastMonthRevenue) }} </h3>
                         <p>Revenue Last Month ({{ $lastMonthName }}) </p>
                     </div>
                     <div class="icon">
@@ -103,7 +103,7 @@
             <div class="col-lg-4 col-6">
                 <div class="small-box card">
                     <div class="inner">
-                        <h3> ${{ number_format($lastThirtyDaysRevenue) }} </h3>
+                        <h3> Rs.{{ number_format($lastThirtyDaysRevenue) }} </h3>
                         <p>Revenue of Last 30 Days </p>
                     </div>
                     <div class="icon">

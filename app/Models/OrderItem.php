@@ -14,7 +14,13 @@ class OrderItem extends Model
 
     protected $table = 'order_items';
 
-    public function orders():BelongsToMany{
+    public function orders(): BelongsToMany
+    {
         return $this->belongsToMany(Order::class);
+    }
+
+    public function orderProductImages()
+    {
+        return $this->belongsTo(ProductImage::class, 'product_image_id');
     }
 }

@@ -157,10 +157,10 @@
                                 <div class="slide-track">
                                     {{-- Loop Start Here --}}
 
-                                    @if ($productImages->count() > 0)
-                                        @foreach ($productImages as $productImage)
+                                    @if ($productAllImages->count() > 0)
+                                        @foreach ($productAllImages as $productAllImage)
                                             <div class="slide">
-                                                <img src="{{ asset('uploads/product/small/' . $productImage->image) }}"
+                                                <img src="{{ asset('uploads/product/small/' . $productAllImage->image) }}"
                                                     alt="" class="carousel_image">
                                             </div>
                                         @endforeach
@@ -245,12 +245,12 @@
                 </div>
                 <div class="row pb-3">
                     @if ($featuredProducts->isNotEmpty())
-                        @foreach ($featuredProducts as $featuredProduct)
+                        @foreach ($featuredProducts as $featuredProduct) 
                             <div class="col-md-3">
                                 <div class="card product-card">
                                     <div class="product-image position-relative">
                                         <a href="{{ route('front.product', $featuredProduct->slug) }}" class="product-img">
-                                            @if (!empty($featuredProduct->productImages->first()->image))
+                                            @if (!empty($featuredProduct->productImages->first()->image))  
                                                 <img class="card-img-top"
                                                     src="{{ asset('uploads/product/small/' . $featuredProduct->productImages->first()->image) }}">
                                             @endif
@@ -262,7 +262,7 @@
                                             @if ($featuredProduct->track_qty == 'Yes')
                                                 @if ($featuredProduct->qty > 0)
                                                     <a class="btn btn-dark rounded" href="javascript:void(0)"
-                                                        onclick="addToCart('{{ $featuredProduct->id }}')">
+                                                        onclick="addToCart('{{ $featuredProduct->id }}', '{{$featuredProduct->productImages->first()->id}}')">
                                                         <i class="fa fa-shopping-cart"></i> Add To Cart
                                                     </a>
                                                 @else
@@ -276,9 +276,9 @@
                                     <div class="card-body text-center mt-3">
                                         <a class="h6 link" href="product.php"> {{ $featuredProduct->title }}</a>
                                         <div class="price mt-2">
-                                            <span class="h5"><strong>$ {{ $featuredProduct->price }} </strong></span>
+                                            <span class="h5"><strong> Rs {{ $featuredProduct->price }} </strong></span>
                                             @if ($featuredProduct->compare_price > 0)
-                                                <span class="h6 text-underline"><del>$
+                                                <span class="h6 text-underline"><del> Rs
                                                         {{ $featuredProduct->compare_price }}</del></span>
                                             @endif
                                         </div>

@@ -30,7 +30,7 @@ function getProductImage($productId)
 
 function orderEmail($orderId, $userType = "customer")
 { 
-    $order = Order::where('id', $orderId)->with('orderItems')->first(); 
+    $order = Order::where('id', $orderId)->with(['orderItems.orderProductImages'])->first(); 
     if ($userType == "customer") {
         $subject = "Thank You For Shopping With Us";
         $email = $order->email;
@@ -39,10 +39,14 @@ function orderEmail($orderId, $userType = "customer")
         $email = env("ADMIN_EMAIL"); 
     }
 
+
     $mailData = [
         'subject' => $subject,
         'order' => $order,
         'userType' => $userType
     ];
+
+
+
     Mail::to($email)->send(new OrderEmail($mailData));
 }

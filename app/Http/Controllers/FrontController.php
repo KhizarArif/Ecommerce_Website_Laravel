@@ -15,13 +15,13 @@ class FrontController extends Controller
     {
 
         $featuredProducts = Product::where('is_featured', 'Yes')->orderBy('id', 'desc')->take(10)->get();
-        $productImages = ProductImage::all(); 
-        $productImageCount = $productImages->count();
+        $productAllImages = ProductImage::all(); 
+        $productImageCount = $productAllImages->count();
         $latestProducts = Product::orderBy('id', 'desc')->where('status', 1)->take(10)->get();
         $exhibitions = Exhibition::where('status', 1)->with('exhibitionImages')->get();  
 
       
-        return view('frontend.home', compact('featuredProducts', 'latestProducts', 'exhibitions', 'productImages', 'productImageCount'));
+        return view('frontend.home', compact('featuredProducts', 'latestProducts', 'exhibitions', 'productAllImages', 'productImageCount'));
     }
 
     public function addToWishlist(Request $request)

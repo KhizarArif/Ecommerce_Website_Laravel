@@ -84,31 +84,28 @@
 
 
                             @if ($products->isNotEmpty())
-                                @foreach ($products as $key => $product)
+                            @foreach ($products as $key => $product)
+                                @foreach ($product->productImages as $item)
                                     <div class="col-md-4">
-                                        <div class="card product-card">
+                                        <div class="card product-card d-flex flex-column justify-content-between align-items-center flex-wrap">
                                             <div class="product-image position-relative">
-                                                @if (!empty($product->productImages->first()->image))
-                                                    <a href="{{ route('front.product', $product->slug) }}"
-                                                        class="product-img">
-                                                        <img src="{{ asset('uploads/product/small/' . $product->productImages->first()->image) }}"
-                                                            class="card-img-top">
+                                                @if (!empty($item->image))
+                                                    <a href="{{ route('front.product', $product->slug) }}" class="product-img">
+                                                        <img src="{{ asset('uploads/product/small/' . $item->image) }}" class="card-img-top">
                                                     </a>
                                                 @endif
-                                                <a onclick="addToWishList('{{ $product->id }}')" class="whishlist"
-                                                    href="javascript:void(0)">
+                                                <a onclick="addToWishList('{{ $item->id }}')" class="whishlist" href="javascript:void(0)">
                                                     <i class="far fa-heart"></i>
                                                 </a>
                                                 <div class="product-action">
                                                     @if ($product->track_qty == 'Yes')
                                                         @if ($product->qty > 0)
                                                             <a class="btn btn-dark" href="javascript:void(0)"
-                                                                onclick="addToCart('{{ $product->id }}')">
+                                                                onclick="addToCart('{{ $product->id }}', '{{ $item->id }}')">
                                                                 <i class="fa fa-shopping-cart"></i> Add To Cart
                                                             </a>
                                                         @else
-                                                            <a class="btn btn-dark" href="javascript:void(0)">Out Of
-                                                                Stock</a>
+                                                            <a class="btn btn-dark" href="javascript:void(0)">Out Of Stock</a>
                                                         @endif
                                                     @endif
                                                 </div>
@@ -116,24 +113,25 @@
                                             <div class="card-body text-center mt-3">
                                                 <a class="h6 link" href="product.php"> {{ $product->title }}</a>
                                                 <div class="price mt-2">
-                                                    <span class="h5"><strong> ${{ $product->price }} </strong></span>
+                                                    <span class="h5"><strong> Rs {{ $product->price }} </strong></span>
                                                     @if ($product->compare_price > 0)
-                                                        <span
-                                                            class="h6 text-underline"><del>${{ $product->compare_price }}</del></span>
+                                                        <span class="h6 text-underline"><del> Rs {{ $product->compare_price }}</del></span>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
-                            @else
-                                <p class="text-center mt-3 fw-bolder fs-5 text-dark letter lh-lg">Please Select a Category or Subcategory to view products.</p>
-                            @endif
+                            @endforeach
+                        @else
+                            <p class="text-center mt-3 fw-bolder fs-5 text-dark letter lh-lg">Please Select a Category or Subcategory to view products.</p>
+                        @endif
+                        
 
 
-                            <div class="col-md-12 pt-5"> 
-                                @if ($products->count() > 0 )
-                                    {{ $products->links() }}                                
+                            <div class="col-md-12 pt-5">
+                                @if ($products->count() > 0)
+                                    {{ $products->links() }}
                                 @endif
                             </div>
                         </div>

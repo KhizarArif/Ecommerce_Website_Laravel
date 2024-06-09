@@ -87,7 +87,7 @@
                                                 <span class="badge bg-danger">Cancelled</span>
                                             @endif
                                         </td>
-                                        <td> ${{ number_format($order->grand_total, 2) }} </td>
+                                        <td> Rs {{ number_format($order->grand_total, 2) }} </td>
                                         <td> {{ \Carbon\Carbon::parse($order->created_at)->format('d M, Y') }} </td>
                                     </tr>
                                 @endforeach

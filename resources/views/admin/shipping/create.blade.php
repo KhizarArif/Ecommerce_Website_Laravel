@@ -59,7 +59,7 @@
                             <tr>
                                 <td> {{ $shippingCharge->id }} </td>
                                 <td> {{ $shippingCharge->country_id == "rest_of_world" ? "Rest Of The World" : $shippingCharge->name }} </td>
-                                <td> $ {{ $shippingCharge->amount }} </td>
+                                <td> Rs {{ $shippingCharge->amount }} </td>
                                 <td>
                                     <a href="{{ route('shipping.edit', $shippingCharge->id) }}" class="btn btn-primary"> Edit  </a>
                                     <a href="javascript:void(0)" onclick="deleteShipping('{{ $shippingCharge->id }}')" class="btn btn-danger"> Delete  </a>

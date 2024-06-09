@@ -83,7 +83,7 @@
                                 @if ($discountCoupen-> type == "percent"  )
                                     {{ $discountCoupen->discount_amount }}% 
                                 @else
-                                    $ {{ $discountCoupen-> discount_amount }}
+                                    Rs {{ $discountCoupen-> discount_amount }}
                                 @endif
                             </td>
                             <td>

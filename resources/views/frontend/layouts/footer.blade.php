@@ -74,13 +74,14 @@
         }
     });
 
-    function addToCart(id) {
-        console.log("id: ", id);
+    function addToCart(productId, productImageId = null) {
+        console.log("productId: ", productId, "productImageId: ", productImageId); 
         $.ajax({
             url: "{{ route('front.addToCart') }}",
             type: "POST",
             data: {
-                id: id
+                id: productId,
+                image_id: productImageId
             },
             dataType: 'json',
             headers: {
@@ -91,12 +92,13 @@
                 if (response.status == true) {
                     window.location.href = "{{ route('front.cart') }}";
                 } else {
-                    console.log("Errrorr");
+                    console.log("Error");
                     alert(response.message);
                 }
             }
         })
     }
+
 
     function addToWishList(id) {
         console.log("id: ", id);
