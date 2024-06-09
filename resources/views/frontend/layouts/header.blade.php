@@ -65,29 +65,7 @@
 
 <body data-instant-intensity="mousedown">
 
-    {{-- <div class="bg-light top-header">        
-	<div class="container">
-		<div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
-			<div class="col-lg-4 logo">
-				<a href="{{ route('frontend.home') }}" class="text-decoration-none">
-					<span class="h1 text-uppercase text-primary bg-dark px-2">Online</span>
-					<span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">SHOP</span>
-				</a>
-			</div>
-			<div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
-				<a href="#" class="nav-link text-dark">My Account</a>
-				<form action="">					
-					<div class="input-group">
-						<input type="text" placeholder="Search For Products" class="form-control" aria-label="Amount (to the nearest dollar)">
-						<span class="input-group-text">
-							<i class="fa fa-search"></i>
-					  	</span>
-					</div>
-				</form>
-			</div>		
-		</div>
-	</div>
-</div> --}}
+
 
     <div class="container-fluid nav-bar ">
         <div class="container">
@@ -106,8 +84,8 @@
                                 href="{{ url('https://www.facebook.com/art.wings.sm?mibextid=kFxxJD') }}"><i
                                     class="fab fa-facebook-f"></i></a>
                             <a class="btn btn-primary btn-sm-square me-2 rounded-circle"
-                                href="{{ url('https://www.threads.net/@art_wings_sm') }}"><i
-                                    class="fab fa-twitter"></i></a>
+                                href="https://wa.me/+923249660909" target="_blank"><i
+                                    class="fab fa-whatsapp"></i></a>
                             <a href="{{ url('https://www.instagram.com/art_wings_sm/') }}"
                                 class="btn btn-primary btn-sm-square me-2 rounded-circle" target="_blank"><i
                                     class="fab fa-instagram"></i></a>
@@ -120,11 +98,7 @@
                         <a href="{{ route('account.login') }}"
                             class="nav-link btn btn-primary text-white mx-2 rounded-pill"> Login/Register </a>
                     @endif
-                    <button
-                        class="btn-search btn btn-primary btn-md-square me-2 rounded-circle d-none d-lg-inline-flex"
-                        data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search"></i></button>
-                    <a href="" class="btn btn-primary py-2 px-4 d-none d-xl-inline-block rounded-pill">Book
-                        Now</a>
+                   
                 </div>
             </nav>
         </div>
@@ -134,10 +108,7 @@
     <header class="bg-dark">
         <div class="container">
             <nav class="navbar navbar-expand-xl" id="navbar">
-                <a href="{{ route('frontend.home') }}" class="text-decoration-none mobile-logo">
-                    <span class="h2 text-uppercase text-primary bg-dark">Online</span>
-                    <span class="h2 text-uppercase text-white px-2">SHOP</span>
-                </a>
+               
                 <button class="navbar-toggler menu-btn" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">

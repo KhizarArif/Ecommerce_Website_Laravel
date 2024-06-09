@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-3 sidebar">
                         <div class="sub-title">
-                            <h2>Categories</h3>
+                            <h1>Categories</h3>
                         </div>
                         <div class="card">
                             <div class="card-body">
@@ -62,36 +62,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="sub-title mt-5">
-                            <h2>Brand</h3>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-body">
-                                @if ($brands->isNotEmpty())
-                                    @foreach ($brands as $brand)
-                                        <div class="form-check mb-2">
-                                            <input {{ in_array($brand->id, $brandsArray) ? 'checked' : '' }}
-                                                class="form-check-input brand-label" type="checkbox" name="brand[]"
-                                                value="{{ $brand->id }}" id="brand-{{ $brand->id }}">
-                                            <label class="form-check-label" for="brand-{{ $brand->id }}">
-                                                {{ $brand->name }} </label>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="sub-title mt-5">
-                            <h2>Price</h3>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-body">
-                                <input type="text" class="js-range-slider" name="my_range" value="" />
-                            </div>
-                        </div>
                     </div>
                     <div class="col-md-9">
                         <div class="row pb-3">
@@ -126,8 +96,9 @@
                                                     </a>
                                                 @endif
                                                 <a onclick="addToWishList('{{ $product->id }}')" class="whishlist"
-                                                    href="javascript:void(0)"><i class="far fa-heart"></i></a>
-
+                                                    href="javascript:void(0)">
+                                                    <i class="far fa-heart"></i>
+                                                </a>
                                                 <div class="product-action">
                                                     @if ($product->track_qty == 'Yes')
                                                         @if ($product->qty > 0)
@@ -136,9 +107,8 @@
                                                                 <i class="fa fa-shopping-cart"></i> Add To Cart
                                                             </a>
                                                         @else
-                                                            <a class="btn btn-dark" href="javascript:void(0)">
-                                                                 Out Of Stock
-                                                            </a>
+                                                            <a class="btn btn-dark" href="javascript:void(0)">Out Of
+                                                                Stock</a>
                                                         @endif
                                                     @endif
                                                 </div>
@@ -148,18 +118,23 @@
                                                 <div class="price mt-2">
                                                     <span class="h5"><strong> ${{ $product->price }} </strong></span>
                                                     @if ($product->compare_price > 0)
-                                                        <span class="h6 text-underline"><del>
-                                                                ${{ $product->compare_price }} </del></span>
+                                                        <span
+                                                            class="h6 text-underline"><del>${{ $product->compare_price }}</del></span>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
+                            @else
+                                <p class="text-center mt-3 fw-bolder fs-5 text-dark letter lh-lg">Please Select a Category or Subcategory to view products.</p>
                             @endif
 
-                            <div class="col-md-12 pt-5">
-                                {{ $products->links() }}
+
+                            <div class="col-md-12 pt-5"> 
+                                @if ($products->count() > 0 )
+                                    {{ $products->links() }}                                
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -171,49 +146,4 @@
 @endsection
 
 @section('customJs')
-    <script>
-        $(".js-range-slider").ionRangeSlider({
-            type: "double",
-            min: 0,
-            max: 100000,
-            from: "{{ $priceMin }}",
-            step: 10,
-            to: "{{ $priceMax }}",
-            skin: "round",
-            max_postfix: "+",
-            prefix: "$",
-            onFinish: function() {
-                apply_filters();
-            }
-        });
-
-        let slider = $(".js-range-slider").data("ionRangeSlider");
-
-        $('.brand-label').change(function() {
-            apply_filters();
-        })
-
-        function apply_filters() {
-            var brands = [];
-            $('.brand-label').each(function() {
-                if ($(this).is(':checked') == true) {
-                    brands.push($(this).val());
-                }
-            });
-            console.log(brands.toString());
-            var url = "{{ url()->current() }}?"
-            url += '&price_min=' + slider.result.from + '&price_max=' + slider.result.to;
-            url += '&sort=' + $('#sort').val();
-            if (brands.length > 0) {
-                url += '&brand=' + brands.toString();
-            }
-            window.location.href = url;
-        }
-
-
-        // Sorting 
-        $('#sort').change(function() {
-            apply_filters();
-        });
-    </script>
 @endsection

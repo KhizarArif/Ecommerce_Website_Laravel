@@ -32,6 +32,89 @@
         .event-img:hover .search-icon {
             display: block;
         }
+
+        .intro_img_container {
+            width: 100%;
+            height: 50vh;
+
+        }
+
+        .intro_heading {
+            font-family: 'Playball', cursive;
+            font-size: 2.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 1);
+            word-spacing: 1rem;
+            color: #000;
+            width: 50%;
+        }
+
+        .slider {
+            height: 250px;
+            margin: auto;
+            position: relative;
+            width: 100%;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+        }
+
+        .slide-track {
+            display: flex;
+            width: calc(250px * {{ $productImageCount }});
+            animation: scroll 40s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(calc(-250px * {{ $productImageCount / 2 }}));
+            }
+        }
+
+        .slide {
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            perspective: 100px;
+        }
+
+        .carousel_image {
+            width: 100%;
+            height: 100%;
+            transition: transform 1s;
+        }
+
+        .carousel_image:hover {
+            transform: translateZ(20px);
+        }
+
+        .slider::before,
+        .slider::after {
+            height: 100%;
+            width: 15%;
+            content: "";
+            position: absolute;
+            z-index: 2;
+            background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        .slider::before {
+            left: 0;
+            top: 0;
+        }
+
+        .slider::after {
+            top: 0;
+            right: 0;
+            transform: rotateZ(180deg);
+        }
+
     </style>
 
     {{-- Modal  --}}
@@ -56,18 +139,36 @@
         </div>
     </div>
     <main>
+  
         <section>
-            <div class="container bg-light mt-5 wow bounceInUp">
+            <div class="contianer bg-light ">
                 <div class="container">
-                    <div class="row g-5 align-items-center">
-                        <div class="col-lg-7 col-md-12">
-                            <h1 class=" mb-4 animated bounceInDown"> Art wings offers a <span class="text-primary">
-                                    hassle-free and convenient way </span> to enhance your interior design. </h1>
-                            
-                        </div>
-                        <div class="col-lg-5 col-md-12">
-                            <img src="{{ asset('front-assets/images/hero.png') }}" class="img-fluid rounded animated zoomIn"
-                                alt="">
+                    <div class="intro_img_container">
+                        <img src="{{ asset('front-assets/images/Hero_01.jpg') }}"
+                            class="img-fluid rounded animated zoomIn w-100 h-100 border rounded position-relative"
+                            style="object-fit: cover;" alt="">
+                        <h1 class="position-absolute top-50 start-50 translate-middle intro_heading"> Art Wings By Sidra
+                            Munawar </h1>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-md-12 ">
+                            <div class="slider">
+                                <div class="slide-track">
+                                    {{-- Loop Start Here --}}
+
+                                    @if ($productImages->count() > 0)
+                                        @foreach ($productImages as $productImage)
+                                            <div class="slide">
+                                                <img src="{{ asset('uploads/product/small/' . $productImage->image) }}"
+                                                    alt="" class="carousel_image">
+                                            </div>
+                                        @endforeach
+                                    @endif 
+
+                                    {{-- Loop Ends Here --}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,7 +180,8 @@
                 <div class="container">
                     <div class="row g-5 align-items-center">
                         <div class="col-lg-5 wow bounceInUp" data-wow-delay="0.1s">
-                            <img src="{{ asset('front-assets/images/artwings_01.jpeg') }}" class="img-fluid rounded" alt="">
+                            <img src="{{ asset('front-assets/images/artwings_01.jpeg') }}" class="img-fluid rounded"
+                                alt="">
                         </div>
                         <div class="col-lg-7 wow bounceInUp" data-wow-delay="0.3s">
                             <small
@@ -93,7 +195,7 @@
                                 Our passion is to provide high-quality, eco-friendly, and sustainable resin creations that
                                 inspire and delight. Explore our collection and discover the beauty of handmade resin art!"
                             </p>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -101,26 +203,7 @@
         </section>
 
 
-        <section class="section-2 wow bounceInUp">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="box shadow-lg">
-                            <div class="fa icon fa-check text-primary m-0 mr-3"></div>
-                            <h2 class="font-weight-semi-bold m-0">Quality Product</h5>
-                        </div>
-                    </div>
 
-
-                    <div class="col-lg-3 ">
-                        <div class="box shadow-lg">
-                            <div class="fa icon fa-phone-volume text-primary m-0 mr-3"></div>
-                            <h2 class="font-weight-semi-bold m-0">24/7 Support</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="section-3 wow bounceInUp">
             <div class="container">
@@ -158,7 +241,7 @@
         <section class="section-4 pt-5 wow bounceInUp">
             <div class="container">
                 <div class="section-title">
-                    <h2>Featured Products</h2>
+                    <h1>Latest Products</h1>
                 </div>
                 <div class="row pb-3">
                     @if ($featuredProducts->isNotEmpty())
@@ -211,60 +294,6 @@
         </section>
 
 
-        {{-- Latest Products Section Start  --}}
-        {{-- <section class="section-4 pt-5 wow bounceInUp">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Latest Produsts</h2>
-                </div>
-                <div class="row pb-3">
-                    @if ($featuredProducts->isNotEmpty())
-                        @foreach ($featuredProducts as $featuredProduct)
-                            <div class="col-md-3">
-                                <div class="card product-card">
-                                    <div class="product-image position-relative">
-                                        <a href="{{ route('front.product', $featuredProduct->slug) }}" class="product-img">
-                                            @if (!empty($featuredProduct->productImages->first()->image))
-                                                <img class="card-img-top"
-                                                    src="{{ asset('uploads/product/small/' . $featuredProduct->productImages->first()->image) }}">
-                                            @endif
-                                        </a>
-                                        <a onclick="addToWishList('{{ $featuredProduct->id }}')" class="whishlist"
-                                            href="javascript:void(0)"><i class="far fa-heart"></i></a>
-
-                                        <div class="product-action">
-                                            @if ($featuredProduct->track_qty == 'Yes')
-                                                @if ($featuredProduct->qty > 0)
-                                                    <a class="btn btn-dark rounded" href="javascript:void(0)"
-                                                        onclick="addToCart('{{ $featuredProduct->id }}')">
-                                                        <i class="fa fa-shopping-cart"></i> Add To Cart
-                                                    </a>
-                                                @else
-                                                    <a class="btn btn-dark rounded" href="javascript:void(0)">
-                                                        Out Of Stock
-                                                    </a>
-                                                @endif
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="card-body text-center mt-3">
-                                        <a class="h6 link" href="product.php"> {{ $featuredProduct->title }}</a>
-                                        <div class="price mt-2">
-                                            <span class="h5"><strong>$ {{ $featuredProduct->price }} </strong></span>
-                                            @if ($featuredProduct->compare_price > 0)
-                                                <span class="h6 text-underline"><del>$
-                                                        {{ $featuredProduct->compare_price }}</del></span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    @endif
-                </div>
-            </div>
-        </section> --}}
-        {{-- Latest Products Section End  --}}
 
         {{-- Exhibitions Section Start --}}
         <!-- Events Start -->
@@ -318,197 +347,6 @@
         <!-- Events End -->
         {{-- Exhibitions Section End  --}}
 
-
-        {{-- Testimonial Section Start --}} 
-            <div class="container-fluid py-6">
-                <div class="container">
-                    <div class="text-center wow bounceInUp" data-wow-delay="0.1s">
-                        <small class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">Testimonial</small>
-                        <h1 class="display-5 mb-5">What Our Customers says!</h1>
-                    </div>
-                    <div class="owl-carousel owl-theme testimonial-carousel testimonial-carousel-1 mb-4 wow bounceInUp" data-wow-delay="0.1s">
-                        <div class="testimonial-item rounded bg-light">
-                            <div class="d-flex mb-3">
-                                <img src="img/testimonial-1.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="">
-                                <div class="position-absolute" style="top: 15px; right: 20px;">
-                                    <i class="fa fa-quote-right fa-2x"></i>
-                                </div>
-                                <div class="ps-3 my-auto">
-                                    <h4 class="mb-0">Person Name</h4>
-                                    <p class="m-0">Profession</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-content">
-                                <div class="d-flex">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                </div>
-                                <p class="fs-5 m-0 pt-3">Lorem ipsum dolor sit amet elit, sed do eiusmod tempor ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-item rounded bg-light">
-                            <div class="d-flex mb-3">
-                                <img src="img/testimonial-2.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="">
-                                <div class="position-absolute" style="top: 15px; right: 20px;">
-                                    <i class="fa fa-quote-right fa-2x"></i>
-                                </div>
-                                <div class="ps-3 my-auto">
-                                    <h4 class="mb-0">Person Name</h4>
-                                    <p class="m-0">Profession</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-content">
-                                <div class="d-flex">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                </div>
-                                <p class="fs-5 m-0 pt-3">Lorem ipsum dolor sit amet elit, sed do eiusmod tempor ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-item rounded bg-light">
-                            <div class="d-flex mb-3">
-                                <img src="img/testimonial-3.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="">
-                                <div class="position-absolute" style="top: 15px; right: 20px;">
-                                    <i class="fa fa-quote-right fa-2x"></i>
-                                </div>
-                                <div class="ps-3 my-auto">
-                                    <h4 class="mb-0">Person Name</h4>
-                                    <p class="m-0">Profession</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-content">
-                                <div class="d-flex">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                </div>
-                                <p class="fs-5 m-0 pt-3">Lorem ipsum dolor sit amet elit, sed do eiusmod tempor ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-item rounded bg-light">
-                            <div class="d-flex mb-3">
-                                <img src="img/testimonial-4.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="">
-                                <div class="position-absolute" style="top: 15px; right: 20px;">
-                                    <i class="fa fa-quote-right fa-2x"></i>
-                                </div>
-                                <div class="ps-3 my-auto">
-                                    <h4 class="mb-0">Person Name</h4>
-                                    <p class="m-0">Profession</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-content">
-                                <div class="d-flex">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                </div>
-                                <p class="fs-5 m-0 pt-3">Lorem ipsum dolor sit amet elit, sed do eiusmod tempor ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="owl-carousel testimonial-carousel testimonial-carousel-2 wow bounceInUp" data-wow-delay="0.3s">
-                        <div class="testimonial-item rounded bg-light">
-                            <div class="d-flex mb-3">
-                                <img src="img/testimonial-1.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="">
-                                <div class="position-absolute" style="top: 15px; right: 20px;">
-                                    <i class="fa fa-quote-right fa-2x"></i>
-                                </div>
-                                <div class="ps-3 my-auto">
-                                    <h4 class="mb-0">Person Name</h4>
-                                    <p class="m-0">Profession</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-content">
-                                <div class="d-flex">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                </div>
-                                <p class="fs-5 m-0 pt-3">Lorem ipsum dolor sit amet elit, sed do eiusmod tempor ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-item rounded bg-light">
-                            <div class="d-flex mb-3">
-                                <img src="img/testimonial-2.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="">
-                                <div class="position-absolute" style="top: 15px; right: 20px;">
-                                    <i class="fa fa-quote-right fa-2x"></i>
-                                </div>
-                                <div class="ps-3 my-auto">
-                                    <h4 class="mb-0">Person Name</h4>
-                                    <p class="m-0">Profession</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-content">
-                                <div class="d-flex">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                </div>
-                                <p class="fs-5 m-0 pt-3">Lorem ipsum dolor sit amet elit, sed do eiusmod tempor ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-item rounded bg-light">
-                            <div class="d-flex mb-3">
-                                <img src="img/testimonial-3.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="">
-                                <div class="position-absolute" style="top: 15px; right: 20px;">
-                                    <i class="fa fa-quote-right fa-2x"></i>
-                                </div>
-                                <div class="ps-3 my-auto">
-                                    <h4 class="mb-0">Person Name</h4>
-                                    <p class="m-0">Profession</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-content">
-                                <div class="d-flex">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                </div>
-                                <p class="fs-5 m-0 pt-3">Lorem ipsum dolor sit amet elit, sed do eiusmod tempor ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                        <div class="testimonial-item rounded bg-light">
-                            <div class="d-flex mb-3">
-                                <img src="img/testimonial-4.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="">
-                                <div class="position-absolute" style="top: 15px; right: 20px;">
-                                    <i class="fa fa-quote-right fa-2x"></i>
-                                </div>
-                                <div class="ps-3 my-auto">
-                                    <h4 class="mb-0">Person Name</h4>
-                                    <p class="m-0">Profession</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-content">
-                                <div class="d-flex">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                </div>
-                                <p class="fs-5 m-0 pt-3">Lorem ipsum dolor sit amet elit, sed do eiusmod tempor ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> 
-        {{-- Testimonial Section End --}}
 
     </main>
 @endsection

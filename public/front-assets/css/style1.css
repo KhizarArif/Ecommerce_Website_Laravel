@@ -139,8 +139,7 @@ h4, h5, h6, .h4, .h5, .h6 {
     }
 }
 
-.dropdown .dropdown-menu a:hover {
-    background: var(--bs-primary);
+.dropdown .dropdown-menu a:hover { 
     color: var(--bs-white);
 }
 

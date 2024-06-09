@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Exhibition;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +15,13 @@ class FrontController extends Controller
     {
 
         $featuredProducts = Product::where('is_featured', 'Yes')->orderBy('id', 'desc')->take(10)->get();
+        $productImages = ProductImage::all(); 
+        $productImageCount = $productImages->count();
         $latestProducts = Product::orderBy('id', 'desc')->where('status', 1)->take(10)->get();
         $exhibitions = Exhibition::where('status', 1)->with('exhibitionImages')->get();  
 
-        return view('frontend.home', compact('featuredProducts', 'latestProducts', 'exhibitions'));
+      
+        return view('frontend.home', compact('featuredProducts', 'latestProducts', 'exhibitions', 'productImages', 'productImageCount'));
     }
 
     public function addToWishlist(Request $request)

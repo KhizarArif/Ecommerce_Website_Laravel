@@ -41,7 +41,7 @@
             <div class="row">
                 <div class="col-12 mt-3">
                     <div class="copy-right text-center">
-                        <p> © Copyright 2022 Amazing Shop. All Rights Reserved </p>
+                        <p> © Copyright 2024 Art Wings. All Rights Reserved </p>
                     </div>
                 </div>
             </div>
