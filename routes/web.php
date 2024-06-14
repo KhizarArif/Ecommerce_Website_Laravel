@@ -17,6 +17,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,9 @@ use function App\Helpers\orderEmail;
 */
 
 
+
+Route::get('login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
+Route::get('google/callback', [LoginController::class, 'redirectToGoogleCallback'])->name('login.google.callback');
 
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
 Route::post('/add_wishlist', [FrontController::class, 'addToWishlist'])->name('frontend.addToWishlist');

@@ -32,6 +32,9 @@
                             <p class="text-danger"> {{ $message }} </p>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <a href="{{ route('login.google') }}" class="btn btn-success" > Login With Google </a>
+                    </div>
                     <div class="form-group small">
                         <a href="{{ route('account.userForgotPassword') }}" class="forgot-link">Forgot Password?</a>
                     </div>

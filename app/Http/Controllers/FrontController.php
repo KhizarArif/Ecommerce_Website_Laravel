@@ -13,7 +13,6 @@ class FrontController extends Controller
 {
     public function index()
     {
-
         $featuredProducts = Product::where('is_featured', 'Yes')->orderBy('id', 'desc')->take(10)->get();
         $productAllImages = ProductImage::all(); 
         $productImageCount = $productAllImages->count();

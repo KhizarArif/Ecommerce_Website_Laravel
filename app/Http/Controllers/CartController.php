@@ -291,7 +291,6 @@ class CartController extends Controller
                 $orderItem = new OrderItem(); 
                 $orderItem->order_id = $order->id;
                 $orderItem->product_id = $item->id;
-                $orderItem->product_image_id = $item->options->productImage->id;
                 $orderItem->name = $item->name;
                 $orderItem->price = $item->price;
                 $orderItem->qty = $item->qty;
