@@ -4,8 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
-use App\Models\ShippingCharge;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\ShippingCharge; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,8 +14,8 @@ use function App\Helpers\successMessage;
 class ShippingController extends Controller
 {
     public function create()
-    {
-        SEOMeta::setTitle('Shipping Charges');
+    { 
+        SEOMeta::setTitle('Shipping Charges'); 
         $countries = Country::orderby('name', 'asc')->get();
 
         $shippingCharges = ShippingCharge::select('shipping_charges.*', 'countries.name')->leftJoin('countries', 'countries.id', 'shipping_charges.country_id')->get();

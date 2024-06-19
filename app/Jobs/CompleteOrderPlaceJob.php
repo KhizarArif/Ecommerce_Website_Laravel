@@ -20,7 +20,7 @@ class CompleteOrderPlaceJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct($mailData)
-    {
+    {  
         $this->mailData = $mailData;
     }
 
@@ -29,13 +29,6 @@ class CompleteOrderPlaceJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('Job started with data: ', $this->mailData);
-
-        Mail::to("khizararif201@gmail.com")->send(new OrderEmail($this->mailData));
-
-        Log::info('Mail sent successfully.');
-        // dd("khizar");
-        // dd($this->mailData);
-        // Mail::to("khizararif201@gmail.com")->send(new OrderEmail($this->mailData));
+    
     }
 }

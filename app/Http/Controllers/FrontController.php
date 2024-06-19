@@ -6,6 +6,7 @@ use App\Models\Exhibition;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Wishlist;
+use Artesaos\SEOTools\Facades\SEOMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +14,7 @@ class FrontController extends Controller
 {
     public function index()
     {
+        SEOMeta::setTitle('Home');
         $featuredProducts = Product::where('is_featured', 'Yes')->orderBy('id', 'desc')->take(10)->get();
         $productAllImages = ProductImage::all(); 
         $productImageCount = $productAllImages->count();

@@ -4,9 +4,9 @@ namespace App\Http\Services;
 
 use App\Exports\CategoryExport;
 use App\Imports\CategoryImport;
-use App\Models\Category;
+use App\Models\Category; 
 use App\Models\SubCategory;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request; 
 use Maatwebsite\Excel\Facades\Excel; 
@@ -17,8 +17,8 @@ class SubCategoryService
 {
 
     public function index($request)
-    { 
-        SEOMeta::setTitle('SubCategories');
+    {  
+        SEOMeta::setTitle('SubCategories'); 
         if ($request->get('table_search')) {
             $subcategories = SubCategory::with('category')->where('name', 'like', '%' . $request->get('table_search') . '%')->paginate(10);
         } else {

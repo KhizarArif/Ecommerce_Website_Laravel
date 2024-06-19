@@ -6,24 +6,24 @@ use App\Mail\UserResetPassword;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
-use App\Models\Wishlist;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\Wishlist; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Artesaos\SEOTools\Facades\SEOTools;
+use Illuminate\Support\Str; 
+use Artesaos\SEOTools\Facades\SEOTools; 
 
 use function App\Helpers\successMessage;
 
 class AuthController extends Controller
 {
     public function login()
-    {
-        SEOMeta::setTitle('Login Here');
+    { 
+        SEOMeta::setTitle('Login Here'); 
         return view('frontend.account.login');
     }
     public function register()
@@ -89,8 +89,8 @@ class AuthController extends Controller
     }
 
     public function profile()
-    {
-        SEOMeta::setTitle('Profile Page');
+    { 
+        SEOMeta::setTitle('Profile Page'); 
         $user = User::where('id', Auth::user()->id)->first();
         return view("frontend.account.profile", compact('user'));
     }
@@ -131,8 +131,8 @@ class AuthController extends Controller
     }
 
     public function orders()
-    {
-        SEOMeta::setTitle('My Orders Page');
+    { 
+        SEOMeta::setTitle('My Orders Page'); 
         $user = Auth::user();
         $orders = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         return view('frontend.account.order', compact('orders'));
@@ -147,8 +147,8 @@ class AuthController extends Controller
     }
 
     public function wishlists()
-    {
-        SEOMeta::setTitle('My Wishlists Page');
+    { 
+        SEOMeta::setTitle('My Wishlists Page'); 
         $wishlists = Wishlist::where('user_id', Auth::user()->id)->with('product')->get();
         return view('frontend.account.wishlists', compact('wishlists'));
     }
@@ -166,8 +166,8 @@ class AuthController extends Controller
     }
 
     public function showChangePassword()
-    {
-        SEOMeta::setTitle('Change Password Page');
+    { 
+        SEOMeta::setTitle('Change Password Page'); 
         return view('frontend.account.change_password');
     }
 

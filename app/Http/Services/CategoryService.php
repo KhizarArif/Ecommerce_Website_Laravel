@@ -5,8 +5,8 @@ namespace App\Http\Services;
 use App\Exports\CategoryExport;
 use App\Imports\CategoryImport;
 use App\Models\Category;
-use App\Models\TempImage;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\TempImage; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -19,8 +19,8 @@ class CategoryService
 { 
 
     public function index(Request $request)
-    {  
-        SEOMeta::setTitle('Categories');
+    {   
+        SEOMeta::setTitle('Categories'); 
         if($request->get('table_search')){ 
             $categories = Category::where('name', 'like', '%'.$request->get('table_search').'%')->paginate(10); 
         }else{

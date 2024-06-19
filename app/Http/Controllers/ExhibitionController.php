@@ -7,8 +7,8 @@ use App\Exports\CategoryExport;
 use App\Imports\CategoryImport;
 use App\Models\Category;
 use App\Models\ExhibitionImage;
-use App\Models\TempImage;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\TempImage; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -19,8 +19,8 @@ use Intervention\Image\Drivers\Gd\Driver;
 class ExhibitionController extends Controller
 {
     public function index(Request $request)
-    {
-        SEOMeta::setTitle('Exhibitions');   
+    { 
+        SEOMeta::setTitle('Exhibitions');    
         if ($request->get('table_search')) {
             $exhibitions = Exhibition::where('name', 'like', '%' . $request->get('table_search') . '%')->paginate(10);
         } else {

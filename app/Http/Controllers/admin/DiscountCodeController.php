@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\DiscountCode;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\DiscountCode; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -15,8 +15,8 @@ use function App\Helpers\successMessage;
 class DiscountCodeController extends Controller
 {
     public function index(Request $request)
-    {
-        SEOMeta::setTitle('Discount Codes');
+    { 
+        SEOMeta::setTitle('Discount Codes'); 
         if ($request->get('table_search')) {
             $discountCoupens = DiscountCode::where('name', 'like', '%' . $request->get('table_search') . '%')->paginate(10);
         } else {

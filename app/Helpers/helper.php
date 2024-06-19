@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Jobs\CompleteOrderPlaceJob;
+use App\Jobs\CompleteOrderPlaceJob; 
 use App\Mail\OrderEmail;
 use App\Models\Category;
 use App\Models\Order;
@@ -49,9 +49,9 @@ function orderEmail($orderId, $userType = "customer")
     ];
 
 
-    // dispatch(new CompleteOrderPlaceJob($mailData));
+    dispatch(new CompleteOrderPlaceJob($mailData));
     // dd(CompleteOrderPlaceJob::dispatch($mailData));
-    CompleteOrderPlaceJob::dispatch($mailData)->delay(now()->addMinutes(2))->onQueue('email');
+    // CompleteOrderPlaceJob::dispatch($mailData);
 
     // Mail::to($email)->send(new OrderEmail($mailData));
 }

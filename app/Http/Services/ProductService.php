@@ -9,8 +9,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\SubCategory;
-use App\Models\TempImage;
+use App\Models\TempImage; 
 use Artesaos\SEOTools\Facades\SEOMeta;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,8 +24,8 @@ use Illuminate\Support\Facades\File;
 class ProductService
 {  
     public function index(Request $request)
-    {
-        SEOMeta::setTitle('Products');
+    { 
+        SEOMeta::setTitle('Products'); 
     $query = Product::latest('id')->with('productImages');
 
     if ($request->get('table_search')) {

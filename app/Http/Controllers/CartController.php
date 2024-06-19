@@ -8,14 +8,13 @@ use App\Models\DiscountCode;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
-use App\Models\ShippingCharge;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\ShippingCharge; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
 use function App\Helpers\orderEmail;
 use function App\Helpers\successMessage;
 
@@ -70,6 +69,7 @@ class CartController extends Controller
 
     public function cart()
     {
+        SEOMeta::setTitle('Cart Page');
         $contentCart = Cart::content();
         return view('frontend.cart', compact('contentCart'));
     }
@@ -130,8 +130,8 @@ class CartController extends Controller
     }
 
     public function checkout()
-    { 
-        SEOMeta::setTitle('Checkout Page');
+    {  
+        SEOMeta::setTitle('Checkout Page'); 
         $discount = 0;
         $subTotal = Cart::subTotal(2, '.', '');
         if (Cart::count() == 0) {
@@ -325,6 +325,7 @@ class CartController extends Controller
 
     public function thankyou($id)
     {
+        SEOMeta::setTitle('Thankyou Page');
         $order = Order::find($id);
         return view('frontend.thankyou', compact('order'));
     }

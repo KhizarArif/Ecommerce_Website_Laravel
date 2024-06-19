@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\TempImage;
-use App\Models\User;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\User; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Session;
 class HomeController extends Controller
 {
     public function index()
-    { 
-        SEOMeta::setTitle('Admin Dashboard');
+    {  
+        SEOMeta::setTitle('Admin Dashboard'); 
         $totalOrders = Order::where('status', '!=', 'cancelled')->count();
         $totalProducts = Product::count();
         $totalUsers = User::where('status', 1)->count();

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\Order; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Illuminate\Http\Request;
 
 use function App\Helpers\orderEmail;
@@ -13,8 +13,8 @@ use function App\Helpers\successMessage;
 class OrderController extends Controller
 {
     public function index(Request $request)
-    {
-        SEOMeta::setTitle('Orders');
+    { 
+        SEOMeta::setTitle('Orders'); 
         $orders = Order::latest('orders.created_at')->select('orders.*', 'users.name', 'users.email'); 
         $orders = $orders->leftJoin('users', 'users.id', 'orders.user_id');
 

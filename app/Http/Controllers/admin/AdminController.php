@@ -4,8 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\AdminResetPassword;
-use App\Models\User;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\User; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +18,8 @@ use Illuminate\Support\Str;
 class AdminController extends Controller
 {
     public function index()
-    {
-        SEOMeta::setTitle('Admin Login');
+    { 
+        SEOMeta::setTitle('Admin Login'); 
         return view("admin.login");
     }
 

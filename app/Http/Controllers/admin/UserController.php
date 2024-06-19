@@ -5,8 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Exports\CategoryExport;
 use App\Models\Category;
-use App\Models\User;
-use Artesaos\SEOTools\Facades\SEOMeta;
+use App\Models\User; 
+use Artesaos\SEOTools\Facades\SEOMeta; 
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
@@ -15,8 +15,8 @@ use Maatwebsite\Excel\Facades\Excel;
 class UserController extends Controller
 {
     public function index(Request $request)
-    {
-        SEOMeta::setTitle('Users');
+    { 
+        SEOMeta::setTitle('Users'); 
         if ($request->get('table_search')) {
             $users = User::where('name', 'like', '%' . $request->get('table_search') . '%')->paginate(10);
         } else {
