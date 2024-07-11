@@ -22,7 +22,7 @@ return new class extends Migration
             $table->double('grand_total', 10, 2);
             $table->enum('payment_status', ['paid', 'not paid'])->default('not paid')->after('grand_total');
             $table->enum('status', ['pending', 'shipped', 'delivered', 'cancelled'])->default('pending')->after('payment_status');
-            
+            $table->enum('payment_method',['cod','stripe'])->default('cod')->after('status');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');

@@ -43,10 +43,20 @@
             font-family: 'Playball', cursive;
             font-size: 2.5rem;
             text-align: center;
-            background: rgba(255, 255, 255, 1);
+            background: rgba(255, 255, 255, 0.6);
             word-spacing: 1rem;
             color: #000;
-            width: 50%;
+            min-width: fit-content; 
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            @media screen and (max-width: 768px) {
+                font-size: 1.5rem;
+                word-spacing: 0.5rem;
+                width: 90%;
+            }
         }
 
         .slider {
@@ -144,10 +154,10 @@
             <div class="contianer bg-light ">
                 <div class="container">
                     <div class="intro_img_container">
-                        <img src="{{ asset('front-assets/images/Hero_01.jpg') }}"
+                        <img src="{{ asset('front-assets/images/hero.png') }}"
                             class="img-fluid rounded animated zoomIn w-100 h-100 border rounded position-relative"
                             style="object-fit: cover;" alt="">
-                        <h1 class="position-absolute top-50 start-50 translate-middle intro_heading"> Art Wings By Sidra
+                        <h1 class="translate-middle intro_heading"> Art Wings By Sidra
                             Munawar </h1>
                     </div>
 
@@ -249,7 +259,10 @@
                             <div class="col-md-3">
                                 <div class="card product-card">
                                     <div class="product-image position-relative">
-                                        <a href="{{ route('front.product', $featuredProduct->slug) }}" class="product-img">
+                                        <a 
+                                        {{-- href="{{ route('front.product', $featuredProduct->slug) }}"  --}}
+                                        href="javascript:void(0)" 
+                                        class="product-img">
                                             @if (!empty($featuredProduct->productImages->first()->image))  
                                                 <img class="card-img-top"
                                                     src="{{ asset('uploads/product/small/' . $featuredProduct->productImages->first()->image) }}">
