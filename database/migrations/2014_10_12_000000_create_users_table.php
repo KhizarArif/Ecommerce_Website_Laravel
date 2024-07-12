@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('email')->unique(); 
             $table->boolean('is_admin')->default(0);
             $table->boolean('status')->default(1);
-            $table->string('password');
+            $table->string('google_id')->nullable();
+            $table->string('password')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

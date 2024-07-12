@@ -42,7 +42,7 @@ Route::get('/stripe', function () {
 Route::post('stripe', [LoginController::class, 'stripePost'])->name('stripe.post');
 
 Route::get('login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
-Route::get('callback/login', [LoginController::class, 'redirectToGoogleCallback'])->name('login.google.callback');
+Route::get('auth/google/call-back', [LoginController::class, 'redirectToGoogleCallback'])->name('login.google.callback');
 
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
 Route::post('/add_wishlist', [FrontController::class, 'addToWishlist'])->name('frontend.addToWishlist');

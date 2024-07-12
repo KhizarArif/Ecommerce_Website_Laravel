@@ -19,6 +19,7 @@ use Stripe\Charge;
 use Stripe\Customer;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 use function App\Helpers\orderEmail;
@@ -637,9 +638,8 @@ public function processCheckout(Request $request)
     if ($request->payment_method == 'stripe') {
         Stripe::setApiKey('sk_test_51McDOELy0oAF9eHjXvu3NgWbqnQTD67nDUh57RelzEprX2AiEQ4mQtuThooSAMA8F40WACGca39mX1fH57H5AtDS000GCj3aUV');
        
-          // Ensure the minimum charge amount
-          $minimumChargeAmountInPKR = 110; // Adjust this based on the current exchange rate
-
+         
+          $minimumChargeAmountInPKR = 110; 
           if (($subTotal - $discount) < $minimumChargeAmountInPKR) {
               return response()->json([
                   'status' => false,
@@ -647,27 +647,17 @@ public function processCheckout(Request $request)
               ]);
           }
         try {
-            $customer = Customer::create(array(
-                
-                "address" => [
-                    "line1" => $request->address,
-                    "postal_code" => $request->zip,
-                    "city" => $request->city,
-                    "state" => $request->state, 
-                ],
-    
-                "email" => $request->email,
-                "name" => $request->first_name . ' ' . $request->last_name, 
-            ));
+         
 
             $charge = Charge::create([  
-                'amount' => ($subTotal - $discount) * 100, // Amount in cents
+                'amount' => ($subTotal - $discount) * 100, 
                 'currency' => 'usd',
                 'source' => $request->stripeToken,
-                // "customer" => $request->first_name . ' ' . $request->last_name,
                 'description' => 'Order description',
             ]); 
 
+            Log::info('Stripe Charge:', $charge->toArray());
+dd($charge->toArray());
             if ($charge->status != 'succeeded') {
                 return response()->json([
                     'status' => false,
@@ -675,6 +665,8 @@ public function processCheckout(Request $request)
                 ]);
             }
         } catch (\Exception $e) {
+            Log::error('Stripe Error:', ['error' => $e->getMessage()]);
+            dd($e->getMessage());
             return response()->json([
                 'status' => false,
                 'error' => $e->getMessage(),
