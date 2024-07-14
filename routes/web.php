@@ -36,7 +36,10 @@ use function App\Helpers\orderEmail;
 |
 */
 
-
+Route::get('/stripe', function () {
+    return view('frontend.paymentCheckout');
+});
+Route::post('stripe', [LoginController::class, 'stripePost'])->name('stripe.post');
 
 Route::get('login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('callback/login', [LoginController::class, 'redirectToGoogleCallback'])->name('login.google.callback');

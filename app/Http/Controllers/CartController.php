@@ -15,6 +15,11 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Stripe\Charge;
+use Stripe\Stripe;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
+
 use function App\Helpers\orderEmail;
 use function App\Helpers\successMessage;
 
@@ -187,132 +192,286 @@ class CartController extends Controller
         return view('frontend.checkout', compact('countries', 'customerAddress', 'totalShippingCharges', 'grandTotal', 'discount'));
     }
 
-    public function processCheckout(Request $request)
-    { 
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required | min:5',
-            'last_name'  => 'required',
-            'email'      => 'required | email',
-            'mobile'     => 'required',
-            'country' => 'required',
-            'address'    => 'required',
-            'city'       => 'required',
-            'state'      => 'required',
-            'zip'        => 'required',
-        ]);
+    // public function processCheckout(Request $request)
+    // { 
+    //     $validator = Validator::make($request->all(), [
+    //         'first_name' => 'required | min:5',
+    //         'last_name'  => 'required',
+    //         'email'      => 'required | email',
+    //         'mobile'     => 'required',
+    //         'country' => 'required',
+    //         'address'    => 'required',
+    //         'city'       => 'required',
+    //         'state'      => 'required',
+    //         'zip'        => 'required',
+    //     ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'error' => $validator->errors()
-            ]);
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'error' => $validator->errors()
+    //         ]);
+    //     }
+
+    //     $user = Auth::user();
+    //     CustomerAddress::updateOrCreate(
+    //         ['user_id' => $user->id],
+    //         [
+    //             'user_id'     => $user->id,
+    //             'first_name'  => $request->first_name,
+    //             'last_name'   => $request->last_name,
+    //             'email'       => $request->email,
+    //             'mobile'      => $request->mobile,
+    //             'appartment'  => $request->appartment,
+    //             'address'     => $request->address,
+    //             'country_id'  => $request->country,
+    //             'state'       => $request->state,
+    //             'city'        => $request->city,
+    //             'zip'         => $request->zip,
+    //             'notes'        => $request->notes
+    //         ]
+    //     );
+    //     $totalQty = 0;
+    //     $coupenCode = '';
+    //     $coupenCodeId = Null;
+    //     $discount = 0;
+
+    //     if ($request->payment_method == 'cod') {
+
+    //         $subTotal = Cart::subtotal(2, '.', '');
+    //         $shippingInfo = ShippingCharge::where('country_id', $request->country_id)->first();
+
+    //         $totalShippingCharges = 0;
+    //         $grandTotal = 0;
+
+    //         foreach (Cart::content() as $item) {
+    //             $totalQty += $item->qty;
+    //         }
+
+    //         if (session()->has('code')) {
+    //             $code = session()->get('code');
+    //             if ($code->type == 'percent') {
+    //                 $discount = ($code->discount_amount / 100) * $subTotal;
+    //             } else {
+
+    //                 $discount = $code->discount_amount;
+    //             }
+
+    //             $coupenCodeId = $code->id;
+    //             $coupenCode = $code->code;
+    //         }
+
+    //         if ($shippingInfo != null) {
+    //             $totalShippingCharges = $totalQty * $shippingInfo->amount;
+    //             $grandTotal = ($subTotal - $discount) + $totalShippingCharges;
+    //         } else {
+    //             $shippingInfo = ShippingCharge::where('country_id', "rest_of_world")->first();
+    //             $totalShippingCharges = $totalQty * $shippingInfo->amount;
+    //             $grandTotal = ($subTotal - $discount) + $totalShippingCharges;
+    //         }
+
+
+
+    //         $order = new Order();
+    //         $order->subtotal = $subTotal;
+    //         $order->shipping = $totalShippingCharges;
+    //         $order->grand_total = $grandTotal;
+    //         $order->coupen_code = $coupenCode;
+    //         $order->coupen_code_id = $coupenCodeId;
+    //         $order->discount = $discount;
+
+    //         $order->user_id = $user->id;
+    //         $order->first_name = $request->first_name;
+    //         $order->last_name = $request->last_name;
+    //         $order->email = $request->email;
+    //         $order->mobile = $request->mobile;
+    //         $order->appartment = $request->appartment;
+    //         $order->address = $request->address;
+    //         $order->country_id = $request->country;
+    //         $order->state = $request->state;
+    //         $order->city = $request->city;
+    //         $order->zip = $request->zip;
+    //         $order->notes = $request->notes;
+    //         $order->save();
+ 
+    //         foreach (Cart::content() as $item) { 
+    //             $orderItem = new OrderItem(); 
+    //             $orderItem->order_id = $order->id;
+    //             $orderItem->product_id = $item->id;
+    //             $orderItem->name = $item->name;
+    //             $orderItem->price = $item->price;
+    //             $orderItem->qty = $item->qty;
+    //             $orderItem->total = $item->price * $item->qty;
+    //             $orderItem->save();
+
+    //             $productData = Product::find($item->id);
+    //             if ($productData->track_qty == 'Yes') {
+    //                 $currentQty = $productData->qty;
+    //                 $updatedQty = $currentQty - $item->qty;
+    //                 $productData->qty = $updatedQty;
+    //                 $productData->save();
+    //             }
+    //         }
+
+    //         // Send Order Email
+    //         orderEmail($order->id, "customer");
+
+    //         Cart::destroy();
+    //         session()->forget('code');
+    //         successMessage("Order Created Successfully");
+
+    //         return response()->json([
+    //             "message" => "Order Created Successfully",
+    //             "orderId" => $order->id,
+    //             "status" => true,
+    //         ]);
+    //     }else{
+    //         Stripe::setApiKey(env('STRIPE_SECRET'));
+    //         $charge = Charge::create([
+    //             'amount' => Cart::subtotal() * 100,
+    //             'currency' => 'PKR',
+    //             'description' => 'Order description',
+    //             'source' => $request->stripeToken,
+    //         ]);
+    //     }
+    // }
+
+    public function processCheckout(Request $request)
+{
+    // Validate input fields
+    $validator = Validator::make($request->all(), [
+        'first_name' => 'required|min:5',
+        'last_name'  => 'required',
+        'email'      => 'required|email',
+        'mobile'     => 'required',
+        'country'    => 'required',
+        'address'    => 'required',
+        'city'       => 'required',
+        'state'      => 'required',
+        'zip'        => 'required',
+        // 'payment_method' => 'required',
+        'stripeToken' => 'required_if:payment_method,stripe',
+        'card_number' => 'required_if:payment_method,stripe|numeric',
+        'card_expiry_month' => 'required_if:payment_method,stripe|numeric|between:1,12',
+        'card_expiry_year' => 'required_if:payment_method,stripe|numeric|digits:4',
+        'card_cvc' => 'required_if:payment_method,stripe|numeric|digits_between:3,4',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'error' => $validator->errors()
+        ]);
+    }
+
+    // Update or create customer address
+    $user = Auth::user();
+    CustomerAddress::updateOrCreate(
+        ['user_id' => $user->id],
+        [
+            'user_id'    => $user->id,
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'email'      => $request->email,
+            'mobile'     => $request->mobile,
+            'appartment' => $request->appartment,
+            'address'    => $request->address,
+            'country_id' => $request->country,
+            'state'      => $request->state,
+            'city'       => $request->city,
+            'zip'        => $request->zip,
+            'notes'      => $request->notes
+        ]
+    );
+
+    $totalQty = 0;
+    $coupenCode = '';
+    $coupenCodeId = null;
+    $discount = 0;
+
+    if ($request->payment_method == 'cod' || $request->payment_method == 'stripe') {
+        $subTotal = Cart::subtotal(2, '.', '');
+        $shippingInfo = ShippingCharge::where('country_id', $request->country_id)->first();
+        $totalShippingCharges = 0;
+        $grandTotal = 0;
+
+        foreach (Cart::content() as $item) {
+            $totalQty += $item->qty;
+        }
+        
+        if (session()->has('code')) {
+            $code = session()->get('code');
+            if ($code->type == 'percent') {
+                $discount = ($code->discount_amount / 100) * $subTotal;
+            } else {
+                $discount = $code->discount_amount;
+            }
+
+            $coupenCodeId = $code->id;
+            $coupenCode = $code->code;
         }
 
-        $user = Auth::user();
-        CustomerAddress::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'user_id'     => $user->id,
-                'first_name'  => $request->first_name,
-                'last_name'   => $request->last_name,
-                'email'       => $request->email,
-                'mobile'      => $request->mobile,
-                'appartment'  => $request->appartment,
-                'address'     => $request->address,
-                'country_id'  => $request->country,
-                'state'       => $request->state,
-                'city'        => $request->city,
-                'zip'         => $request->zip,
-                'notes'        => $request->notes
-            ]
-        );
-        $totalQty = 0;
-        $coupenCode = '';
-        $coupenCodeId = Null;
-        $discount = 0;
+        if ($shippingInfo != null) {
+            $totalShippingCharges = $totalQty * $shippingInfo->amount;
+            $grandTotal = ($subTotal - $discount) + $totalShippingCharges;
+        } else {
+            $shippingInfo = ShippingCharge::where('country_id', "rest_of_world")->first();
+            $totalShippingCharges = $totalQty * $shippingInfo->amount;
+            $grandTotal = ($subTotal - $discount) + $totalShippingCharges;
+        }
+
+        // Create order
+        $order = new Order();
+        $order->subtotal = $subTotal;
+        $order->shipping = $totalShippingCharges;
+        $order->grand_total = $grandTotal;
+        $order->coupen_code = $coupenCode;
+        $order->coupen_code_id = $coupenCodeId;
+        $order->discount = $discount;
+        $order->user_id = $user->id;
+        $order->first_name = $request->first_name;
+        $order->last_name = $request->last_name;
+        $order->email = $request->email;
+        $order->mobile = $request->mobile;
+        $order->appartment = $request->appartment;
+        $order->address = $request->address;
+        $order->country_id = $request->country;
+        $order->state = $request->state;
+        $order->city = $request->city;
+        $order->zip = $request->zip;
+        $order->notes = $request->notes;
+        // $order->payment_method = $request->payment_method;
+        $order->save();
+
+        // Create order items
+        foreach (Cart::content() as $item) {
+            $orderItem = new OrderItem();
+            $orderItem->order_id = $order->id;
+            $orderItem->product_id = $item->id;
+            $orderItem->name = $item->name;
+            $orderItem->price = $item->price;
+            $orderItem->qty = $item->qty;
+            $orderItem->total = $item->price * $item->qty;
+            $orderItem->save();
+
+            // Update product quantity
+            $productData = Product::find($item->id);
+            if ($productData->track_qty == 'Yes') {
+                $currentQty = $productData->qty;
+                $updatedQty = $currentQty - $item->qty;
+                $productData->qty = $updatedQty;
+                $productData->save();
+            }
+        }
+
+        // Send Order Email
+        orderEmail($order->id, "customer");
+
+        // Clear cart and session
+        Cart::destroy();
+        session()->forget('code');
 
         if ($request->payment_method == 'cod') {
-
-            $subTotal = Cart::subtotal(2, '.', '');
-            $shippingInfo = ShippingCharge::where('country_id', $request->country_id)->first();
-
-            $totalShippingCharges = 0;
-            $grandTotal = 0;
-
-            foreach (Cart::content() as $item) {
-                $totalQty += $item->qty;
-            }
-
-            if (session()->has('code')) {
-                $code = session()->get('code');
-                if ($code->type == 'percent') {
-                    $discount = ($code->discount_amount / 100) * $subTotal;
-                } else {
-
-                    $discount = $code->discount_amount;
-                }
-
-                $coupenCodeId = $code->id;
-                $coupenCode = $code->code;
-            }
-
-            if ($shippingInfo != null) {
-                $totalShippingCharges = $totalQty * $shippingInfo->amount;
-                $grandTotal = ($subTotal - $discount) + $totalShippingCharges;
-            } else {
-                $shippingInfo = ShippingCharge::where('country_id', "rest_of_world")->first();
-                $totalShippingCharges = $totalQty * $shippingInfo->amount;
-                $grandTotal = ($subTotal - $discount) + $totalShippingCharges;
-            }
-
-
-
-            $order = new Order();
-            $order->subtotal = $subTotal;
-            $order->shipping = $totalShippingCharges;
-            $order->grand_total = $grandTotal;
-            $order->coupen_code = $coupenCode;
-            $order->coupen_code_id = $coupenCodeId;
-            $order->discount = $discount;
-
-            $order->user_id = $user->id;
-            $order->first_name = $request->first_name;
-            $order->last_name = $request->last_name;
-            $order->email = $request->email;
-            $order->mobile = $request->mobile;
-            $order->appartment = $request->appartment;
-            $order->address = $request->address;
-            $order->country_id = $request->country;
-            $order->state = $request->state;
-            $order->city = $request->city;
-            $order->zip = $request->zip;
-            $order->notes = $request->notes;
-            $order->save();
- 
-            foreach (Cart::content() as $item) { 
-                $orderItem = new OrderItem(); 
-                $orderItem->order_id = $order->id;
-                $orderItem->product_id = $item->id;
-                $orderItem->name = $item->name;
-                $orderItem->price = $item->price;
-                $orderItem->qty = $item->qty;
-                $orderItem->total = $item->price * $item->qty;
-                $orderItem->save();
-
-                $productData = Product::find($item->id);
-                if ($productData->track_qty == 'Yes') {
-                    $currentQty = $productData->qty;
-                    $updatedQty = $currentQty - $item->qty;
-                    $productData->qty = $updatedQty;
-                    $productData->save();
-                }
-            }
-
-            // Send Order Email
-            orderEmail($order->id, "customer");
-
-            Cart::destroy();
-            session()->forget('code');
             successMessage("Order Created Successfully");
 
             return response()->json([
@@ -320,8 +479,75 @@ class CartController extends Controller
                 "orderId" => $order->id,
                 "status" => true,
             ]);
-        }
+        } 
     }
+
+    $post_data =  array(
+        "pp_Version" 			=> Config::get('constants.jazzcash.VERSION'),
+        "pp_TxnType" 			=> "MWALLET",
+        "pp_Language" 			=> Config::get('constants.jazzcash.LANGUAGE'),
+        "pp_MerchantID" 		=> Config::get('constants.jazzcash.MERCHANT_ID'),
+        "pp_SubMerchantID" 		=> "",
+        "pp_Password" 			=> Config::get('constants.jazzcash.PASSWORD'),
+        "pp_BankID" 			=> "TBANK",
+        "pp_ProductID" 			=> "RETL",
+        // "pp_TxnRefNo" 			=> $pp_TxnRefNo,
+        // "pp_Amount" 			=> $pp_Amount,
+        "pp_TxnCurrency" 		=> Config::get('constants.jazzcash.CURRENCY_CODE'),
+        // "pp_TxnDateTime" 		=> $pp_TxnDateTime,
+        "pp_BillReference" 		=> "billRef",
+        "pp_Description" 		=> "Description of transaction",
+        // "pp_TxnExpiryDateTime" 	=> $pp_TxnExpiryDateTime,
+        "pp_ReturnURL" 			=> Config::get('constants.jazzcash.RETURN_URL'),
+        "pp_SecureHash" 		=> "",
+        "ppmpf_1" 				=> "1",
+        "ppmpf_2" 				=> "2",
+        "ppmpf_3" 				=> "3",
+        "ppmpf_4" 				=> "4",
+        "ppmpf_5" 				=> "5",
+    );
+    $pp_SecureHash = $this->get_SecureHash($post_data);
+    $post_data['pp_SecureHash'] = $pp_SecureHash;
+
+    $values = array(
+        'TxnRefNo' => $post_data['pp_TxnRefNo'],
+        'Amount' => $post_data['pp_Amount'],
+        'description' => $post_data['pp_Description'],
+        'status' => 'pending'
+    );
+
+
+    
+    Session::put('post_data', $post_data);
+
+    return response()->json([
+        'status' => false,
+        'error' => 'Invalid payment method',
+    ]);
+}
+
+private function get_SecureHash($data_array)
+	{
+		ksort($data_array);
+		
+		$str = '';
+		foreach($data_array as $key => $value){
+			if(!empty($value)){
+				$str = $str . '&' . $value;
+			}
+		}
+		
+		$str = Config::get('constants.jazzcash.INTEGERITY_SALT').$str;
+		
+		$pp_SecureHash = hash_hmac('sha256', $str, Config::get('constants.jazzcash.INTEGERITY_SALT'));
+		
+		
+		
+		return $pp_SecureHash;
+	}
+	
+	
+
 
     public function thankyou($id)
     {

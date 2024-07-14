@@ -57,7 +57,7 @@
                                             <h2> {{ $item->name }}</h2>
                                         </div>
                                     </td>
-                                    <td>${{ $item->price }}</td>
+                                    <td> Rs {{ $item->price }}</td>
                                     <td>
                                         <div class="input-group quantity mx-auto" style="width: 100px;">
                                             <div class="input-group-btn">
@@ -75,7 +75,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        ${{ $item-> price * $item->qty }}
+                                        Rs {{ $item-> price * $item->qty }}
                                     </td>
                                     <td>
                                         <button class="btn btn-sm btn-danger rounded" onclick="deleteToCart('{{ $item->rowId }}')"><i class="fa fa-times"></i></button>
@@ -98,7 +98,7 @@
                             </div>
                             <div class="d-flex justify-content-between pb-2">
                                 <div>Subtotal</div>
-                                <div>${{Cart::subtotal()}}</div>
+                                <div>Rs {{Cart::subtotal()}}</div>
                             </div> 
                             <div class="pt-3">
                                 <a href="{{ route('front.checkout') }}" class="btn-dark btn btn-block rounded w-100">Proceed to Checkout</a>

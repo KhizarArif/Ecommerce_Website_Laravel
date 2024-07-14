@@ -138,27 +138,28 @@
                                 @foreach (Cart::content() as $item)
                                     <div class="d-flex justify-content-between pb-2">
                                         <div class="h6"> {{ $item->name }} </div>
-                                        <div class="h6"> ${{ $item->price }} </div>
+                                        <div class="h6"> Rs {{ $item->price }} </div>
                                     </div>
                                 @endforeach
 
                                 <div class="d-flex justify-content-between summery-end">
                                     <div class="h6"><strong>Subtotal</strong></div>
-                                    <div class="h6"><strong> ${{ Cart::subtotal() }} </strong></div>
+                                    <div class="h6"><strong> Rs {{ Cart::subtotal() }} </strong></div>
                                 </div>
                                 <div class="d-flex justify-content-between summery-end">
                                     <div class="h6"><strong> Discount </strong></div>
-                                    <div class="h6"><strong id="discount_value"> ${{ $discount }} </strong></div>
+                                    <div class="h6"><strong id="discount_value"> Rs {{ $discount }} </strong>
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <div class="h6"><strong>Shipping</strong></div>
-                                    <div class="h6"><strong id="shippingCharge">$
+                                    <div class="h6"><strong id="shippingCharge">Rs
                                             {{ number_format($totalShippingCharges, 2) }}</strong>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2 summery-end">
                                     <div class="h5"><strong>Total</strong></div>
-                                    <div class="h5"><strong id="grandTotal"> ${{ number_format($grandTotal, 2) }}
+                                    <div class="h5"><strong id="grandTotal"> Rs {{ number_format($grandTotal, 2) }}
                                         </strong></div>
                                 </div>
                             </div>
@@ -187,7 +188,7 @@
 
                         <div class="card payment-form ">
                             <h3 class="card-title h5 mb-3">Payment Method</h3>
-                            <div>
+                            {{-- <div>
                                 <input type="radio" id="payment_method_one" name="payment_method" value="cod"
                                     checked>
                                 <label for="cod"> Cash on delivery </label>
@@ -196,7 +197,8 @@
                                 <input type="radio" id="payment_method_two" name="payment_method" value="stripe">
                                 <label for="stripe"> Stripe </label>
                             </div>
-                            <div class="card-body p-0 d-none my-2" id="card-payment-form">
+                            <form class="card-body p-0 d-none my-2" id="card-payment-form">
+                                <input type="hidden" name="stripeToken" id="stripeToken" value="{{ csrf_token() }}">
                                 <div class="mb-3">
                                     <label for="card_number" class="mb-2">Card Number</label>
                                     <input type="text" name="card_number" id="card_number"
@@ -204,16 +206,34 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label for="expiry_date" class="mb-2">Expiry Date</label>
-                                        <input type="text" name="expiry_date" id="expiry_date" placeholder="MM/YYYY"
+                                        <label for="card_expiry_month" class="mb-2">Expiry Month</label>
+                                        <input type="text" name="card_expiry_month" id="card_expiry_month" placeholder="MM"
                                             class="form-control">
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="expiry_date" class="mb-2">CVV Code</label>
-                                        <input type="text" name="expiry_date" id="expiry_date" placeholder="123"
+                                        <label for="card_expiry_year" class="mb-2">Expiry Year</label>
+                                        <input type="text" name="card_expiry_year" id="card_expiry_year" placeholder="YYYY"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="card_cvc" class="mb-2">CVV Code</label>
+                                        <input type="text" name="card_cvc" id="card_cvc" placeholder="123"
                                             class="form-control">
                                     </div>
                                 </div>
+                            </form> --}}
+
+                            <div class="container">
+
+                                @verbatim
+                                    <form action="/your-server-side-code" method="POST">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <script {{-- src="https://checkout.stripe.com/checkout.js"  --}} class="stripe-button" data-key="pk_test_xxxxxxxxxxxxxxxxxxxxx" data-amount="2000"
+                                            data-name="Demo Site" data-description="2 widgets" {{-- data-image="https://stripe.com/img/documentation/checkout/marketplace.png" --}} data-locale="auto"></script>
+                                    </form>
+                                @endverbatim
+
+
                             </div>
                             <button type="submit" class="btn-dark btn btn-block w-100 rounded" id="btn_payNow"> Pay Now
                             </button>
@@ -229,6 +249,7 @@
 @endsection
 
 @section('customJs')
+    <script src="https://js.stripe.com/v3/"></script>
     <script type="text/javascript">
         $('#country').change(function() {
             var country_id = $(this).val();
@@ -284,10 +305,11 @@
                         window.location.href = "{{ route('front.thankyou', ['id' => 1]) }}";
 
                     }
-                }, error: function(error) {
+                },
+                error: function(error) {
                     console.log(error);
                     $("#btn_payNow").prop('disabled', false);
-                    
+
                 }
             });
         });
