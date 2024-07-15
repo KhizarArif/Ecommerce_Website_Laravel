@@ -22,37 +22,39 @@ class LoginController extends Controller
     public function redirectToGoogleCallback()
     {
         try {
-
-            $google_user = Socialite::driver('google')->user(); 
-        
+            $google_user = Socialite::driver('google')->user();
+            
+            // Check if a user with the Google ID exists
             $user = User::where('google_id', $google_user->getId())->first();
- 
-            if(!$user){
-
-                $user = User::create([
-                    'name' => $google_user->getName(),  
-                    'email' => $google_user->getEmail(),
-                    'google_id' => $google_user->getId(), 
-                ]);
-
-
-                dd($user);
-                Auth::login($user);
-
-                return redirect()->intended('/');
-
-            }else{
-
-                Auth::login($user);
-
-                return redirect()->intended('/');
+    
+            if (!$user) {
+                // Check if a user with the same email exists
+                $user = User::where('email', $google_user->getEmail())->first();
+    
+                if (!$user) {
+                    // Create a new user if not found
+                    $user = User::create([
+                        'name' => $google_user->getName(),
+                        'email' => $google_user->getEmail(),
+                        'google_id' => $google_user->getId(),
+                    ]);
+                } else {
+                    // Update existing user with google_id if not set
+                    $user->update([
+                        'google_id' => $google_user->getId(),
+                    ]);
+                }
             }
-
-
+    
+            // Log in the user
+            Auth::login($user);
+    
+            return redirect()->intended('/');
         } catch (\Throwable $th) {
-            dd("Error in Google Authentication". $th->getMessage());
+            dd("Error in Google Authentication: " . $th->getMessage());
         }
     }
+    
 
 
 
