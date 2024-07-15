@@ -49,9 +49,9 @@ function orderEmail($orderId, $userType = "customer")
     ];
 
 
-    dispatch(new CompleteOrderPlaceJob($mailData));
+    // dispatch(new CompleteOrderPlaceJob($mailData));
     // dd(CompleteOrderPlaceJob::dispatch($mailData));
     // CompleteOrderPlaceJob::dispatch($mailData);
 
-    // Mail::to($email)->send(new OrderEmail($mailData));
+    Mail::to($email)->send(new OrderEmail($mailData));
 }

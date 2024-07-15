@@ -659,7 +659,7 @@ public function processCheckout(Request $request)
             ]); 
 
             Log::info('Stripe Charge:', $charge->toArray());
-dd($charge->toArray());
+
             if ($charge->status != 'succeeded') {
                 return response()->json([
                     'status' => false,
