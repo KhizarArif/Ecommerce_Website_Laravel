@@ -648,23 +648,41 @@ public function processCheckout(Request $request)
                   'error' => 'Order amount is too low to process payment. Please add more items to your cart.',
               ]);
           }
+
+          $customer = Customer::create([
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'email' => $request->email,
+            'source' => $request->stripeToken,
+            'description' => 'Order description',
+            'metadata' => [
+                'first_name' => $request->first_name,
+                'last_name'  => $request->last_name,
+                'email'      => $request->email,
+                'mobile'     => $request->mobile,
+                'country'    => $request->country,
+                'address'    => $request->address,
+                'city'       => $request->city,
+                'state'      => $request->state,
+                'zip'        => $request->zip,
+                'notes'      => $request->notes
+            ], 
+        ]);
+
         try {
          
-
             $charge = Charge::create([  
                 'amount' => ($subTotal - $discount) * 100, 
                 'currency' => 'usd',
-                'source' => $request->stripeToken,
-                'description' => 'Order description',
+                'customer' => $customer->id,
             ]); 
-
-            Log::info('Stripe Charge:', $charge->toArray());
-
+ 
             if ($charge->status != 'succeeded') {
                 return response()->json([
                     'status' => false,
                     'error' => 'Stripe payment failed',
                 ]);
+            }else{
+                return redirect()->route('stripe.webhook', $charge);
             }
         } catch (\Exception $e) {
             Log::error('Stripe Error:', ['error' => $e->getMessage()]);
@@ -675,7 +693,7 @@ public function processCheckout(Request $request)
             ]);
         } 
     }
-
+    
 
     // Calculate shipping charges and grand total
     $shippingInfo = ShippingCharge::where('country_id', $request->country)->first();
@@ -754,25 +772,6 @@ public function processCheckout(Request $request)
 }
 
 
-// private function get_SecureHash($data_array)
-// 	{
-// 		ksort($data_array);
-		
-// 		$str = '';
-// 		foreach($data_array as $key => $value){
-// 			if(!empty($value)){
-// 				$str = $str . '&' . $value;
-// 			}
-// 		}
-		
-// 		$str = Config::get('constants.jazzcash.INTEGERITY_SALT').$str;
-		
-// 		$pp_SecureHash = hash_hmac('sha256', $str, Config::get('constants.jazzcash.INTEGERITY_SALT'));
-		
-		
-		
-// 		return $pp_SecureHash;
-// 	}
     public function thankyou($id)
     { 
         SEOMeta::setTitle('Thankyou Page');

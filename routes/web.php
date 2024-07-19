@@ -19,6 +19,7 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -40,6 +41,7 @@ Route::get('/stripe', function () {
     return view('frontend.paymentCheckout');
 });
 Route::post('stripe', [LoginController::class, 'stripePost'])->name('stripe.post');
+Route::get('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 
 Route::get('login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('auth/google/call-back', [LoginController::class, 'redirectToGoogleCallback'])->name('login.google.callback');
