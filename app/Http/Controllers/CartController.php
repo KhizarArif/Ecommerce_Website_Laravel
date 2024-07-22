@@ -567,6 +567,7 @@ class CartController extends Controller
 
 public function processCheckout(Request $request)
 { 
+
     // Validate input fields
     $validator = Validator::make($request->all(), [
         'first_name' => 'required|min:5',
@@ -650,12 +651,13 @@ public function processCheckout(Request $request)
          
 
             $charge = Charge::create([  
-                'amount' => ($subTotal - $discount) * 100, 
+                'amount'   => ($subTotal - $discount) * 100, 
                 'currency' => 'usd',
-                'source' => $request->stripeToken,
+                'source'   => $request->stripeToken,
+                'email'    => $request->email,
                 'description' => 'Order description',
             ]); 
-
+          
             Log::info('Stripe Charge:', $charge->toArray());
 
             if ($charge->status != 'succeeded') {
