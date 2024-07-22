@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 use Stripe\Charge;
@@ -21,6 +22,7 @@ class LoginController extends Controller
 
     public function redirectToGoogleCallback()
     {
+
         try {
             $google_user = Socialite::driver('google')->user();
             
@@ -51,6 +53,7 @@ class LoginController extends Controller
     
             return redirect()->intended('/');
         } catch (\Throwable $th) {
+
             dd("Error in Google Authentication: " . $th->getMessage());
         }
     }

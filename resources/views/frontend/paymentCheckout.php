@@ -1,3 +1,4 @@
+
 <form action="/" id="my-sample-form">
   <input type="hidden" name="payment_method_nonce" />
   <label for="card-number">Card Number</label>

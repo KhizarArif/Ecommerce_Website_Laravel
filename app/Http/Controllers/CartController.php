@@ -19,7 +19,7 @@ use Stripe\Charge;
 use Stripe\Customer;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log; 
 use Illuminate\Support\Facades\Session;
 
 use function App\Helpers\orderEmail;
@@ -578,13 +578,14 @@ public function processCheckout(Request $request)
         'address'    => 'required',
         'city'       => 'required',
         'state'      => 'required',
-        'zip'        => 'required',
+        'zip'        => 'required', 
         // 'payment_method' => 'required|in:cod,stripe',
         'stripeToken' => 'required_if:payment_method,stripe',
         // 'card_number' => 'required_if:payment_method,stripe|numeric',
         // 'card_expiry_month' => 'required_if:payment_method,stripe|numeric|between:1,12',
         // 'card_expiry_year' => 'required_if:payment_method,stripe|numeric|digits:4',
         // 'card_cvc' => 'required_if:payment_method,stripe|numeric|digits_between:3,4',
+
     ]);
 
     if ($validator->fails()) {
@@ -647,35 +648,52 @@ public function processCheckout(Request $request)
                   'error' => 'Order amount is too low to process payment. Please add more items to your cart.',
               ]);
           }
+
+          $customer = Customer::create([
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'email' => $request->email,
+            'source' => $request->stripeToken,
+            'description' => 'Order description',
+            'metadata' => [
+                'first_name' => $request->first_name,
+                'last_name'  => $request->last_name,
+                'email'      => $request->email,
+                'mobile'     => $request->mobile,
+                'country'    => $request->country,
+                'address'    => $request->address,
+                'city'       => $request->city,
+                'state'      => $request->state,
+                'zip'        => $request->zip,
+                'notes'      => $request->notes
+            ], 
+        ]);
+
         try {
          
-
             $charge = Charge::create([  
                 'amount'   => ($subTotal - $discount) * 100, 
                 'currency' => 'usd',
-                'source'   => $request->stripeToken,
-                'email'    => $request->email,
-                'description' => 'Order description',
+                'customer' => $customer->id,
             ]); 
-          
-            Log::info('Stripe Charge:', $charge->toArray());
-
+ 
             if ($charge->status != 'succeeded') {
                 return response()->json([
                     'status' => false,
                     'error' => 'Stripe payment failed',
                 ]);
+            }else{
+                return redirect()->route('stripe.webhook', $charge);
             }
         } catch (\Exception $e) {
             Log::error('Stripe Error:', ['error' => $e->getMessage()]);
-            dd($e->getMessage());
+            dd($e->getMessage()); 
             return response()->json([
                 'status' => false,
                 'error' => $e->getMessage(),
             ]);
-        }
+        } 
     }
-
+    
 
     // Calculate shipping charges and grand total
     $shippingInfo = ShippingCharge::where('country_id', $request->country)->first();
@@ -752,29 +770,6 @@ public function processCheckout(Request $request)
         'status' => true,
     ]);
 }
-
-
-// private function get_SecureHash($data_array)
-// 	{
-// 		ksort($data_array);
-		
-// 		$str = '';
-// 		foreach($data_array as $key => $value){
-// 			if(!empty($value)){
-// 				$str = $str . '&' . $value;
-// 			}
-// 		}
-		
-// 		$str = Config::get('constants.jazzcash.INTEGERITY_SALT').$str;
-		
-// 		$pp_SecureHash = hash_hmac('sha256', $str, Config::get('constants.jazzcash.INTEGERITY_SALT'));
-		
-		
-		
-// 		return $pp_SecureHash;
-// 	}
-	
-	
 
 
     public function thankyou($id)

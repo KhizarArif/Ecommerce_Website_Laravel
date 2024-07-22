@@ -21,6 +21,7 @@
                     <div class="sub-title">
                         <h2>Shipping Address</h2>
                     </div>
+
                     <div class="card shadow-lg border-0">
                         <div class="card-body checkout-form">
                             <div class="row">
@@ -40,6 +41,7 @@
                                             placeholder="Last Name">
                                         <p></p>
                                     </div>
+
                                 </div>
 
                                 <div class="col-md-12">
@@ -128,6 +130,7 @@
 
                             </div>
                         </div>
+
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -240,6 +243,7 @@
 @endsection
 
 @section('customJs')
+
 <script src="https://js.stripe.com/v3/"></script>
 <script type="text/javascript">
 var stripe = Stripe('pk_test_51McDOELy0oAF9eHjlYp0KHoo64sn4LOMgitrbDDycEGtqkr06jLg1qI1cxWEJMUSOIYIpfjmztsWHJ8fL6l75Okf00D5pJMoRu');
@@ -372,8 +376,8 @@ function processOrder() {
 
             }
         });
-}
 
+}
 
 
 $("#apply-discount").click(function() {
