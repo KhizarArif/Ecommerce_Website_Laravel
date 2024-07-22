@@ -39,6 +39,13 @@ class CategoryController extends Controller
     { 
         return $this->categoryService->destroy( $id);
     }
+    public function updateCategoryImage(Request $request){
+        return $this->categoryService->updateCategoryImage($request);
+    }
+    public function deleteCategoryImage(Request $request)
+    { 
+        return $this->categoryService->deleteCategoryImage($request);
+    }
 
     public function fileImport(Request $request){
         return $this->categoryService->fileImport($request);

@@ -269,15 +269,15 @@
 
                         console.log("success", response.image_id);
                         var product = `
-                <div class="col-md-2" id="image-row-${response.image_id}" >
-                    <div class="card" >
-                        <input type="hidden" name="image_array[]" value="${response.image_id}">
-                        <img src="{{ asset('${response.ImagePath}') }}" class="card-img-top" alt="...">
-                            <div class="card-body"> 
-                            <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="btn btn-danger btn-sm delete"> Delete </a>
-                            </div> 
-                    </div>
-                </div>
+                            <div class="col-md-2" id="image-row-${response.image_id}" >
+                                <div class="card" >
+                                    <input type="hidden" name="image_array[]" value="${response.image_id}">
+                                    <img src="{{ asset('${response.ImagePath}') }}" class="card-img-top" alt="...">
+                                        <div class="card-body"> 
+                                        <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="btn btn-danger btn-sm delete"> Delete </a>
+                                        </div> 
+                                </div>
+                            </div>
                 `;
 
                         $("#product-gallery").append(product);

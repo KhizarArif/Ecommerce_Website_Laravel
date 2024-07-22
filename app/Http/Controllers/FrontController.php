@@ -60,5 +60,11 @@ class FrontController extends Controller
         return response()->json(['status' => true, 'message' => $message]);
     }
 
+    public function allCategories($id){ 
+        $deCryptId = decrypt($id);
+        dd($deCryptId);
+        // $allProducts = 
+    }
+
     
 }

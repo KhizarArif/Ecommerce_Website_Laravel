@@ -48,6 +48,9 @@ Route::get('auth/google/call-back', [LoginController::class, 'redirectToGoogleCa
 
 Route::get('/', [FrontController::class, 'index'])->name('frontend.home');
 Route::post('/add_wishlist', [FrontController::class, 'addToWishlist'])->name('frontend.addToWishlist');
+Route::get('/show_all_categories/{id}', [FrontController::class, 'allCategories'])->name('allCategories.show');
+
+
 
 Route::get('/user_forgot_password', [AuthController::class, 'userForgotPassword'])->name('account.userForgotPassword');
 Route::get('/user_reset_password/{token}', [AuthController::class, 'userResetPassword'])->name('account.userResetPassword'); 
@@ -121,6 +124,7 @@ Route::group(["prefix" => "admin"], function () {
     Route::group(["middleware" => "is_admin"], function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
         Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
+      
 
         // Category routes 
         Route::controller(CategoryController::class)->prefix('categories')->group(function () {
@@ -129,6 +133,8 @@ Route::group(["prefix" => "admin"], function () {
             Route::get('edit/{id}', 'edit')->name('categories.edit');
             Route::post('store', 'store')->name('categories.store');
             Route::delete('delete/{id}', 'destroy')->name('categories.delete');
+            Route::post('category_image/update','updateCategoryImage')->name('categories.updateImage');
+            Route::delete('category_image','deleteCategoryImage')->name('categories.deleteImage');
         });
 
         // Exhibitions 

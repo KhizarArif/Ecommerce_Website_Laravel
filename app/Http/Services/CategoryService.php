@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Exports\CategoryExport;
 use App\Imports\CategoryImport;
 use App\Models\Category;
+use App\Models\CategoryImage;
 use App\Models\TempImage; 
 use Artesaos\SEOTools\Facades\SEOMeta; 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -31,48 +32,93 @@ class CategoryService
 
 
     public function store(Request $request)
-    {   
+    {    
         $category = $request->id > 0 ?  Category::find($request->id) : new Category();
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->status = $request->status;
         $category->showHome = $request->showHome;
-        $category->save();
-
+        $category->save(); 
         
-        $oldImage = $category->image;  
-        if (!empty($request->image_id)) {
-            $tempImage = TempImage::find($request->image_id); 
+        if (isset($request->id) && $request->id !== '' && !empty($request->image_array)) { 
+            foreach ($request->image_array as  $temp_value_image) {
+                $tempImageInfo = TempImage::find($temp_value_image);
+                $extArray = explode('.', $tempImageInfo->name);
+                $ext = last($extArray);
 
-                $extArray = explode('.', $tempImage->name);
-                $ext = last($extArray); 
+                $categoryImage = new CategoryImage();
+                $categoryImage->category_id = $category->id;
+                $categoryImage->image = "NULL";    
+                $categoryImage->save();
 
-                $newImageName = hexdec(uniqid()) . '.' . $ext;
-                $spath = public_path() . '/temp/' . $tempImage->name;
-                $dpath = public_path() . '/uploads/category/' . $newImageName;
-                File::makeDirectory(public_path() . '/uploads/category/', 0755, true, true);
-                File::copy($spath, $dpath);
+                $newImageName = $category-> id . '-' . $categoryImage->id . '-' . time() . '.' . $ext;
+                $categoryImage->image = $newImageName;
+                $categoryImage->save();   
+
+                   // For Large Image 
+                   try {  
+                    $spath = public_path() . '/temp/' . $tempImageInfo->name; 
+                    dd($spath);
+                    $dpath = public_path() . '/uploads/category/large/' . $newImageName;
+                      $manager = new ImageManager(new Driver()); 
+                      $image = $manager->read($spath);
+                      $image->resize(1400, 900);                
+                      $image->save($dpath); 
+                    } catch (\Exception $e) { 
+                        dd("Large Image ",$e->getMessage());
+                    }
+
+                    // For Small Image  
+                    try { 
+                        $dpath = public_path() . '/uploads/category/small/' . $newImageName;
+                          $manager = new ImageManager(new Driver()); 
+                          $image = $manager->read($spath);
+                          $image->resize(300, 300);                
+                          $image->save($dpath); 
+                    } catch (\Exception $e) { 
+                        dd("Small Image ",$e->getMessage());
+                    }
+                    $category->image = $newImageName;
+                    $category->save(); 
+                // $newImageName = hexdec(uniqid()) . '.' . $ext;
+                // $spath = public_path() . '/temp/' . $tempImageInfo->name;
+                // $dpath = public_path() . '/uploads/category/' . $newImageName;
+                // File::makeDirectory(public_path() . '/uploads/category/', 0755, true, true);
+                // File::copy($spath, $dpath);
+                // $category->image = $newImageName;
+                // $category->save();
+
+            }
+            // $tempImage = TempImage::find($request->image_id); 
+
+            //     $extArray = explode('.', $tempImage->name);
+            //     $ext = last($extArray); 
+
+            //     $newImageName = hexdec(uniqid()) . '.' . $ext;
+            //     $spath = public_path() . '/temp/' . $tempImage->name;
+            //     $dpath = public_path() . '/uploads/category/' . $newImageName;
+            //     File::makeDirectory(public_path() . '/uploads/category/', 0755, true, true);
+            //     File::copy($spath, $dpath);
                 
 
-                 // Creating Image Thumbnail  
-                 try {
-                    $manager = new ImageManager(new Driver()); 
-                    $image = $manager->read($spath);
-                    $image = $image->resize(370, 246);                     
-                    $image->toJpeg()->save(base_path('public/uploads/category/thumb/'. $newImageName));
-                    $save_url = 'uploads/category/'.$newImageName;
-                    $image->save($save_url);
-                } catch (\Intervention\Image\Exceptions\DecoderException $e) {
-                    // Log or handle the exception
-                    dd($e->getMessage());
-                }
+            //      // Creating Image Thumbnail  
+            //      try {
+            //         $manager = new ImageManager(new Driver()); 
+            //         $image = $manager->read($spath);
+            //         $image = $image->resize(370, 246);                     
+            //         $image->toJpeg()->save(base_path('public/uploads/category/thumb/'. $newImageName));
+            //         $save_url = 'uploads/category/'.$newImageName;
+            //         $image->save($save_url);
+            //     } catch (\Intervention\Image\Exceptions\DecoderException $e) {
+            //         // Log or handle the exception
+            //         dd($e->getMessage());
+            //     }
                 
 
-                 $category->image = $newImageName;
-                $category->save(); 
+          
 
-                File::delete(public_path() . '/uploads/category/thumb/' . $oldImage);
-                File::delete(public_path() . '/uploads/category/' . $oldImage);
+            //     File::delete(public_path() . '/uploads/category/thumb/' . $oldImage);
+            //     File::delete(public_path() . '/uploads/category/' . $oldImage);
 
         }
 
@@ -87,22 +133,100 @@ class CategoryService
     public function edit($id)
     {
         $category = Category::find($id);
-        return view('admin.category.create', compact('category'));
+        $categoryImages = CategoryImage::where('category_id', $category->id)->get(); 
+        return view('admin.category.edit', compact('category', 'categoryImages'));
     }
     
+    // public function destroy($id)
+    // {  
+    //     $category = Category::find($id);
+
+    //     File::delete(public_path() . '/uploads/category/thumb/' . $category->image);
+    //     File::delete(public_path() . '/uploads/category/' . $category->image);
+        
+    //     $category->delete(); 
+
+    //     return response()->json([
+    //         "status" => true,
+    //         "message" => 'success',
+    //     ]);
+    // }
+
     public function destroy($id)
     {  
         $category = Category::find($id);
 
-        File::delete(public_path() . '/uploads/category/thumb/' . $category->image);
-        File::delete(public_path() . '/uploads/category/' . $category->image);
+        $categoryImages = CategoryImage::where('category_id', $category->id)->get();
+        if(!empty($categoryImages)){
+            foreach ($categoryImages as $categoryImage) {
+                File::delete(public_path() . '/uploads/category/large/' . $categoryImages->image);
+                File::delete(public_path() . '/uploads/category/small/' . $categoryImages->image); 
+            }
+            CategoryImage::where('category_id', $category->id)->delete();
+        } 
         
         $category->delete(); 
 
+        session()->flash('success', 'Category Deleted Successfully! ');
+
         return response()->json([
             "status" => true,
-            "message" => 'success',
+            "message" => 'Category Deleted Successfully! ',
         ]);
+    }
+
+    public function updateCategoryImage(Request $request){
+        // dd($request->all());
+        $image = $request->file;
+        $ext = $image->getClientOriginalExtension();
+        $sourcePath = $image->getPathName();
+
+        $categoryImage = new CategoryImage();
+        $categoryImage->category_id = $request->category_id;
+        $categoryImage->image = "NULL";
+        $categoryImage->save();
+
+        $newImageName = $request->category_id . '-' . $categoryImage->id . '-' . time() . '.' . $ext;
+        $categoryImage->image = $newImageName;
+        $categoryImage->save();
+
+        try {  
+            $dpath = public_path() . '/uploads/category/large/' . $newImageName;
+              $manager = new ImageManager(new Driver()); 
+              $image = $manager->read($sourcePath);
+              $image->resize(1400, 900);                
+              $image->save($dpath); 
+            } catch (\Exception $e) { 
+                dd($e->getMessage());
+            }
+
+            // For Small Image  
+            try {
+                $dpath = public_path() . '/uploads/category/small/' . $newImageName;
+                  $manager = new ImageManager(new Driver()); 
+                  $image = $manager->read($sourcePath);
+                  $image->resize(300, 300);                
+                  $image->save($dpath); 
+            } catch (\Exception $e) { 
+                dd($e->getMessage());
+            }
+
+            return response()->json([
+                "status" => true,
+                "image_id" => $categoryImage->id,
+                "ImagePath" => asset('uploads/category/small/'. $categoryImage->image), 
+                "message" => 'Image Saved Successfully!',
+            ]);
+
+    }
+
+    public function deleteCategoryImage(Request $request){ 
+        $categoryImage = CategoryImage::find($request-> id);
+        File::delete(public_path() . '/uploads/category/large/' . $categoryImage->image);
+        File::delete(public_path() . '/uploads/category/small/' . $categoryImage->image);
+        $categoryImage->delete();
+
+        return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
     }
 
     public function fileImport(Request $request) 

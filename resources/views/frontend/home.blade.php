@@ -125,6 +125,7 @@
             transform: rotateZ(180deg);
         }
 
+
     </style>
 
     {{-- Modal  --}}
@@ -157,8 +158,7 @@
                         <img src="{{ asset('front-assets/images/hero.png') }}"
                             class="img-fluid rounded animated zoomIn w-100 h-100 border rounded position-relative"
                             style="object-fit: cover;" alt="">
-                        <h1 class="translate-middle intro_heading"> Art Wings By Sidra
-                            Munawar </h1>
+                        <h1 class="translate-middle intro_heading"> Art Wings By Sidra Munawar </h1>
                     </div>
 
                     <div class="row mt-5">
@@ -215,7 +215,7 @@
 
 
 
-        <section class="section-3 wow bounceInUp">
+        <section class="section-3 wow bounceInUp pt-5">
             <div class="container">
                 <div class="section-title">
                     <h2>Categories</h2>
@@ -231,8 +231,10 @@
                             <div class="col-lg-3">
                                 <div class="cat-card">
                                     <div class="left">
+                                        <a href="{{ route('allCategories.show', encrypt($category->id)) }}">
                                         <img src="{{ asset('uploads/category/thumb/' . $category->image) }}" alt=""
-                                            class="img-fluid">
+                                        class="">
+                                        </a>
                                     </div>
                                     <div class="right">
                                         <div class="cat-data">
@@ -311,51 +313,46 @@
         {{-- Exhibitions Section Start --}}
         <!-- Events Start -->
         <div class="container">
-            <div class="text-center wow bounceInUp" data-wow-delay="0.1s">
-                <small
-                    class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
-                    Latest Events
-                </small>
-                <h1 class="display-5 mb-5">Our Social & Professional Events Gallery</h1>
-            </div>
-            <div class="tab-class text-center">
-                @if ($exhibitions->isNotEmpty())
-                    <ul class="nav nav-pills d-inline-flex justify-content-center mb-5 wow bounceInUp"
-                        data-wow-delay="0.1s">
-                        <li class="nav-item p-2">
-                            <a class="d-flex mx-2 py-2 border border-primary bg-light rounded-pill active"
-                                data-bs-toggle="pill" href="#tab-1">
-                                <span class="text-dark" style="width: 150px;"> All Events</span>
-                            </a>
-                        </li>
-                        @foreach ($exhibitions as $index => $exhibition)
-                            <li class="nav-item p-2">
-                                <a class="d-flex mx-2 py-2 border border-primary bg-light rounded-pill"
-                                    data-bs-toggle="pill" href="#tab-{{ $index + 2 }}">
-                                    <span class="text-dark" style="width: 150px;"> {{ $exhibition->name }} </span>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
+    <div class="text-center wow bounceInUp" data-wow-delay="0.1s">
+        <small
+            class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
+            Latest Events
+        </small>
+        <h1 class="display-5 mb-5">Our Social & Professional Events Gallery</h1>
+    </div>
+    <div class="tab-class text-center">
+        @if ($exhibitions->isNotEmpty())
+            <ul class="nav nav-pills d-inline-flex justify-content-center mb-5 wow bounceInUp" data-wow-delay="0.1s">
+                <li class="nav-item p-2">
+                    <a class="d-flex mx-2 py-2 border border-primary bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-1">
+                        <span class="text-dark" style="width: 150px;"> All Events</span>
+                    </a>
+                </li>
+                @foreach ($exhibitions as $index => $exhibition)
+                    <li class="nav-item p-2">
+                        <a class="d-flex mx-2 py-2 border border-primary bg-light rounded-pill" data-bs-toggle="pill" href="#tab-{{ $index + 2 }}">
+                            <span class="text-dark" style="width: 150px;"> {{ $exhibition->name }} </span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
 
-                <div class="tab-content">
-                    <div id="tab-1" class="tab-pane fade show p-0 active">
-                        <div class="row g-4">
-
-                        </div>
-                    </div>
-
-                    @foreach ($exhibitions as $index => $exhibition)
-                        <div id="tab-{{ $index + 2 }}" class="tab-pane fade show p-0">
-                            <div class="row g-4">
-
-                            </div>
-                        </div>
-                    @endforeach
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4">
                 </div>
             </div>
+
+            @foreach ($exhibitions as $index => $exhibition)
+                <div id="tab-{{ $index + 2 }}" class="tab-pane fade show p-0">
+                    <div class="row g-4">
+                    </div>
+                </div>
+            @endforeach
         </div>
+    </div>
+</div>
 
         <!-- Events End -->
         {{-- Exhibitions Section End  --}}
@@ -366,27 +363,44 @@
 
 
 @section('customJs')
-    <script>
-        $(document).ready(function() {
-            // Ensure tab-1 is selected by default
-            $('a[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
-                var target = $(e.target).attr("href"); // activated tab
-                if (target === "#tab-1") {
-                    loadTabContent(1);
-                } else {
-                    loadTabContent(target.replace('#tab-', ''));
-                }
-            });
+<script>
+    $(document).ready(function() {
+        // Ensure tab-1 is selected by default
+        $('a[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
+            var target = $(e.target).attr("href"); // activated tab
+            if (target === "#tab-1") {
+                loadTabContent(1);
+            } else {
+                loadTabContent(target.replace('#tab-', ''));
+            }
+        });
 
-            function loadTabContent(tabIndex) {
-                var tabPane = $("#tab-" + tabIndex);
-                tabPane.find('.row.g-4').empty();
+        function loadTabContent(tabIndex) {
+            var tabPane = $("#tab-" + tabIndex);
+            tabPane.find('.row.g-4').empty();
 
-                if (tabIndex == 1) {
-                    @foreach ($exhibitions as $exhibition)
-                        @foreach ($exhibition->exhibitionImages->take(2) as $image)
+            if (tabIndex == 1) {
+                @foreach ($exhibitions as $exhibition)
+                    @foreach ($exhibition->exhibitionImages->take(2) as $image)
+                        tabPane.find('.row.g-4').append(`
+                    <div class="col-4 col-md-3 col-lg-2 wow bounceInUp" data-wow-delay="0.1s">
+                        <div class="event-img position-relative">
+                            <img class="img-fluid rounded w-100" src="{{ asset('uploads/exhibition/small/' . $image->image) }}" alt="{{ $exhibition->name }}">
+                            <div class="event-overlay d-flex flex-column p-4">
+                                <h4 class="me-auto">{{ $exhibition->name }}</h4>
+                                <a href="{{ asset('uploads/exhibition/small/' . $image->image) }}" data-lightbox="event-{{ $image->id }}" class="my-auto"><i class="fas fa-search-plus text-dark fa-2x"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                `);
+                    @endforeach
+                @endforeach
+            } else {
+                @foreach ($exhibitions as $index => $exhibition)
+                    if (tabIndex == {{ $index + 2 }}) {
+                        @foreach ($exhibition->exhibitionImages as $image)
                             tabPane.find('.row.g-4').append(`
-                        <div class="col-md-6 col-lg-3 wow bounceInUp" data-wow-delay="0.1s">
+                        <div class="col-4 col-md-3 col-lg-2 wow bounceInUp" data-wow-delay="0.1s">
                             <div class="event-img position-relative">
                                 <img class="img-fluid rounded w-100" src="{{ asset('uploads/exhibition/small/' . $image->image) }}" alt="{{ $exhibition->name }}">
                                 <div class="event-overlay d-flex flex-column p-4">
@@ -397,30 +411,13 @@
                         </div>
                     `);
                         @endforeach
-                    @endforeach
-                } else {
-                    @foreach ($exhibitions as $index => $exhibition)
-                        if (tabIndex == {{ $index + 2 }}) {
-                            @foreach ($exhibition->exhibitionImages as $image)
-                                tabPane.find('.row.g-4').append(`
-                            <div class="col-md-6 col-lg-3 wow bounceInUp" data-wow-delay="0.1s">
-                                <div class="event-img position-relative">
-                                    <img class="img-fluid rounded w-100" src="{{ asset('uploads/exhibition/small/' . $image->image) }}" alt="{{ $exhibition->name }}">
-                                    <div class="event-overlay d-flex flex-column p-4">
-                                        <h4 class="me-auto">{{ $exhibition->name }}</h4>
-                                        <a href="{{ asset('uploads/exhibition/small/' . $image->image) }}" data-lightbox="event-{{ $image->id }}" class="my-auto"><i class="fas fa-search-plus text-dark fa-2x"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                            @endforeach
-                        }
-                    @endforeach
-                }
+                    }
+                @endforeach
             }
+        }
 
-            // Initial load for tab-1
-            loadTabContent(1);
-        });
-    </script>
+        // Initial load for tab-1
+        loadTabContent(1);
+    });
+</script>
 @endsection
