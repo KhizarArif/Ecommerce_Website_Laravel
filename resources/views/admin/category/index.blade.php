@@ -63,6 +63,7 @@
                     <thead>
                         <tr>
                             <th width="60"> ID </th>
+                            <th width="80"></th>
                             <th> Name </th>
                             <th> Slug </th>
                             <th width="100"> Status </th>
@@ -74,6 +75,12 @@
                         @foreach ($categories as $category)
                         <tr>
                             <td> {{ $category->id }} </td>
+                            <td>
+                                @if (!empty($category->categoryImages->first()->image)) 
+                                <img src="{{ asset('uploads/category/small/'.$category->categoryImages->first()->image)}}"
+                                    class="img-thumbnail" width="50">
+                                @endif
+                            </td>
                             <td> {{ $category->name }} </td>
                             <td> {{ $category->slug }} </td>
                             <td>

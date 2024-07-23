@@ -186,35 +186,10 @@
                                     </select>
                                     <p class="error"></p>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="subcategory">Sub category</label>
-                                    <select name="subcategory_id" id="subcategory_id" class="form-control">
-                                        @foreach ($subcategories as $subcategory)
-                                            <option value="{{ $subcategory->id }}"
-                                                {{ $product->subcategory_id == $subcategory->id ? 'selected' : '' }}>
-                                                {{ $subcategory->name }} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                
                             </div>
                         </div>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h2 class="h4 mb-3">Product brand</h2>
-                                <div class="mb-3">
-                                    <select name="brand_id" id="brand_id" class="form-control">
-                                        <option value=""> Select Brand... </option>
-                                        @foreach ($brands as $brand)
-                                            <option value="{{ $brand->id }}"
-                                                {{ $product->brand_id == $brand->id ? 'selected' : '' }}>
-                                                {{ $brand->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-
-                                </div>
-                            </div>
-                        </div>
+                       
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Featured product</h2>
@@ -358,29 +333,29 @@
             });
         });
 
-        $('#category_id').change(function() {
-            var categoryId = $(this).val();
-            var subcategorySelect = $('#subcategory_id');
-            $.ajax({
-                type: "get",
-                data: {
-                    category_id: categoryId
-                },
-                url: "{{ route('getSubCategory') }}",
-                dataType: "json",
-                success: function(response) {
-                    if (response.status == true) {
-                        subcategorySelect.empty();
-                        $.each(response.subCategories, function(index, subcategory) {
-                            subcategorySelect.append($('<option>', {
-                                value: subcategory.id,
-                                text: subcategory.name,
-                            }));
-                        });
-                    };
-                }
-            });
-        });
+        // $('#category_id').change(function() {
+        //     var categoryId = $(this).val();
+        //     var subcategorySelect = $('#subcategory_id');
+        //     $.ajax({
+        //         type: "get",
+        //         data: {
+        //             category_id: categoryId
+        //         },
+        //         url: "{{ route('getSubCategory') }}",
+        //         dataType: "json",
+        //         success: function(response) {
+        //             if (response.status == true) {
+        //                 subcategorySelect.empty();
+        //                 $.each(response.subCategories, function(index, subcategory) {
+        //                     subcategorySelect.append($('<option>', {
+        //                         value: subcategory.id,
+        //                         text: subcategory.name,
+        //                     }));
+        //                 });
+        //             };
+        //         }
+        //     });
+        // });
 
         $("#productForm").submit(function(e) {
             e.preventDefault();

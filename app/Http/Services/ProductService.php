@@ -75,8 +75,6 @@ class ProductService
             $product->qty = $request->qty;
             $product->status = $request->status;
             $product->category_id = $request->category_id;
-            $product->subcategory_id = $request->subcategory_id;
-            $product->brand_id = $request->brand_id;
             $product->is_featured = $request->is_featured; 
             $product->related_products = (!empty($request->related_products)) ? implode(',', $request->related_products) : '';
             $product->save();
@@ -141,7 +139,7 @@ class ProductService
     {
         $product = Product::find($id);  
         $productImages = ProductImage::where('product_id', $product->id)->get();
-        $subcategories = SubCategory::where('category_id', $product->category_id)->get();
+        // $subcategories = SubCategory::where('category_id', $product->category_id)->get();
         $categories = Category::orderBy('name', 'ASC')->get();
         $brands = Brand::orderBy('name', 'ASC')->get(); 
 
@@ -152,7 +150,7 @@ class ProductService
             $relatedProducts = Product::whereIn('id', $productArray)->get();
         }
 
-        return view('admin.products.edit', compact('product', 'categories', 'brands', 'subcategories', 'productImages', 'relatedProducts'));
+        return view('admin.products.edit', compact('product', 'categories',  'productImages', 'relatedProducts'));
     }
 
     public function destroy($id)
@@ -199,8 +197,9 @@ class ProductService
 
     // Update Product Controller Image
     public function updateProductImage(Request $request){
-        
-        $image = $request->image;
+        // dd($request->all());
+        $image = $request->file;
+        // dd($image);
         $ext = $image->getClientOriginalExtension();
         $sourcePath = $image->getPathName();
 

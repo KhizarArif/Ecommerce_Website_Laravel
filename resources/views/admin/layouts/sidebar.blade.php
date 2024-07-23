@@ -25,12 +25,7 @@
                         <p>Category</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('subcategories.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-file-alt"></i>
-                        <p>Sub Category</p>
-                    </a>
-                </li>
+                
                 <li class="nav-item">
                     <a href="{{ route('products.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-tag"></i>

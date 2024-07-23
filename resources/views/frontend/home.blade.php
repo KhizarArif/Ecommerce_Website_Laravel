@@ -125,6 +125,13 @@
             transform: rotateZ(180deg);
         }
 
+        @media (max-width: 575.98px) {
+        .product-cards  {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 
     </style>
 
@@ -228,11 +235,11 @@
                     ?>
                     @if ($categories->isNotEmpty())
                         @foreach ($categories as $category)
-                            <div class="col-lg-3">
+                            <div class="col-6 col-md-4 col-lg-3 ">
                                 <div class="cat-card">
                                     <div class="left">
                                         <a href="{{ route('allCategories.show', encrypt($category->id)) }}">
-                                        <img src="{{ asset('uploads/category/thumb/' . $category->image) }}" alt=""
+                                        <img src="{{ asset('uploads/category/large/' . $category->image) }}" alt=""
                                         class="">
                                         </a>
                                     </div>
@@ -255,12 +262,12 @@
                 <div class="section-title">
                     <h1>Latest Products</h1>
                 </div>
-                <div class="row pb-3">
+                <div class="row pb-3 product-cards">
                     @if ($featuredProducts->isNotEmpty())
                         @foreach ($featuredProducts as $featuredProduct) 
-                            <div class="col-md-3">
+                            <div class="col-8 col-md-3 col-sm-6 col-lg-2">
                                 <div class="card product-card">
-                                    <div class="product-image position-relative">
+                                    <div class="product-image position-relative  ">
                                         <a 
                                         {{-- href="{{ route('front.product', $featuredProduct->slug) }}"  --}}
                                         href="javascript:void(0)" 

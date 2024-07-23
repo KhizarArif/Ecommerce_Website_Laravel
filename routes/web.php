@@ -161,13 +161,7 @@ Route::group(["prefix" => "admin"], function () {
         });
 
         // Brands routes
-        Route::controller(BrandController::class)->prefix('brands')->group(function () {
-            Route::get('', 'index')->name('brands.index');
-            Route::get('create', 'create')->name('brands.create');
-            Route::get('edit/{id}', 'edit')->name('brands.edit');
-            Route::post('store', 'store')->name('brands.store');
-            Route::delete('delete/{id}', 'destroy')->name('brands.delete');
-        });
+      
 
         // Products Routes
         Route::controller(ProductController::class)->prefix('products')->group(function () {

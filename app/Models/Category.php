@@ -16,4 +16,8 @@ class Category extends Model
     public function subcategories():HasMany{
         return $this->hasMany(SubCategory::class);
     }
+
+    public function categoryImages(): HasMany{
+        return $this->hasMany(CategoryImage::class);
+    }
 }

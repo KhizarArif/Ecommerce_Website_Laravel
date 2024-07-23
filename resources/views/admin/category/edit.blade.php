@@ -90,7 +90,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="image">Image</label>
-                                <input type="hidden" name="image_id" id="image_id">
+                                <!-- <input type="hidden" name="image_id" id="image_id"> -->
                                 <div id="image" class="dropzone dz-clickable" name="image">
                                     <div class="dz-message needsclick">
                                         <br>Drop files here or click to upload.<br><br>
