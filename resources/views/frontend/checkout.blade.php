@@ -142,27 +142,27 @@
                             @foreach (Cart::content() as $item)
                             <div class="d-flex justify-content-between pb-2">
                                 <div class="h6"> {{ $item->name }} </div>
-                                <div class="h6"> ${{ $item->price }} </div>
+                                <div class="h6"> Rs. {{ $item->price }} </div>
                             </div>
                             @endforeach
 
                             <div class="d-flex justify-content-between summery-end">
                                 <div class="h6"><strong>Subtotal</strong></div>
-                                <div class="h6"><strong> ${{ Cart::subtotal() }} </strong></div>
+                                <div class="h6"><strong> Rs. {{ Cart::subtotal() }} </strong></div>
                             </div>
                             <div class="d-flex justify-content-between summery-end">
                                 <div class="h6"><strong> Discount </strong></div>
-                                <div class="h6"><strong id="discount_value"> ${{ $discount }} </strong></div>
+                                <div class="h6"><strong id="discount_value"> Rs. {{ $discount }} </strong></div>
                             </div>
                             <div class="d-flex justify-content-between mt-2">
                                 <div class="h6"><strong>Shipping</strong></div>
-                                <div class="h6"><strong id="shippingCharge">$
+                                <div class="h6"><strong id="shippingCharge">Rs.
                                         {{ number_format($totalShippingCharges, 2) }}</strong>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between mt-2 summery-end">
                                 <div class="h5"><strong>Total</strong></div>
-                                <div class="h5"><strong id="grandTotal"> ${{ number_format($grandTotal, 2) }}
+                                <div class="h5"><strong id="grandTotal"> Rs. {{ number_format($grandTotal, 2) }}
                                     </strong></div>
                             </div>
                         </div>
