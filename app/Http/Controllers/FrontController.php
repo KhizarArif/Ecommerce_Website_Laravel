@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CategoryImage;
 use App\Models\Exhibition;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -61,9 +62,9 @@ class FrontController extends Controller
     }
 
     public function allCategories($id){ 
-        $deCryptId = decrypt($id);
-        dd($deCryptId);
-        // $allProducts = 
+        $deCryptId = decrypt($id); 
+        $allProducts = CategoryImage::where('category_id', $deCryptId)->get();
+        return view('frontend.allCategories.all_categories', compact('allProducts'));
     }
 
     
